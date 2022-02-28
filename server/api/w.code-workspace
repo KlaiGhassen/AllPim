@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "C:\\Users\\gaston\\express\\server"
+		},
+		{
+			"path": "C:\\Users\\gaston\\express\\testExtentions"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "testExtentions",
+		"git.ignoreLimitWarning": true
+	}
+}
