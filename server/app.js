@@ -5,13 +5,24 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 const cors = require('cors');
-const stickers = require('./api/autoEcolePlus');
+//Roots
+const patients = require('./api/patientRoot');
+const authPatient = require('./api/patientAuth');
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
-app.use('/api', stickers);
+
+
+app.use('/patient', patients);
+app.use('/authPatient', authPatient);
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
