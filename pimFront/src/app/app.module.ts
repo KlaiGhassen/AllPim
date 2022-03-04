@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
@@ -12,6 +12,15 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import { AuthService } from './core/auth/auth.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth/auth-interceptor.service';
+import { GlobalService } from './global.service';
+import { InitialazerService } from './initializer.service';
+import { configurationFactory } from './configurationFactory';
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login';
+  
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -23,6 +32,7 @@ const routerConfig: ExtraOptions = {
         AppComponent
     ],
     imports     : [
+        SocialLoginModule,
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
@@ -40,6 +50,40 @@ const routerConfig: ExtraOptions = {
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({})
+    ],
+
+    providers: [AuthService,  
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        GlobalService,
+        InitialazerService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: configurationFactory,
+          deps: [InitialazerService],
+          multi: true,
+        },
+        {
+          provide: 'SocialAuthServiceConfig',
+          useValue: {
+            autoLogin: false,
+            providers: [
+              {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider(
+                  '992171802483-b2509a16j76clmmkr32965uvm5gvu3jt.apps.googleusercontent.com'
+                )
+              },
+              {
+                id: FacebookLoginProvider.PROVIDER_ID,
+                provider: new FacebookLoginProvider('505990200417179')
+                //              471159557632201
+  
+              }
+            ]
+          } as SocialAuthServiceConfig,
+        }
+     
+  
     ],
     bootstrap   : [
         AppComponent

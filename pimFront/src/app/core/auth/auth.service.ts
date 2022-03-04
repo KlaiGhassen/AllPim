@@ -4,6 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { GlobalService } from 'app/global.service';
 
 @Injectable()
 export class AuthService
@@ -14,6 +15,7 @@ export class AuthService
      * Constructor
      */
     constructor(
+        private gs :GlobalService, 
         private _httpClient: HttpClient,
         private _userService: UserService
     )
@@ -58,7 +60,7 @@ export class AuthService
      */
     resetPassword(password: string): Observable<any>
     {
-        return this._httpClient.post('api/auth/reset-password', password);
+        return this._httpClient.post(this.gs.uri+'/api/auth/reset-password', password);
     }
 
     /**
@@ -74,7 +76,7 @@ export class AuthService
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(this.gs.uri+'api/auth/sign-in', credentials).pipe(
             switchMap((response: any) => {
 
                 // Store the access token in the local storage
