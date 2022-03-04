@@ -11,22 +11,7 @@ var cors = require("cors");
 
 const mongoose = require("mongoose");
 
-var emploi = require("./routes/emploi")
-var parking = require("./routes/parking");
-var clubRouter = require("./routes/club");
-var usersRouter = require("./routes/users");
-var eventRouter = require("./routes/eventPost");
-var elearningRouter = require("./routes/Elearning");
-var syrveys = require("./routes/syrveys");
-var document = require("./routes/document");
-var ratePost = require("./routes/ratePost");
-var lostPost = require("./routes/lostPost");
-var authUser = require("./routes/auth");
-var authClub = require("./routes/authClub");
-var EventInt = require("./routes/Eventint");
-var admin = require("./routes/admin");
-var messages = require("./routes/messages")
-var messages = require("./routes/messages");
+
 var uploadDownload = require("./routes/uploadDownload");
 var clubMembersRouter = require("./routes/clubMembers");
 const swaggerJsDocs = require("swagger-jsdoc");
