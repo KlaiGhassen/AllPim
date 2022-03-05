@@ -61,8 +61,6 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to DataBase"));
 app.use("/upload", uploadDownload);
 app.use("/auth", authUser);
-<<<<<<< Updated upstream
-=======
 app.use("/authClub", authClub);
 app.use("/user", usersRouter);
 app.use("/club", clubRouter);
@@ -71,7 +69,7 @@ app.use("/clubMembers", clubMembersRouter);
 app.use("/EventInt", EventInt);
 app.use("/admin",admin);
 app.use("/emploi",emploi);
-app.use("/appointement",emploi);
+app.use("/appointement",apppointement);
 
 
 
@@ -92,7 +90,6 @@ app.use("/parking", parking);
 
 
 
->>>>>>> Stashed changes
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
