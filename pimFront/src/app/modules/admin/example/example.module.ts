@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { ExampleComponent } from 'app/modules/admin/example/example.component';
+import { FuseCardModule } from '@fuse/components/card';
 
 const exampleRoutes: Route[] = [
     {
@@ -14,6 +15,7 @@ const exampleRoutes: Route[] = [
         ExampleComponent
     ],
     imports     : [
+        FuseCardModule,
         RouterModule.forChild(exampleRoutes)
     ]
 })

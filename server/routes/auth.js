@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const userdb = require("../models/user");
+const userdb = require("../models/patient");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 

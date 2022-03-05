@@ -45,7 +45,7 @@ export class SignUpClassicComponent implements OnInit
                 name      : ['', Validators.required],
                 email     : ['', [Validators.required, Validators.email]],
                 password  : ['', Validators.required],
-                company   : [''],
+                phoneNumber : ['', Validators.required, Validators.minLength(8),Validators.maxLength(8)],
                 agreements: ['', Validators.requiredTrue]
             }
         );

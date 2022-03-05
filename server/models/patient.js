@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
-const userSchema = new mongoose.Schema({
-    identifier: { type: String, required: true },
+const userSchema = new mongoose.Schema(
+  {
     email: { type: String, unique: true },
     password: String,
     phoneNumber: Number,
     profilePicture: { type: String, default: "default.png" },
-    FirstName: String,
-    LastName: String,
+    fullName: String,
     social: { type: Boolean, default: false },
-    role: String,
     verified: { type: Boolean, default: false },
-    className: String,
-    description: String
-});
-module.exports = mongoose.model("user", userSchema);
+    description: String,
+  },
+  {
+    timestamps: true,
+  }
+);
+module.exports = mongoose.model("patient", userSchema);

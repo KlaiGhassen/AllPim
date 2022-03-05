@@ -87,15 +87,14 @@
                     </mat-error>
                 </mat-form-field>
 
-                <!-- Company field -->
+                <!-- phoneNumber field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
+                    <mat-label>phoneNumber</mat-label>
                     <input
-                        id="company-confirm"
+                        id="phoneNumber-confirm"
                         matInput
-                        [formControlName]="'company'">
+                        [formControlName]="'phoneNumber'">
                 </mat-form-field>
-
                 <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5">
                     <mat-checkbox
@@ -122,7 +121,7 @@
                     [disabled]="signUpForm.disabled"
                     (click)="signUp()">
                     <span *ngIf="!signUpForm.disabled">
-                        Create your free account
+                        Create your account
                     </span>
                     <mat-progress-spinner
                         *ngIf="signUpForm.disabled"
