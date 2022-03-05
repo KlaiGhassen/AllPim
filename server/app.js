@@ -61,6 +61,35 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to DataBase"));
 app.use("/upload", uploadDownload);
 app.use("/auth", authUser);
+app.use("/authClub", authClub);
+app.use("/user", usersRouter);
+app.use("/club", clubRouter);
+app.use("/elearning", elearningRouter);
+app.use("/clubMembers", clubMembersRouter);
+app.use("/EventInt", EventInt);
+app.use("/admin",admin);
+app.use("/emploi",emploi);
+app.use("/appointement",apppointement);
+
+
+
+
+//app.use(verifyAdminToken);
+app.use("/message",messages)
+app.use("/ratePost", ratePost);
+app.use("/message",messages);
+
+app.use("/event", eventRouter);
+//app.use(verifyAdminToken);
+
+
+app.use("/lostpost", lostPost);
+app.use("/document", document);
+app.use("/syveys", syrveys);
+app.use("/parking", parking);
+
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
