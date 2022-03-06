@@ -12,7 +12,7 @@
                 <div>Already have an account?</div>
                 <a
                     class="ml-1 text-primary-500 hover:underline"
-                    [routerLink]="['/pages/authentication/sign-in']">Sign in
+                    [routerLink]="['/sign-in']">Sign in
                 </a>
             </div>
 
@@ -93,7 +93,16 @@
                     <input
                         id="phoneNumber-confirm"
                         matInput
+                        type="tel"
                         [formControlName]="'phoneNumber'">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Description</mat-label>
+                    <input
+                        id="Description"
+                        matInput
+                        type="textarea"
+                        [formControlName]="'Description'">
                 </mat-form-field>
                 <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5">
@@ -119,6 +128,7 @@
                     mat-flat-button
                     [color]="'primary'"
                     [disabled]="signUpForm.disabled"
+                    [routerLink]="['/sign-in']"
                     (click)="signUp()">
                     <span *ngIf="!signUpForm.disabled">
                         Create your account

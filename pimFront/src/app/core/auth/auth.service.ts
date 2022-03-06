@@ -4,6 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { GlobalService } from 'app/global.service';
 
 @Injectable()
 export class AuthService
@@ -14,6 +15,7 @@ export class AuthService
      * Constructor
      */
     constructor(
+        private gs:GlobalService,
         private _httpClient: HttpClient,
         private _userService: UserService
     )
@@ -68,14 +70,17 @@ export class AuthService
      */
     signIn(credentials: { email: string; password: string }): Observable<any>
     {
+        credentials.password =   this.gs.hashPassword(password);
+
         // Throw error, if the user is already logged in
         if ( this._authenticated )
         {
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(this.gs.uri+'/auth/sign-in', credentials).pipe(
             switchMap((response: any) => {
+                console.log(response)
 
                 // Store the access token in the local storage
                 this.accessToken = response.accessToken;
@@ -143,9 +148,15 @@ export class AuthService
      *
      * @param user
      */
-    signUp(user: { name: string; email: string; password: string; company: string }): Observable<any>
+    signUp(data:any): Observable<any>
     {
-        return this._httpClient.post('api/auth/sign-up', user);
+        return this._httpClient.post<any>(`${this.gs.uri}/ophto`, {
+            full_name: data.full_name,
+            email: data.email,
+            password: this.gs.hashPassword(data.password),
+            description: data.description,
+            phone_number: data.phoneNumber
+        });
     }
 
     /**
@@ -184,4 +195,8 @@ export class AuthService
         // If the access token exists and it didn't expire, sign in using it
         return this.signInUsingToken();
     }
+}
+
+function password(password: any): string {
+    throw new Error('Function not implemented.');
 }

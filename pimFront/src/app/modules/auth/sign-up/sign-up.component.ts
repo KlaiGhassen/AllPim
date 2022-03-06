@@ -5,18 +5,17 @@ import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
-    selector     : 'sign-up-classic',
-    templateUrl  : './sign-up.component.html',
+    selector: 'sign-up-classic',
+    templateUrl: './sign-up.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations,
 })
-export class SignUpClassicComponent implements OnInit
-{
+export class SignUpClassicComponent implements OnInit {
     @ViewChild('signUpNgForm') signUpNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
-        type   : 'success',
-        message: ''
+        type: 'success',
+        message: '',
     };
     signUpForm: FormGroup;
     showAlert: boolean = false;
@@ -27,9 +26,7 @@ export class SignUpClassicComponent implements OnInit
     constructor(
         private _authService: AuthService,
         private _formBuilder: FormBuilder
-    )
-    {
-    }
+    ) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -38,17 +35,16 @@ export class SignUpClassicComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                name      : ['', Validators.required],
-                email     : ['', [Validators.required, Validators.email]],
-                password  : ['', Validators.required],
-                phoneNumber : ['', Validators.required, Validators.minLength(8),Validators.maxLength(8)],
-                agreements: ['', Validators.requiredTrue]
-            }
-        );
+            name: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
+            agreements: ['', Validators.requiredTrue],
+            Description: ['', Validators.required],
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -58,7 +54,11 @@ export class SignUpClassicComponent implements OnInit
     /**
      * Sign in
      */
-    signUp(): void
-    {
+    signUp(): void {
+        console.log('hello');
+        if (this.signUpForm.valid)
+            this._authService.signUp(this.signUpForm.value).subscribe((res) => {
+
+            });
     }
 }
