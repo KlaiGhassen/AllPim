@@ -38,7 +38,7 @@ export class SignUpClassicComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-            name: ['', Validators.required],
+            full_name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
             phoneNumber: ['', Validators.required],
@@ -55,7 +55,6 @@ export class SignUpClassicComponent implements OnInit {
      * Sign in
      */
     signUp(): void {
-        console.log('hello');
         if (this.signUpForm.valid)
             this._authService.signUp(this.signUpForm.value).subscribe((res) => {
 

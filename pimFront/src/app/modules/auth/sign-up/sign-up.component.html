@@ -3,7 +3,7 @@
         <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
             <!-- Logo -->
             <div class="w-12">
-                <img src="assets/images/logo/logo.svg">
+                <img src="assets/images/logo/logo.png">
             </div>
 
             <!-- Title -->
@@ -38,8 +38,8 @@
                     <input
                         id="name"
                         matInput
-                        [formControlName]="'name'">
-                    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+                        [formControlName]="'full_name'">
+                    <mat-error *ngIf="signUpForm.get('full_name').hasError('required')">
                         Full name is required
                     </mat-error>
                 </mat-form-field>
@@ -95,6 +95,12 @@
                         matInput
                         type="tel"
                         [formControlName]="'phoneNumber'">
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('required')">
+                            Email address is required
+                        </mat-error>
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('tel')">
+                            Please enter a valid email address
+                        </mat-error>
                 </mat-form-field>
                 <mat-form-field class="w-full">
                     <mat-label>Description</mat-label>

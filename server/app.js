@@ -66,11 +66,6 @@ app.use("/auth", authUser);
 app.use("/appointement",appointment);
 app.use("/ophto",ophto);
 
-
-
-
-
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

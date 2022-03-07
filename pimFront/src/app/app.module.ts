@@ -16,8 +16,6 @@ import { AuthService } from './core/auth/auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth-interceptor.service';
 import { GlobalService } from './global.service';
-import { InitialazerService } from './initializer.service';
-import { configurationFactory } from './configurationFactory';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login';
   
@@ -35,7 +33,7 @@ const routerConfig: ExtraOptions = {
         SocialLoginModule,
         BrowserModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot(appRoutes, routerConfig),
+        RouterModule.forRoot(appRoutes),
 
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
@@ -52,16 +50,7 @@ const routerConfig: ExtraOptions = {
         MarkdownModule.forRoot({})
     ],
 
-    providers: [AuthService,  
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        GlobalService,
-        InitialazerService,
-        {
-          provide: APP_INITIALIZER,
-          useFactory: configurationFactory,
-          deps: [InitialazerService],
-          multi: true,
-        },
+    providers: [
         {
           provide: 'SocialAuthServiceConfig',
           useValue: {

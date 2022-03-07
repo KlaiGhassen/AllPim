@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
+    title:String,
+    country:String,
+    full_name: String,
     email: { type: String, unique: true },
     password: String,
     phone_number: Number,
-    profilePicture: { type: String, default: "default.png" },
+    profilePicture: String,
     diploma: { type: String, default: "default.png" },
-    fullName: String,
+    full_name: String,
     social: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     description: String,
