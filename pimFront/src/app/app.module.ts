@@ -20,6 +20,12 @@ import { InitialazerService } from './initializer.service';
 import { configurationFactory } from './configurationFactory';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login';
+import { CalendarModule } from './modules/calendar/calendar.module';
+import { AppointementModule } from './modules/appointement/appointement.module';
+import { SharedModule } from './shared/shared.module';
+
+
+
   
 
 const routerConfig: ExtraOptions = {
@@ -29,12 +35,17 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        
     ],
     imports     : [
         SocialLoginModule,
         BrowserModule,
         BrowserAnimationsModule,
+        AppointementModule,
+        CalendarModule,
+        SharedModule,
+        
         RouterModule.forRoot(appRoutes, routerConfig),
 
         // Fuse, FuseConfig & FuseMockAPI

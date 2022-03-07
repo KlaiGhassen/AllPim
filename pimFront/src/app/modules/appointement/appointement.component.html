@@ -1,0 +1,104 @@
+
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden dark:bg-gray-900">
+    <div style="float:left;" class="ml-20" >
+        <input #dateInput  nmae="date" type="date"> <button (click)="onSaveAppointement(dateInput.value)" class="ml-4 h-10 mat-primary mat-flat-button"  type="button" >Save</button>
+    </div>
+<table  mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+    
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+
+        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+            <div  class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                
+                <!-- <div class="example-element-symbol">
+                    <mat-icon class="material-icons mat-primary " svgIcon="heroicons_outline:map"></mat-icon>
+                     {{element.place}} 
+                </div> -->
+                
+                <!-- <div class="example-element-symbol"> {{element.state}} </div> -->
+                
+                
+                
+                <table class="w-50">
+                    <thead>
+                        <tr>
+                            <th>doctor</th>
+                            <th>patient</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <center>
+                                    <!-- patient confirmation icon display -->
+                                    <div *ngIf="element.doctorConfirm == false">
+                                        <mat-icon class="material-icons mat-warn" svgIcon="heroicons_outline:x"></mat-icon>
+                                    </div>
+                                    <div *ngIf="element.doctorConfirm == true">
+                                        <mat-icon class="material-icons mat-primary" svgIcon="heroicons_outline:check"></mat-icon>
+                                    </div>
+
+                                    <!-- end of patient confirmation icon display -->
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <!-- patient confirmation icon display -->
+                                    <div *ngIf="element.patientConfirm == false">
+                                        <mat-icon  class="material-icons mat-warn" svgIcon="heroicons_outline:x"></mat-icon>
+                                    </div>
+                                    <div *ngIf="element.patientConfirm == true">
+                                        <mat-icon class="material-icons mat-primary" svgIcon="heroicons_outline:check"></mat-icon>
+                                    </div>
+                                    <!-- end of patient confirmation icon display -->
+                                </center>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <!-- confirm button -->
+                <button (click)="onPatchAppointement(element._id,true)" type="button" mat-flat-button=""
+                class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-primary"
+                ng-reflect-color="primary">
+                <span class="mat-button-wrapper">Confirm </span>
+                <span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false"
+                    ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]">
+                </span><span class="mat-button-focus-overlay"></span>
+                </button>
+                <!-- end confirm -->
+
+
+                <!-- decline button -->
+                <button (click)="onPatchAppointement(element._id,false)" type="button" mat-flat-button="" class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-warn" ng-reflect-color="warn">
+                <span class="mat-button-wrapper">decline </span>
+                <span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></span>
+                <span class="mat-button-focus-overlay"></span>
+                </button>
+                <!-- end decline  -->
+
+
+
+              
+                
+
+                
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+</div>

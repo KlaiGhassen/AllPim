@@ -15,14 +15,14 @@ router.get("/", async(req, res, next) => {
     }
 });
 
-/*
+
 // get one appointement by 
 
-router.get("/:identifiant", getApp, (req, res) => {
+router.get("/:id", getApp, (req, res) => {
     console.log(res.app)
     res.json(res.app);
 });
-*/
+
 
 
 router.get("/appById/:identifiant", async(req, res, next) => {
@@ -41,9 +41,12 @@ router.get("/appById/:identifiant", async(req, res, next) => {
 router.post("/", async(req, res, next) => {
     console.log(req.body);
     const app = new App({
-        identifant: req.body.identifant,
+        id: req.body.id,
         patientId: req.body.patientId,
         docId: req.body.docId,
+        patientConfirm: req.body.patientConfirm,
+        doctorConfirm: req.body.doctorConfirm,
+        state: req.body.state,
         date: req.body.date,
         place: req.body.place,
     });
@@ -76,22 +79,22 @@ router.delete("/:identifiant", getApp, async(req, res) => {
 
 // update app
 
-router.patch("/:identifiant", getApp, (req, res) => {
+router.patch("/:id", getApp, (req, res) => {
     console.log(req.params, req.body)
-    if (req.body.identifant != null) {
-        res.app.identifant = req.body.identifant;
+   
+    
+    
+    if (req.body.patientConfirm != null) {
+        res.app.patientConfirm = req.body.patientConfirm;
     }
-    if (req.body.date != null) {
-        res.app.date = req.body.date;
-    }
-    if (req.body.place != null) {
-        res.app.place = req.body.place;
+    if (req.body.doctorConfirm != null) {
+        res.app.doctorConfirm = req.body.doctorConfirm;
     }
     if (req.body.state != null) {
         res.app.state = req.body.state;
+        
     }
-    
-
+    console.log("state",req.body.state);
     try {
         res.app.save().then((updatedapp) => {
             res.json(updatedapp);
@@ -101,17 +104,19 @@ router.patch("/:identifiant", getApp, (req, res) => {
     }
 });
 
+
+
 async function getApp(req, res, next) {
     console.log(req.params.identifiant)
     try {
-        app = await App.find({ identifiant: req.params.identifiant });
+        app = await App.findById(req.params.id );
         if (app == null) {
             return res.status(404).json({ message: "cannot find app" });
         }
     } catch (error) {
         return res.status(500).json({ message: err.message });
     }
-    res.app = app[0];
+    res.app = app;
     next();
 }
 
