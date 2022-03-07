@@ -4,6 +4,7 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 
+
 // @formatter:off
 // tslint:disable:max-line-length
 export const appRoutes: Route[] = [
@@ -74,6 +75,10 @@ export const appRoutes: Route[] = [
         },
         children   : [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
+            {path: 'appointement', loadChildren: () => import('app/modules/appointement/appointement.module').then(m => m.AppointementModule)},
+            {path: 'calendar', loadChildren: () => import('app/modules/calendar/calendar.module').then(m => m.CalendarModule)},
+            //{path: 'Appointements', loadChildren: () => import('app/modules/appointement/appointement.module').then(m => m.CalendarModule)},
+            
             {path: 'settings', loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule)},
            
             

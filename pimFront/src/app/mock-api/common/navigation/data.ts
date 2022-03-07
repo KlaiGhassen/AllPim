@@ -8,6 +8,20 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
+    },
+    {
+        id   : 'Calendar',
+        title: 'Calendar',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/calendar'
+    },
+    {
+        id   : 'Appointement',
+        title: 'Appointement',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/appointement'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [

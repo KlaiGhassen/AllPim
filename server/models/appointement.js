@@ -2,9 +2,11 @@
 const mongoose = require("mongoose");
 
 const appointementSchema = new mongoose.Schema({
-    identifant: { type: String, required: true },
+    id: String,
     patientId: String,
     docId: String ,
+    patientConfirm: Boolean,
+    doctorConfirm: Boolean,
     state: String, 
     date: Date,
     place: String
