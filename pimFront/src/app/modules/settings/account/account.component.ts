@@ -44,12 +44,11 @@ export class SettingsAccountComponent implements OnInit {
         console.log(this.gs.getUser());
         // Create the form
         this.accountForm = this._formBuilder.group({
-            name: [this.user.full_name],
+            full_name: [this.user.full_name],
             phone_number: [this.user.phone_number],
             title: [this.user.title],
             about: [this.user.description],
             email: [this.user.email, Validators.email],
-            phone: [this.user.phone_number],
             country: [this.user.country],
         });
     }

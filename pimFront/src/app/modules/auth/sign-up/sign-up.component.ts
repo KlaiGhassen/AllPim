@@ -43,7 +43,7 @@ export class SignUpClassicComponent implements OnInit {
             password: ['', Validators.required],
             phoneNumber: ['', Validators.required],
             agreements: ['', Validators.requiredTrue],
-            Description: ['', Validators.required],
+            description: ['', Validators.required],
         });
     }
 
