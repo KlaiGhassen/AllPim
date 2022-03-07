@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 var uploadDownload = require("./routes/uploadDownload");
 var authUser= require("./routes/auth");
 var appointment = require("./routes/appointement")
+var ophto = require ("./routes/ophto")
 
 //const swaggerJsDocs = require("swagger-jsdoc");
 //const swaggerUi = require("swagger-ui-express");
@@ -63,11 +64,7 @@ db.once("open", () => console.log("Connected to DataBase"));
 app.use("/upload", uploadDownload);
 app.use("/auth", authUser);
 app.use("/appointement",appointment);
-
-
-
-
-
+app.use("/ophto",ophto);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

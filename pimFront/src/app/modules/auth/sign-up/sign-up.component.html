@@ -3,7 +3,7 @@
         <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
             <!-- Logo -->
             <div class="w-12">
-                <img src="assets/images/logo/logo.svg">
+                <img src="assets/images/logo/logo.png">
             </div>
 
             <!-- Title -->
@@ -12,7 +12,7 @@
                 <div>Already have an account?</div>
                 <a
                     class="ml-1 text-primary-500 hover:underline"
-                    [routerLink]="['/pages/authentication/sign-in']">Sign in
+                    [routerLink]="['/sign-in']">Sign in
                 </a>
             </div>
 
@@ -38,8 +38,8 @@
                     <input
                         id="name"
                         matInput
-                        [formControlName]="'name'">
-                    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+                        [formControlName]="'full_name'">
+                    <mat-error *ngIf="signUpForm.get('full_name').hasError('required')">
                         Full name is required
                     </mat-error>
                 </mat-form-field>
@@ -93,7 +93,22 @@
                     <input
                         id="phoneNumber-confirm"
                         matInput
+                        type="tel"
                         [formControlName]="'phoneNumber'">
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('required')">
+                            Email address is required
+                        </mat-error>
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('tel')">
+                            Please enter a valid email address
+                        </mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Description</mat-label>
+                    <input
+                        id="Description"
+                        matInput
+                        type="textarea"
+                        [formControlName]="'Description'">
                 </mat-form-field>
                 <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5">
@@ -119,6 +134,7 @@
                     mat-flat-button
                     [color]="'primary'"
                     [disabled]="signUpForm.disabled"
+                    [routerLink]="['/sign-in']"
                     (click)="signUp()">
                     <span *ngIf="!signUpForm.disabled">
                         Create your account

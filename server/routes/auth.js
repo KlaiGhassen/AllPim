@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const userdb = require("../models/patient");
+const userdb = require("../models/ophto");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 
@@ -185,37 +185,23 @@ res.json({ "test":"test" });
 
 
 
-router.post("/", (req, res) => {
+router.post("/sign-in", (req, res) => {
     try {
         console.log(req.body);
         let email = req.body.email;
         let password = req.body.password;
         console.log(email, password);
         userdb.find({ email: email, password: password }).then((user) => {
-            compte = user[0];
+          let  compte = user[0];
             if (compte) {
                 let payload = {
                     id: compte.id,
-                    role: compte.role,
+                    email: compte.email,
                 };
                 console.log(payload);
                 const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-                let userLogin = {
-                    token: token,
-                    identifier: compte.identifier,
-                    email: compte.email,
-                    password: compte.password,
-                    phoneNumber: compte.phoneNumber,
-                    profilePicture: compte.profilePicture,
-                    FirstName: compte.FirstName,
-                    LastName: compte.LastName,
-                    social: compte.social,
-                    role: compte.role,
-                    verified: compte.verified,
-                    className: compte.className,
-                    description: compte.description,
-                };
-                res.json(userLogin);
+             
+                res.json({accessToken:token, user:compte});
             } else {
                 res.status(401);
                 res.json({
@@ -229,6 +215,39 @@ router.post("/", (req, res) => {
         });
     }
 });
+
+
+router.post("/refresh-access-token", (req, res) => {
+  try {
+      console.log(req.body.accessToken.payload);
+      let email = req.body.email;
+      let password = req.body.password;
+      console.log(email, password);
+      userdb.find({ id: req.body.accessToken.payload}).then((user) => {
+        let  compte = user[0];
+          if (compte) {
+              let payload = {
+                  id: compte.id,
+                  email: compte.email,
+              };
+              console.log(payload);
+              const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+           
+              res.json({accessToken:token, user:compte});
+          } else {
+              res.status(401);
+              res.json({
+                  error: "UNAUTHORIZED",
+              });
+          }
+      });
+  } catch (err) {
+      res.json({
+          error: err,
+      });
+  }
+});
+
 
 
 router.post("/googleCheck", (req, res) => {
@@ -277,32 +296,34 @@ router.post("/googleCheck", (req, res) => {
 });
 
 
-/**
- * @swagger
- * tags:
- *  name: auth User
- *  description: authentification reset verif User
- * /auth/reset:
- *  patch:
- *      tags: [auth User]
- *      requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          email:
- *                              type: string
- *                          code:
- *                              type: number
- *                          password:
- *                              type: number
- *                         
- *      responses:
- *          default:
- *              description: This is the default response for it
- */
+
+router.get("/current/:id", (req, res) => {
+  try {
+    console.log(req.query.id);
+    userdb.find({_id:req.body.query.id})
+      .then((user) => {
+        console.log("hello",user[0])
+        if (user) {
+          res.json(user);
+        } else {
+          res.status(401);
+          res.json({
+            error: "UNAUTHORIZED",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(401);
+        res.json({
+          error: "UNAUTHORIZED",
+        });
+      });
+  } catch (err) {
+    res.json({
+      error: err,
+    });
+  }
+});
 router.patch("/reset", getUserEmail, async(req, res) => {
     if (req.body.password != null) {
         if (req.body.code == val) {

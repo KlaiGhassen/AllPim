@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User } from 'app/core/user/user.types';
+import { GlobalService } from 'app/global.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,10 @@ export class UserService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(private _httpClient: HttpClient,
+        private gs:GlobalService,
+        
+        )
     {
     }
 
@@ -46,12 +50,15 @@ export class UserService
      * Get the current logged in user data
      */
     get(): Observable<User>
-    {
-        return this._httpClient.get<User>('api/common/user').pipe(
+    { let _user = this.gs.getUser();
+        return this._httpClient.get<User>(this.gs.uri+'/auth/current/'+_user._id).pipe(
             tap((user) => {
                 this._user.next(user);
+                this.user=_user;
             })
+            
         );
+
     }
 
     /**
