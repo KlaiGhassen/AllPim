@@ -105,10 +105,10 @@
                 <mat-form-field class="w-full">
                     <mat-label>Description</mat-label>
                     <input
-                        id="Description"
+                        id="Description"    
                         matInput
                         type="textarea"
-                        [formControlName]="'Description'">
+                        [formControlName]="'description'">
                 </mat-form-field>
                 <!-- ToS and PP -->
                 <div class="inline-flex items-end w-full mt-1.5">
@@ -133,8 +133,7 @@
                     class="fuse-mat-button-large w-full mt-6"
                     mat-flat-button
                     [color]="'primary'"
-                    [disabled]="signUpForm.disabled"
-                    [routerLink]="['/sign-in']"
+                    [disabled]="!signUpForm.valid"
                     (click)="signUp()">
                     <span *ngIf="!signUpForm.disabled">
                         Create your account

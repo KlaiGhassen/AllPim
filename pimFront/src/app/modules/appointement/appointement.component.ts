@@ -54,7 +54,6 @@ export class AppointementComponent implements OnInit {
 
     this.appointementService.addAppointement(a).subscribe(
       (response) => {
-        
         this.ngOnInit();
       }
       

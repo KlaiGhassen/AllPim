@@ -40,8 +40,6 @@ const routerConfig: ExtraOptions = {
         SocialLoginModule,
         BrowserModule,
         BrowserAnimationsModule,
-        AppointementModule,
-        CalendarModule,
         SharedModule,
         
         RouterModule.forRoot(appRoutes, routerConfig),

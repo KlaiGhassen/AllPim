@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -18,8 +18,9 @@ export class SignInClassicComponent implements OnInit {
         type: 'success',
         message: '',
     };
-    signInForm: FormGroup;
     showAlert: boolean = false;
+
+    signInForm: FormGroup;
 
     /**
      * Constructor
@@ -39,6 +40,28 @@ export class SignInClassicComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
+      if (this._activatedRoute.snapshot.params.token) {
+        if (this._activatedRoute.snapshot.params.token.length > 20) {
+
+
+
+          this._authService.accessToken =
+              this._activatedRoute.snapshot.params.token;
+          const redirectURL =
+              this._activatedRoute.snapshot.queryParamMap.get(
+                  'redirectURL'
+              ) || '/signed-in-redirect';
+
+          // // Navigate to the redirect url
+          this._router.navigateByUrl(redirectURL);
+   
+      }
+      else {
+        this._router.navigateByUrl("/sign-in")
+
+      }
+    }
+
         // Create the form
         this.signInForm = this._formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
@@ -68,7 +91,7 @@ export class SignInClassicComponent implements OnInit {
 
         // Sign in
         this._authService.signIn(this.signInForm.value).subscribe(
-             () => {
+            () => {
                 console.log('Success');
                 // Set the redirect url.
                 // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
@@ -77,12 +100,11 @@ export class SignInClassicComponent implements OnInit {
                 const redirectURL =
                     this._activatedRoute.snapshot.queryParamMap.get(
                         'redirectURL'
-                     ) || '/signed-in-redirect';
+                    ) || '/signed-in-redirect';
 
                 // // Navigate to the redirect url
-                 this._router.navigateByUrl(redirectURL);
-            
-             },
+                this._router.navigateByUrl(redirectURL);
+            },
             (response) => {
                 console.log(response);
                 // Re-enable the form

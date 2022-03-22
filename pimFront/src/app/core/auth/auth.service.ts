@@ -73,11 +73,8 @@ export class AuthService {
             .post(this.gs.uri + '/auth/sign-in', credentials)
             .pipe(
                 switchMap((response: any) => {
-if(response.image){
-
-
-    
-}
+                    if (response.image) {
+                    }
 
                     this.gs.setUser(response.user);
                     // Store the access token in the local storage
@@ -105,11 +102,14 @@ if(response.image){
                 accessToken: this.accessToken,
             })
             .pipe(
+                
                 catchError(() =>
+                
                     // Return false
                     of(false)
                 ),
                 switchMap((response: any) => {
+                    
                     console.log(response);
                     this.gs.setUser(response.user);
                     console.log(this.gs.getUser());
@@ -125,6 +125,8 @@ if(response.image){
                     // Return true
                     return of(true);
                 })
+               
+                
             );
     }
 
@@ -140,6 +142,12 @@ if(response.image){
 
         // Return the observable
         return of(true);
+    }
+
+    confirmationMail(email) {
+        return this._httpClient.post<any>(`${this.gs.uri}/auth/verified`, {
+            email: email,
+        });
     }
 
     /**

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -24,6 +25,7 @@ export class SignUpClassicComponent implements OnInit {
      * Constructor
      */
     constructor(
+        private _router: Router,
         private _authService: AuthService,
         private _formBuilder: FormBuilder
     ) {}
@@ -57,7 +59,19 @@ export class SignUpClassicComponent implements OnInit {
     signUp(): void {
         if (this.signUpForm.valid)
             this._authService.signUp(this.signUpForm.value).subscribe((res) => {
+                console.log(res);
 
+                if (!res.email && res.newOphto) {
+                    this._router.navigateByUrl(
+                        '/confirmation-required/' + res.newOphto.email
+                    );
+                } else {
+                    this.alert = {
+                        type: 'error',
+                        message: 'check email',
+                    };
+                    this.showAlert = true;
+                }
             });
     }
 }

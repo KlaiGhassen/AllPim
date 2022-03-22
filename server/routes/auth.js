@@ -8,301 +8,301 @@ const jwt = require("jsonwebtoken");
 var val;
 
 router.post("/reset", (req, res) => {
-    val = Math.floor(1000 + Math.random() * 9000);
-    console.log(val, req.body);
+  val = Math.floor(1000 + Math.random() * 9000);
+  console.log(val, req.body);
 
-    try {
-        let email = req.body.email;
-        userdb.find({ email: email }).then((user) => {
-            compte = user[0];
-            if (compte) {
-                var transporter = nodemailer.createTransport({
-                    service: "gmail",
-                    auth: {
-                        user: "pimmpim40@gmail.com",
-                        pass: "123456789azer@@",
-                    },
-                });
-                var mailOptions = {
-                    from: "pimmpim40@gmail.com",
-                    to: compte.email,
-                    subject: "Reset password",
-                    attachments: [{
-                            filename: "final_panda_ios.png",
-                            path: "./final_panda_ios.png",
-                            cid: 'pandaplogo.ee'
-                        },
-
-                    ],
-                    html: templateReset(val),
-                };
-                transporter.sendMail(mailOptions, async function(error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email sent: " + info.response);
-                    }
-                });
-
-                res.json("true");
-            } else {
-                res.json("false");
-            }
-        });
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-router.post("/verified", (req, res) => {
-    val = Math.floor(1000 + Math.random() * 9000);
-    try {
-        let email = req.body.email;
-        userdb.find({ email: email }).then((user) => {
-            compte = user[0];
-            if (compte) {
-                var transporter = nodemailer.createTransport({
-                    service: "gmail",
-                    auth: {
-                        user: "pimmpim40@gmail.com",
-                        pass: "123456789azer@@",
-                    },
-                });
-
-                var mailOptions = {
-                    from: "pimmpim40@gmail.com",
-                    to: compte.email,
-                    subject: "Verify email",
-                    html: templateVerify(val),
-                    attachments: [{
-                            filename: "final_panda_ios.png",
-                            path: "./final_panda_ios.png",
-                            cid: 'pandaplogo.ee'
-                        },
-
-                    ],
-                };
-                transporter.sendMail(mailOptions, async function(error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email sent: " + info.response);
-                    }
-                });
-                res.json({
-                    isemail: true,
-                });
-            } else {
-                res.json({
-                    isemail: false,
-                });
-            }
-        });
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-
-router.patch("/verified", getUserEmail, async(req, res) => {
-    if (req.body.code == val) {
-        console.log(res.user);
-        res.user.verified = true;
-        console.log(res.user);
-    }
-    try {
-        res.user.save().then((updateduser) => {
-            res.json(updateduser);
-        });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-router.post("/socauth", (req, res) => {
-    try {
-        let newUser = new userdb({
-            nom: req.body.nom,
-            email: req.body.email,
-            prenom: req.body.prenom,
-            image: req.body.image,
-            social: true,
-            verified: true,
-            description: req.body.description,
-        });
-        userdb.find({ email: newUser.email }).then((sss) => {
-            ss = sss[0];
-            console.log(ss);
-            if (ss) {
-                let payload = {
-                    id: ss.id,
-                    role: ss.role,
-                };
-                const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-                res.json({
-                    token: token,
-                    user: ss,
-                });
-            } else {
-                newUser.save().then((user) => {
-                    console.log("hello", user);
-                    compte = user;
-                    if (compte) {
-                        let payload = {
-                            id: compte.id,
-                            role: compte.role,
-                        };
-                        console.log(payload);
-                        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-                        console.log("hello", compte);
-
-                        res.json({
-                            token: token,
-                            user: compte,
-                        });
-                    } else {
-                        res.status(401);
-                        res.json({
-                            error: "UNAUTHORIZED",
-                        });
-                    }
-                });
-            }
-        });
-    } catch (err) {
-        console.log(err.code);
-        if (err.code === 11000) {
-            res.json({ created: true });
-        }
-    }
-});
-
-router.get('/',(req, res) => {
-
-res.json({ "test":"test" });
-
-})
-
-
-
-router.post("/sign-in", (req, res) => {
-    try {
-        console.log(req.body);
-        let email = req.body.email;
-        let password = req.body.password;
-        console.log(email, password);
-        userdb.find({ email: email, password: password }).then((user) => {
-          let  compte = user[0];
-            if (compte) {
-                let payload = {
-                    id: compte.id,
-                    email: compte.email,
-                };
-                console.log(payload);
-                const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-             
-                res.json({accessToken:token, user:compte});
-            } else {
-                res.status(401);
-                res.json({
-                    error: "UNAUTHORIZED",
-                });
-            }
-        });
-    } catch (err) {
-        res.json({
-            error: err,
-        });
-    }
-});
-
-
-router.post("/refresh-access-token", (req, res) => {
   try {
-      console.log(req.body.accessToken.payload);
-      let email = req.body.email;
-      let password = req.body.password;
-      console.log(email, password);
-      userdb.find({ id: req.body.accessToken.payload}).then((user) => {
-        let  compte = user[0];
-          if (compte) {
-              let payload = {
-                  id: compte.id,
-                  email: compte.email,
-              };
-              console.log(payload);
-              const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-           
-              res.json({accessToken:token, user:compte});
+    let email = req.body.email;
+    userdb.find({ email: email }).then((user) => {
+      compte = user[0];
+      if (compte) {
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "pimmpim40@gmail.com",
+            pass: "123456789azer@@",
+          },
+        });
+        var mailOptions = {
+          from: "pimmpim40@gmail.com",
+          to: compte.email,
+          subject: "Reset password",
+          attachments: [
+            {
+              filename: "insight.png",
+              path: "./insight.png",
+              cid: "pandaplogo.ee",
+            },
+          ],
+          html: templateReset(val),
+        };
+        transporter.sendMail(mailOptions, async function (error, info) {
+          if (error) {
+            console.log(error);
           } else {
-              res.status(401);
-              res.json({
-                  error: "UNAUTHORIZED",
-              });
+            console.log("Email sent: " + info.response);
           }
-      });
-  } catch (err) {
-      res.json({
-          error: err,
-      });
+        });
+
+        res.json("true");
+      } else {
+        res.json("false");
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 
+router.post("/verified", (req, res) => {
+  let val;
+  try {
+    let email = req.body.email;
+    console.log("email", email);
 
+    userdb.find({ email: email }).then((user) => {
+      compte = user[0];
+      if (compte) {
+        console.log("the account", compte);
+        if (compte) {
+          let payload = {
+            id: compte.id,
+            email: compte.email,
+          };
+          console.log(payload);
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
 
-router.post("/googleCheck", (req, res) => {
-    try {
-        console.log(req.body);
-        let email = req.body.email;
-
-        console.log(email);
-        userdb.find({ email: email }).then((user) => {
-            compte = user[0];
-            if (compte) {
-                let payload = {
-                    id: compte.id,
-                    role: compte.role,
-                };
-                console.log(payload);
-                const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-                let userLogin = {
-                    token: token,
-                    identifant: compte.identifant,
-                    email: compte.email,
-                    password: compte.password,
-                    phoneNumber: compte.phoneNumber,
-                    profilePicture: compte.profilePicture,
-                    FirstName: compte.FirstName,
-                    LastName: compte.LastName,
-                    social: compte.social,
-                    role: compte.role,
-                    verified: compte.verified,
-                    className: compte.className,
-                    description: compte.description,
-                };
-                res.json(userLogin);
+          val = token;
+          var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: "pimmpim40@gmail.com",
+              pass: "123456789azer@@",
+            },
+          });
+          var mailOptions = {
+            from: "pimmpim40@gmail.com",
+            to: compte.email,
+            subject: "Verify email",
+            html: templateVerify(val),
+            attachments: [
+              {
+                filename: "insight.png",
+                path: "./insight.png",
+                cid: "pandaplogo.ee",
+              },
+            ],
+          };
+          transporter.sendMail(mailOptions, async function (error, info) {
+            if (error) {
+              console.log(error);
             } else {
-                res.status(401);
-                res.json({
-                    error: "UNAUTHORIZED",
-                });
+              console.log("Email sent: " + info.response);
             }
-        });
-    } catch (err) {
-        res.json({
-            error: err,
-        });
-    }
+          });
+          res.json({
+            isemail: true,
+          });
+        } else {
+          res.json({
+            isemail: false,
+          });
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
+router.patch("/verified", getUserEmail, async (req, res) => {
+  if (req.body.code == val) {
+    console.log(res.user);
+    res.user.verified = true;
+    console.log(res.user);
+  }
+  try {
+    res.user.save().then((updateduser) => {
+      res.json(updateduser);
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
+router.post("/socauth", (req, res) => {
+  try {
+    let newUser = new userdb({
+      nom: req.body.nom,
+      email: req.body.email,
+      prenom: req.body.prenom,
+      image: req.body.image,
+      social: true,
+      verified: true,
+      description: req.body.description,
+    });
+    userdb.find({ email: newUser.email }).then((sss) => {
+      ss = sss[0];
+      console.log(ss);
+      if (ss) {
+        let payload = {
+          id: ss.id,
+          role: ss.role,
+        };
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+        res.json({
+          token: token,
+          user: ss,
+        });
+      } else {
+        newUser.save().then((user) => {
+          console.log("hello", user);
+          compte = user;
+          if (compte) {
+            let payload = {
+              id: compte.id,
+              role: compte.role,
+            };
+            console.log(payload);
+            const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+            console.log("hello", compte);
+
+            res.json({
+              token: token,
+              user: compte,
+            });
+          } else {
+            res.status(401);
+            res.json({
+              error: "UNAUTHORIZED",
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    console.log(err.code);
+    if (err.code === 11000) {
+      res.json({ created: true });
+    }
+  }
+});
+
+router.get("/", (req, res) => {
+  res.json({ test: "test" });
+});
+
+router.post("/sign-in", (req, res) => {
+  try {
+    console.log(req.body);
+    let email = req.body.email;
+    let password = req.body.password;
+    console.log(email, password);
+    userdb.find({ email: email, password: password }).then((user) => {
+      let compte = user[0];
+      if (compte) {
+        let payload = {
+          id: compte.id,
+          email: compte.email,
+        };
+        console.log(payload);
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+
+        res.json({ accessToken: token, user: compte });
+      } else {
+        res.status(401);
+        res.json({
+          error: "UNAUTHORIZED",
+        });
+      }
+    });
+  } catch (err) {
+    res.json({
+      error: err,
+    });
+  }
+});
+
+router.post("/refresh-access-token", (req, res) => {
+  try {
+    console.log("hellew",parseJwt(req.body.accessToken))
+    userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
+      let compte = user[0];
+      if (compte) {
+        console.log("Compte",compte)
+        let payload = {
+          id: compte.id,
+          email: compte.email,
+        };
+        console.log(payload);
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+        res.json({ accessToken: token, user: compte });
+      } else {
+        res.status(401);
+        res.json({
+          error: "UNAUTHORIZED",
+        });
+      }
+    });
+  } catch (err) {
+    res.json({
+      error: err,
+    });
+  }
+});
+
+router.post("/googleCheck", (req, res) => {
+  try {
+    console.log(req.body);
+    let email = req.body.email;
+
+    console.log(email);
+    userdb.find({ email: email }).then((user) => {
+      compte = user[0];
+      if (compte) {
+        let payload = {
+          id: compte.id,
+          role: compte.role,
+        };
+        console.log(payload);
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+        let userLogin = {
+          token: token,
+          identifant: compte.identifant,
+          email: compte.email,
+          password: compte.password,
+          phoneNumber: compte.phoneNumber,
+          profilePicture: compte.profilePicture,
+          FirstName: compte.FirstName,
+          LastName: compte.LastName,
+          social: compte.social,
+          role: compte.role,
+          verified: compte.verified,
+          className: compte.className,
+          description: compte.description,
+        };
+        res.json(userLogin);
+      } else {
+        res.status(401);
+        res.json({
+          error: "UNAUTHORIZED",
+        });
+      }
+    });
+  } catch (err) {
+    res.json({
+      error: err,
+    });
+  }
+});
 
 router.get("/current/:id", (req, res) => {
   try {
-    console.log(req.query.id);
-    userdb.find({_id:req.body.query.id})
+    console.log("hello",req.query.id);
+    userdb
+      .find({ _id: req.body.query.id })
       .then((user) => {
-        console.log("hello",user[0])
+        console.log("hello", user[0]);
         if (user) {
           res.json(user);
         } else {
@@ -324,39 +324,47 @@ router.get("/current/:id", (req, res) => {
     });
   }
 });
-router.patch("/reset", getUserEmail, async(req, res) => {
-    if (req.body.password != null) {
-        if (req.body.code == val) {
-            res.user.password = req.body.password;
-        }
-
-        try {
-            res.user.save().then((updateduser) => {
-                res.json(updateduser);
-            });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
-    } else {
-        res.json({ code: false });
+router.patch("/reset", getUserEmail, async (req, res) => {
+  if (req.body.password != null) {
+    if (req.body.code == val) {
+      res.user.password = req.body.password;
     }
+
+    try {
+      res.user.save().then((updateduser) => {
+        res.json(updateduser);
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  } else {
+    res.json({ code: false });
+  }
 });
 
 async function getUserEmail(req, res, next) {
-    try {
-        user = await userdb.find({ email: req.body.email });
-        if (user == null) {
-            return res.status(404).json({ message: "cannot find user" });
-        }
-    } catch (error) {
-        return res.status(500).json({ message: err.message });
+  try {
+    user = await userdb.find({ email: req.body.email });
+    if (user == null) {
+      return res.status(404).json({ message: "cannot find user" });
     }
-    res.user = user[0];
-    next();
+  } catch (error) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.user = user[0];
+  next();
 }
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
+  return JSON.parse(jsonPayload);
+};
 function templateReset(val) {
-    return `
+  return `
 <!DOCTYPE html >
 <html>
 
@@ -894,11 +902,12 @@ function templateReset(val) {
 
 </html>
 
-`
+`;
 }
 
 function templateVerify(val) {
-    return `
+  return (
+    `
 <!DOCTYPE html >
 <html>
 
@@ -1363,7 +1372,7 @@ function templateVerify(val) {
                               <!-- <h2 class="h2">Heading 2</h2>
                                                                 <h3 class="h3">Heading 3</h3>
                                                                 <h4 class="h4">Heading 4</h4> -->
-                              <p>verification code : </p>
+                              <p>verification Button : </p>
                             </div>
                           </td>
                         </tr>
@@ -1373,7 +1382,15 @@ function templateVerify(val) {
                               <tbody>
                                 <tr align="center">
                                   <td align="center" valign="middle" style="border-collapse:collapse;">
-                                    <p class="buttonText" href="#" target="_blank" style="color: #4A90E2;text-decoration: none;font-weight: normal;display: block;border: 2px solid #585858;padding: 10px 60px;font-family: Arial;">${val}</p>
+                                    <p class="buttonText" href="#" target="_blank" style="color: #4A90E2;text-decoration: none;font-weight: normal;display: block;border: 2px solid #585858;padding: 10px 60px;font-family: Arial;">
+                                    <a href='http://localhost:4200/confirmed/` +
+    val +
+    `' >
+                                    click here !
+                                    </a>
+                                    
+                                    
+                                    </p>
                                   </td>
                                 </tr>
                               </tbody>
@@ -1441,6 +1458,7 @@ function templateVerify(val) {
 </html>
 
 `
+  );
 }
 
 module.exports = router;
