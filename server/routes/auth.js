@@ -7,15 +7,16 @@ var nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 var val;
 
-router.post("/reset", (req, res) => {
-  val = Math.floor(1000 + Math.random() * 9000);
-  console.log(val, req.body);
-
+router.post("/forgot-password", (req, res) => {
+  console.log("Forgot Password")
+  let val;
   try {
     let email = req.body.email;
     userdb.find({ email: email }).then((user) => {
       compte = user[0];
       if (compte) {
+        val = compte._id;
+
         var transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
@@ -225,11 +226,11 @@ router.post("/sign-in", (req, res) => {
 
 router.post("/refresh-access-token", (req, res) => {
   try {
-    console.log("hellew",parseJwt(req.body.accessToken))
+    console.log("hellew", parseJwt(req.body.accessToken));
     userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
       let compte = user[0];
       if (compte) {
-        console.log("Compte",compte)
+        console.log("Compte", compte);
         let payload = {
           id: compte.id,
           email: compte.email,
@@ -298,7 +299,7 @@ router.post("/googleCheck", (req, res) => {
 
 router.get("/current/:id", (req, res) => {
   try {
-    console.log("hello",req.query.id);
+    console.log("hello", req.query.id);
     userdb
       .find({ _id: req.body.query.id })
       .then((user) => {
@@ -324,24 +325,34 @@ router.get("/current/:id", (req, res) => {
     });
   }
 });
-router.patch("/reset", getUserEmail, async (req, res) => {
-  if (req.body.password != null) {
-    if (req.body.code == val) {
-      res.user.password = req.body.password;
-    }
+router.post("/reset-password", getUserById, async (req, res) => {
+  console.log(req.body)
 
-    try {
-      res.user.save().then((updateduser) => {
-        res.json(updateduser);
-      });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  } else {
-    res.json({ code: false });
+  if (req.body.password != null) {
+    res.user.password = req.body.password;
+  }
+
+  try {
+    res.user.save().then((updateduser) => {
+      res.json(updateduser);
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
-
+async function getUserById(req, res, next) {
+  console.log(req.body)
+  try {
+    user = await userdb.find({ _id: req.body.id });
+    if (user == null) {
+      return res.status(404).json({ message: "cannot find user" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.user = user[0];
+  next();
+}
 async function getUserEmail(req, res, next) {
   try {
     user = await userdb.find({ email: req.body.email });
@@ -354,17 +365,23 @@ async function getUserEmail(req, res, next) {
   res.user = user[0];
   next();
 }
-function parseJwt (token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
+function parseJwt(token) {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
 
   return JSON.parse(jsonPayload);
-};
+}
 function templateReset(val) {
-  return `
+  return (
+    `
 <!DOCTYPE html >
 <html>
 
@@ -835,7 +852,11 @@ function templateReset(val) {
                               <tbody>
                                 <tr align="center">
                                   <td align="center" valign="middle" style="border-collapse:collapse;">
-                                    <p class="buttonText" href="#" target="_blank" style="color: #4A90E2;text-decoration: none;font-weight: normal;display: block;border: 2px solid #585858;padding: 10px 60px;font-family: Arial;">${val}</p>
+                                    <p class="buttonText" href="#" target="_blank" style="color: #4A90E2;text-decoration: none;font-weight: normal;display: block;border: 2px solid #585858;padding: 10px 60px;font-family: Arial;">  <a href='http://localhost:4200/reset-password/` +
+    val +
+    `' >
+                                                                    click here !
+                                                                    </a></p>
                                   </td>
                                 </tr>
                               </tbody>
@@ -902,7 +923,8 @@ function templateReset(val) {
 
 </html>
 
-`;
+`
+  );
 }
 
 function templateVerify(val) {
