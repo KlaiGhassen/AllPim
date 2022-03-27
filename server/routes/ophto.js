@@ -124,8 +124,8 @@ router.delete("/:email", getOphto, async(req, res) => {
 
 router.patch("/:email", getOphto, (req, res) => {
     console.log(req.params, req.body)
-    if (req.body.identifant != null) {
-        res.ophto.identifant = req.body.identifant;
+    if (req.body.country != null) {
+        res.ophto.country = req.body.country;
     }
     if (req.body.email != null) {
         res.ophto.email = req.body.email;
@@ -133,17 +133,14 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.password != null) {
         res.ophto.password = req.body.password;
     }
-    if (req.body.phoneNumber != null) {
-        res.ophto.phoneNumber = req.body.phoneNumber;
+    if (req.body.phone_number != null) {
+        res.ophto.phone_number = req.body.phone_number;
     }
     if (req.body.profilePicture != null) {
         res.ophto.profilePicture = req.body.profilePicture;
     }
-    if (req.body.FirstName != null) {
-        res.ophto.FirstName = req.body.FirstName;
-    }
-    if (req.body.LastName != null) {
-        res.ophto.LastName = req.body.LastName;
+    if (req.body.full_name != null) {
+        res.ophto.full_name = req.body.full_name;
     }
     if (req.body.verified != null) {
         res.ophto.verified = req.body.verified;
@@ -154,11 +151,11 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.role != null) {
         res.ophto.role = req.body.role;
     }
+    if (req.body.title != null) {
+        res.ophto.title = req.body.title;
+    }
     if (req.body.description != null) {
         res.ophto.description = req.body.description;
-    }
-    if (req.body.className != null) {
-        res.ophto.className = req.body.className;
     }
 
     try {

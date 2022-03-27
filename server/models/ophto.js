@@ -7,12 +7,13 @@ const userSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     phone_number: Number,
-    profilePicture: String,
+    profilePicture:{ type: String, default: "default.png" },
     diploma: { type: String, default: "default.png" },
     full_name: String,
     social: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     description: String,
+    role:String
   },
   {
     timestamps: true,

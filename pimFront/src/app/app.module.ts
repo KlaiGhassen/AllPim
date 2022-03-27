@@ -21,6 +21,8 @@ import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login'
 import { CalendarModule } from './modules/calendar/calendar.module';
 import { AppointementModule } from './modules/appointement/appointement.module';
 import { SharedModule } from './shared/shared.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 
@@ -57,7 +59,13 @@ const routerConfig: ExtraOptions = {
         LayoutModule,
 
         // 3rd party modules that require global configuration via forRoot
-        MarkdownModule.forRoot({})
+        MarkdownModule.forRoot({}),
+          ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the application is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+          })
     ],
 
     providers: [
