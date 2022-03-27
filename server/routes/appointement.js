@@ -19,6 +19,15 @@ router.get("/", async(req, res, next) => {
     }
 });
 
+router.get("/byPatientId/:patientId", async(req, res, next) => {
+    try {
+        const app = await App.find({ patientId: req.params.patientId });
+        res.json(app);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 const picsPath = require("path").resolve(__dirname, "../uploads");
 
 var storage = multer.diskStorage({
