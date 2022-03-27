@@ -3,6 +3,9 @@ import { AppointementService } from './appointement.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Appointement } from './appointement.model';
 import { SharedModule } from 'app/shared/shared.module';
+import { GlobalService } from 'app/global.service';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
+
 
 
 @Component({
@@ -19,16 +22,24 @@ import { SharedModule } from 'app/shared/shared.module';
   providers: [AppointementService]
 })
 export class AppointementComponent implements OnInit {
-  constructor(private appointementService: AppointementService) { }
-  dataSource
+  constructor(private appointementService: AppointementService, private gs: GlobalService) { }
+  dataSource;
+  
   columnsToDisplay = ['date', 'place', 'patientId','state'];
   appointement: Appointement;
 
   ngOnInit(): void {
-    this.dataSource = this.appointementService.getFromDatabase();
+    this.dataSource = this.appointementService.getFromDatabase().subscribe(val => { this.dataSource = val; console.log(val)});
+    //console.log(this.testDateInstance());
+    
     
     
     //throw new Error('Method not implemented.');
+  }
+
+  testDateInstance(myVar) {
+    //console.log("test time ::::::::: ",this.dataSource.subscribe(val => console.log(val[0].date)));
+    return (this.dataSource.subscribe(val => console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",typeof(myVar) ) ) )
   }
 
   onPatchAppointement(id: string, bolbol: Boolean, state: string): void {
@@ -40,10 +51,13 @@ export class AppointementComponent implements OnInit {
       
     );
   }
+
+  
+
   onSaveAppointement(d: Date): void {
     
     var patientId = "11111111";
-    var docId = "2222222";
+    var docId = this.gs.getUser()._id;
     var patientConfirm = true;
     var doctorConfirm = false ;
     var id = "33333";
@@ -87,7 +101,7 @@ export interface PeriodicElement {
     patientConfirm: Boolean; 
     doctorConfirm: Boolean; 
     state: string; 
-    date: string; 
+    date: Date; 
     place: string; 
 }
 

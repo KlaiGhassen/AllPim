@@ -63,7 +63,7 @@ export class AppointementService {
       }
 
       addAppointement(a: Appointement) {
-        return this._httpClient.post(this.Gs.uri+'/appointement', {a});
+        return this._httpClient.post(this.Gs.uri+'/appointement', a);
       }
       
     }
