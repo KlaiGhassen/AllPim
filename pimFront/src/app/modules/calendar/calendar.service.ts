@@ -47,6 +47,8 @@ export class CalendarService
             return this._httpClient.get(`${this.Gs.uri}/appointement/${id}`);
         }
 
+        
+
         //update
         confirmAppointement(id: string, bolbol: Boolean, calendarId: string){
             var nstate: string;
@@ -397,10 +399,11 @@ export class CalendarService
      */
     updateEvent(id: string, event): Observable<CalendarEvent>
     {
+        if(this.Gs.getUser().role == "ophto"){
         return this.events$.pipe(
             take(1),
             switchMap(events => this._httpClient.patch<CalendarEvent>(`${this.Gs.uri}/appointement/${id}`,
-                {date: event.date}
+                {date: event.date, doctorConfirm: true, patientConfirm: false, state: "Pending", calendarId: "1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc"}
             ).pipe(
                 map((updatedEvent) => {
 
@@ -418,6 +421,29 @@ export class CalendarService
                 })
             ))
         );
+            } else if(this.Gs.getUser().role == "simple"){
+                return this.events$.pipe(
+                    take(1),
+                    switchMap(events => this._httpClient.patch<CalendarEvent>(`${this.Gs.uri}/appointement/${id}`,
+                        {date: event.date, doctorConfirm: false, patientConfirm: true, state: "Pending", calendarId: "1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc"}
+                    ).pipe(
+                        map((updatedEvent) => {
+        
+                            // Find the index of the updated event
+                            const index = events.findIndex(item => item.id === id);
+        
+                            // Update the event
+                            events[index] = updatedEvent;
+        
+                            // Update the events
+                            this._events.next(events);
+        
+                            // Return the updated event
+                            return updatedEvent;
+                        })
+                    ))
+                );
+            }
     }
 
     /**

@@ -42,7 +42,7 @@ export class AppointementComponent implements OnInit {
     return (this.dataSource.subscribe(val => console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",typeof(myVar) ) ) )
   }
 
-  onPatchAppointement(id: string, bolbol: Boolean, state: string): void {
+  onPatchAppointement(id: string, bolbol: Boolean, state: string) {
     this.appointementService.confirmAppointement(id, bolbol).subscribe(
       (response) => {
         

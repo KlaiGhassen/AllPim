@@ -23,6 +23,7 @@ import { CalendarRecurrenceComponent } from 'app/modules/calendar/recurrence/rec
 import { CalendarService } from 'app/modules/calendar/calendar.service';
 import { Calendar, CalendarDrawerMode, CalendarEvent, CalendarEventEditMode, CalendarEventPanelMode, CalendarSettings } from 'app/modules/calendar/calendar.types';
 import { GlobalService } from 'app/global.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector       : 'calendar',
@@ -68,7 +69,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         private _overlay: Overlay,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _viewContainerRef: ViewContainerRef,
-        private gs: GlobalService
+        private gs: GlobalService,
+        private _httpClient: HttpClient
     )
     {
     }
@@ -968,14 +970,40 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         this.eventForm.get('end').setValue(moment().year(9999).endOf('year').toISOString());
     }
 
-    onPatchAppointement(id: string, bolbol: Boolean, state: string): void {
-        this._calendarService.confirmAppointement(id, bolbol,state).subscribe(
+    confirmDoctor(id: string, bolbol: Boolean) {
+        if(this.gs.getUser().role == "ophto") {
+        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe"}).subscribe(
           (response) => {
             
             this.ngOnInit();
           }
-          
         );
+    } else if(this.gs.getUser().role == "simple") {
+        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{patientConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe"}).subscribe(
+            (response) => {
+              
+              this.ngOnInit();
+            }
+          );
+    }
+      }
+
+      declineDoctor(id: string, bolbol: Boolean) {
+        if(this.gs.getUser().role == "ophto") {
+        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"}).subscribe(
+          (response) => {
+            
+            this.ngOnInit();
+          }
+        );
+      } else if(this.gs.getUser().role == "simple") {
+        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{patientConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"}).subscribe(
+            (response) => {
+              
+              this.ngOnInit();
+            }
+          );
+      }
       }
 
     
