@@ -78,6 +78,7 @@ export class SettingsSecurityComponent implements OnInit {
             this._authService
                 .resetPassword(
                     this.resetPasswordForm.get('password').value,
+                    this.gs.getUser()._id
                 )
 
                 .pipe(
