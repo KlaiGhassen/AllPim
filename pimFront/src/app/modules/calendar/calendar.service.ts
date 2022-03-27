@@ -33,7 +33,13 @@ export class CalendarService
     }
         //import from database
         getFromDatabase(){
-            return this._httpClient.get<any>(this.Gs.uri+'/appointement');
+            console.log("rzougggggaaaaaaa",this.Gs.getUser()._id)
+            if(this.Gs.getUser().role == "ophto"){
+            return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byDocId/${this.Gs.getUser()._id}`);
+        }
+        else if (this.Gs.getUser().role == "simple"){
+            return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byPatientId/${this.Gs.getUser()._id}`);
+        }
         };
 
         //get one event by id:
