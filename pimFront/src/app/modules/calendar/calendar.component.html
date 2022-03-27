@@ -230,9 +230,13 @@
                                                     All events
                                                 </button>
                                             </mat-menu>
+                                            
                                         </ng-container>
+                                        
                                     </div>
+                                    
                                 </div>
+                               
                             </div>
 
                             <!-- Description -->
@@ -253,7 +257,29 @@
                                     <div class="ml-3 leading-none">{{getCalendar(event.calendarId).title}}</div>
                                 </div>
                             </div>
+                            <div style="float:right">
+                             <!-- confirm button -->
+                <button (click)="onPatchAppointement(event._id,true,'5dab5f7b-757a-4467-ace1-305fe07b11fe')" type="button" mat-flat-button=""
+                class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-primary"
+                ng-reflect-color="primary">
+                <span class="mat-button-wrapper">Confirm </span>
+                <span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false"
+                    ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]">
+                </span><span class="mat-button-focus-overlay"></span>
+                </button>
+                <!-- end confirm -->
+
+
+                <!-- decline button -->
+                <button  type="button" mat-flat-button="" class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-warn" ng-reflect-color="warn">
+                <span class="mat-button-wrapper">decline </span>
+                <span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></span>
+                <span class="mat-button-focus-overlay"></span>
+                </button>
+                </div>
+                <!-- end decline  -->
                         </div>
+                        
                     </ng-container>
 
                     <!-- Add / Edit mode -->

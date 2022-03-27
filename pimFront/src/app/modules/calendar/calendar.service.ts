@@ -35,17 +35,50 @@ export class CalendarService
         getFromDatabase(){
             console.log("rzougggggaaaaaaa",this.Gs.getUser()._id)
             if(this.Gs.getUser().role == "ophto"){
-            return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byDocId/${this.Gs.getUser()._id}`);
-        }
-        else if (this.Gs.getUser().role == "simple"){
-            return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byPatientId/${this.Gs.getUser()._id}`);
-        }
+                return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byDocId/${this.Gs.getUser()._id}`);
+            }
+            else if (this.Gs.getUser().role == "simple"){
+                return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byPatientId/${this.Gs.getUser()._id}`);
+            }
         };
 
         //get one event by id:
         getOneaPP(id:string) {
             return this._httpClient.get(`${this.Gs.uri}/appointement/${id}`);
         }
+
+        //update
+        confirmAppointement(id: string, bolbol: Boolean, calendarId: string){
+            var nstate: string;
+            const tmpApp = this._httpClient.get(`${this.Gs.uri}/appointement/${id}`);
+            const myObjStr = JSON.stringify(tmpApp);
+    
+            console.log('stringify', myObjStr);
+            console.log(JSON.parse(myObjStr));
+            var parsedApp = JSON.parse(myObjStr);
+            
+            console.log(parsedApp);
+            console.log("confirmdoc ===== ", parsedApp.doctorConfirm);
+            console.log("partient confirm ===== ", parsedApp.patientConfirm);
+    
+            if(parsedApp.patientConfirm == true && parsedApp.doctorConfirm == true) {
+              nstate = "Confirmed";
+              
+              return this._httpClient.patch(`${this.Gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe"});
+            }
+            else if ((parsedApp.patientConfirm == false && parsedApp.doctorConfirm == true) || (parsedApp.patientConfirm == true && parsedApp.doctorConfirm == false)){
+              nstate = "Pending";
+             
+             return this._httpClient.patch(`${this.Gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Pending",calendarId: "1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc"});
+            }
+            else if (parsedApp.patientConfirm == false && parsedApp.doctorConfirm == false){
+              nstate = "Declined"
+              
+              return this._httpClient.patch(`${this.Gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"});
+            }
+            //console.log("el state ##################",nstate)
+           // return this._httpClient.patch(`${this.Gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"});
+          }
         
         
 

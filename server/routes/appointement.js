@@ -203,6 +203,10 @@ router.patch("/:id", getApp, (req, res) => {
         res.app.state = req.body.state;
         
     }
+    if (req.body.calendarId != null) {
+        res.app.calendarId = req.body.calendarId;
+        
+    }
     if (req.body.date != null) {
         res.app.date = req.body.date;
         

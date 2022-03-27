@@ -44,6 +44,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
     event: CalendarEvent;
     eventEditMode: CalendarEventEditMode = 'single';
     eventForm: FormGroup;
+    eventFormByDoc: FormGroup;
     eventTimeFormat: any;
     events: CalendarEvent[] = [];
     panelMode: CalendarEventPanelMode = 'view';
@@ -121,8 +122,19 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
             place      : ['']
         });
 
-        
-
+        // houni el form 7ajti bel getuser by name
+        this.eventFormByDoc = this._formBuilder.group({
+            id              : ['23'],
+            calendarId      : [''],
+            patientId: this.gs.getUser()._id,
+            title           : this.gs.getUser().full_name,
+            docId     : [''],
+            date           : [null],
+            patientConfirm             : [false],
+            doctorConfirm        : [true],
+            state          : ['Pending'],
+            place      : ['']
+        });
         
         // Get calendars
         this._calendarService.calendars$
@@ -955,6 +967,16 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         // If there are no UNTIL or COUNT, set the end date to a fixed value
         this.eventForm.get('end').setValue(moment().year(9999).endOf('year').toISOString());
     }
+
+    onPatchAppointement(id: string, bolbol: Boolean, state: string): void {
+        this._calendarService.confirmAppointement(id, bolbol,state).subscribe(
+          (response) => {
+            
+            this.ngOnInit();
+          }
+          
+        );
+      }
 
     
 }
