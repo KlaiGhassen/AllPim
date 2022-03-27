@@ -1,8 +1,12 @@
 var express = require("express");
 const App = require("../models/appointement");
+const tesseract = require("tesseract.js")
+const ocr = require("../routes/ocr")
 var router = express.Router();
+const multer = require("multer");
 
 const { POINT_CONVERSION_COMPRESSED } = require("constants");
+
 
 
 //get all Appointements
@@ -15,6 +19,76 @@ router.get("/", async(req, res, next) => {
     }
 });
 
+const picsPath = require("path").resolve(__dirname, "../uploads");
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./uploads");
+    },
+    filename: (req, file, cb) => {
+        console.log()
+        var filetype = "";
+        var fileExtension = "";
+        console.log("file###################################################################", file.mimetype)
+        if (file.mimetype === "image/gif") {
+            filetype = "image-";
+            fileExtension = "gif";
+        }
+        if (file.mimetype === "image/png") {
+            filetype = "image-";
+            fileExtension = "png";
+        }
+        if (file.mimetype === "image/jpeg") {
+            filetype = "image-";
+            fileExtension = "jpeg";
+        }
+        if (file.mimetype === "application/pdf") {
+            filetype = "pdf-"
+            fileExtension = "pdf"
+
+        }
+
+    cb(null, filetype + Date.now() + "." + fileExtension);
+    h = cb;
+  },
+});
+var upload = multer({
+  storage: storage,
+});
+
+//ocr test
+router.post("/license", upload.single('file') ,async(req, res, next) => {
+   try 
+  {
+      const rr = await ocr.licenseVerification(req.file.path).then((result) => {
+        //console.log(result.data.text);
+       
+        console.log(result.data.text)
+if(result.data.text.includes("zwayten")){
+    console.log("Accepted");
+}
+else {
+    console.log("Rejected")
+}
+        return result.data.text;
+        
+       /* if(result.data.text.includes("zwayten") ){
+            console.log("hafffffffellllllliiiiii");
+           return true;
+        }
+        else 
+          return 
+          */
+       
+    })
+    ;
+
+}
+  catch (error) {
+    res.status(500).json({ message: error.message });
+}
+    
+});
 
 // get one appointement by 
 
