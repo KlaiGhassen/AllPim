@@ -7,6 +7,16 @@
         <div class="w-full">
             <div class="text-xl">Change your password</div>
             <div class="text-secondary">You can only change your password twice within 24 hours!</div>
+             <!-- Alert -->
+             <fuse-alert
+             class="mt-8 -mb-4"
+             *ngIf="showAlert"
+             [appearance]="'outline'"
+             [showIcon]="false"
+             [type]="alert.type"
+             [@shake]="alert.type === 'error'">
+             {{alert.message}}
+         </fuse-alert>
         </div>
         <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
             <!-- Current password -->
@@ -18,7 +28,7 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'currentPassword'"
+                        [formControlName]="'password'"
                         type="password"
                         matInput>
                 </mat-form-field>
@@ -32,7 +42,7 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'newPassword'"
+                        [formControlName]="'passwordConfirm'"
                         type="password"
                         matInput>
                 </mat-form-field>
@@ -58,6 +68,7 @@
             <button
                 class="ml-4"
                 mat-flat-button
+                (click)="update()"
                 type="button"
                 [color]="'primary'">Save
             </button>
