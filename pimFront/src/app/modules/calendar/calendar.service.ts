@@ -36,6 +36,13 @@ export class CalendarService
             return this._httpClient.get<any>(this.Gs.uri+'/appointement');
         };
 
+        //get one event by id:
+        getOneaPP(id:string) {
+            return this._httpClient.get(`${this.Gs.uri}/appointement/${id}`);
+        }
+        
+        
+
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
@@ -328,9 +335,9 @@ export class CalendarService
     {
         return this.events$.pipe(
             take(1),
-            switchMap(events => this._httpClient.post<CalendarEvent>('api/apps/calendar/event', {
+            switchMap(events => this._httpClient.post<CalendarEvent>(this.Gs.uri+'/appointement',
                 event
-            }).pipe(
+            ).pipe(
                 map((addedEvent) => {
 
                     // Update the events
@@ -353,10 +360,9 @@ export class CalendarService
     {
         return this.events$.pipe(
             take(1),
-            switchMap(events => this._httpClient.patch<CalendarEvent>('api/apps/calendar/event', {
-                id,
-                event
-            }).pipe(
+            switchMap(events => this._httpClient.patch<CalendarEvent>(`${this.Gs.uri}/appointement/${id}`,
+                {date: event.date}
+            ).pipe(
                 map((updatedEvent) => {
 
                     // Find the index of the updated event
@@ -400,7 +406,7 @@ export class CalendarService
     {
         return this.events$.pipe(
             take(1),
-            switchMap(events => this._httpClient.delete<CalendarEvent>('api/apps/calendar/event', {params: {id}}).pipe(
+            switchMap(events => this._httpClient.delete<CalendarEvent>(`${this.Gs.uri}/appointement/${id}`).pipe(
                 map((isDeleted) => {
 
                     // Find the index of the deleted event

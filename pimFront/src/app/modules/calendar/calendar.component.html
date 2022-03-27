@@ -53,6 +53,13 @@
                         (click)="today()">
                         <mat-icon [svgIcon]="'heroicons_outline:calendar'"></mat-icon>
                     </button>
+                    <button
+                        class="hidden md:inline-flex"
+                        mat-icon-button
+                        (click)="onDateClick($event)">
+                        <mat-icon svgIcon="add"></mat-icon>
+                        
+                    </button>
 
                     <div class="hidden md:block ml-auto">
                         <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript w-30 ml-2">
@@ -132,6 +139,7 @@
                         [height]="'parent'"
                         [plugins]="calendarPlugins"
                         [views]="views"
+                        
                         (eventClick)="onEventClick($event)"
                         (eventRender)="onEventRender($event)"
                         #fullCalendar></full-calendar>
@@ -149,11 +157,81 @@
                                 <div class="flex flex-auto justify-between ml-6">
                                     <!-- Info -->
                                     <div>
-                                       
-                                        
+                                        <div class="text-3xl font-semibold tracking-tight leading-none">{{event.title || '(No title)'}}</div>
+                                        <div class="mt-0.5 text-secondary">{{event.date | date:'medium'}}</div>
+                                        <div class="text-secondary"></div>
                                     </div>
                                     <!-- Actions -->
-                                    
+                                    <div class="flex -mt-2 -mr-2 ml-10">
+
+                                        <!-- Non-recurring event -->
+                                        <ng-container *ngIf="!event.recurrence">
+                                            <!-- Edit -->
+                                            <button
+                                                mat-icon-button
+                                                (click)="changeEventPanelMode('edit', 'single')">
+                                                <mat-icon [svgIcon]="'heroicons_outline:pencil-alt'"></mat-icon>
+                                            </button>
+                                            <!-- Delete -->
+                                            <button
+                                                mat-icon-button
+                                                (click)="deleteEvent(event)">
+                                                <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                            </button>
+                                        </ng-container>
+
+                                        <!-- Recurring event -->
+                                        <ng-container *ngIf="event.recurrence">
+                                            <!-- Edit -->
+                                            <button
+                                                mat-icon-button
+                                                [matMenuTriggerFor]="editMenu">
+                                                <mat-icon [svgIcon]="'heroicons_outline:pencil-alt'"></mat-icon>
+                                            </button>
+                                            <mat-menu #editMenu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="changeEventPanelMode('edit', 'single')">
+                                                    This event
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="!event.isFirstInstance"
+                                                    (click)="changeEventPanelMode('edit', 'future')">
+                                                    This and following events
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="changeEventPanelMode('edit', 'all')">
+                                                    All events
+                                                </button>
+                                            </mat-menu>
+                                            <!-- Delete -->
+                                            <button
+                                                mat-icon-button
+                                                [matMenuTriggerFor]="deleteMenu">
+                                                <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                            </button>
+                                            <mat-menu #deleteMenu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="deleteEvent(event, 'single')">
+                                                    This event
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="!event.isFirstInstance"
+                                                    (click)="deleteEvent(event, 'future')">
+                                                    This and following events
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="deleteEvent(event, 'all')">
+                                                    All events
+                                                </button>
+                                            </mat-menu>
+                                        </ng-container>
+                                    </div>
                                 </div>
                             </div>
 
@@ -162,7 +240,7 @@
                                 class="flex mt-6"
                                 *ngIf="event.description">
                                 <mat-icon [svgIcon]="'heroicons_outline:menu-alt-2'"></mat-icon>
-                                <div class="flex-auto ml-6">{{event.description}}</div>
+                                <div class="flex-auto ml-6">{{event.state}}</div>
                             </div>
 
                             <!-- Calendar -->
@@ -172,14 +250,68 @@
                                     <div
                                         class="w-2 h-2 rounded-full"
                                         [ngClass]="getCalendar(event.calendarId).color"></div>
-                                    <div class="ml-3 leading-none">{{getCalendar(event.patientId).title}}</div>
+                                    <div class="ml-3 leading-none">{{getCalendar(event.calendarId).title}}</div>
                                 </div>
                             </div>
                         </div>
                     </ng-container>
 
                     <!-- Add / Edit mode -->
-                  
+                    <ng-container  *ngIf="panelMode === 'add' || panelMode === 'edit'">
+                        <form
+                            class="flex flex-col w-full p-6 pt-8 sm:pt-10 sm:pr-8"
+                            [formGroup]="eventForm">
+
+                            
+
+                            <!-- Dates -->
+                            <div style="width:20rem" class="flex items-start mt-6">
+                                <mat-icon
+                                    class="hidden sm:inline-flex mt-3 mr-6"
+                                    [svgIcon]="'heroicons_outline:calendar'"></mat-icon>
+                                    <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                        <input 
+                                            matInput
+                                            #dateInput  name="date" type="datetime-local"
+                                            [formControlName]="'date'"
+                                            [placeholder]="'date'">
+                                    </mat-form-field>
+                                    
+                                    
+                                
+                            </div>
+
+                            <!-- Recurrence -->
+                            
+
+                           
+
+                            <!-- Description -->
+                            
+
+                            <!-- Actions -->
+                            <div class="ml-auto mt-6">
+                                <button
+                                    class="add"
+                                    *ngIf="panelMode === 'add'"
+                                    mat-flat-button
+                                    type="button"
+                                    [color]="'primary'"
+                                    (click)="addEvent()">
+                                    Add
+                                </button>
+                                <button
+                                    class="save"
+                                    *ngIf="panelMode === 'edit'"
+                                    mat-flat-button
+                                    type="button"
+                                    [color]="'primary'"
+                                    (click)="updateEvent()">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </ng-container>
 
                 </ng-template>
 

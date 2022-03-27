@@ -40,23 +40,27 @@ export class SignInClassicComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
-        localStorage.removeItem('accessToken');
+      if (this._activatedRoute.snapshot.params.token) {
+        if (this._activatedRoute.snapshot.params.token.length > 20) {
 
-        if (this._activatedRoute.snapshot.params.token) {
-            if (this._activatedRoute.snapshot.params.token.length > 20) {
-                this._authService.accessToken =
-                    this._activatedRoute.snapshot.params.token;
-                const redirectURL =
-                    this._activatedRoute.snapshot.queryParamMap.get(
-                        'redirectURL'
-                    ) || '/signed-in-redirect';
 
-                // // Navigate to the redirect url
-                this._router.navigateByUrl(redirectURL);
-            } else {
-                this._router.navigateByUrl('/sign-in');
-            }
-        }
+
+          this._authService.accessToken =
+              this._activatedRoute.snapshot.params.token;
+          const redirectURL =
+              this._activatedRoute.snapshot.queryParamMap.get(
+                  'redirectURL'
+              ) || '/signed-in-redirect';
+
+          // // Navigate to the redirect url
+          this._router.navigateByUrl(redirectURL);
+   
+      }
+      else {
+        this._router.navigateByUrl("/sign-in")
+
+      }
+    }
 
         // Create the form
         this.signInForm = this._formBuilder.group({
@@ -73,7 +77,6 @@ export class SignInClassicComponent implements OnInit {
     /**
      * Sign in
      */
-
     signIn(): void {
         // Return if the form is invalid
         if (this.signInForm.invalid) {

@@ -42,13 +42,12 @@ export class SettingsAccountComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.gs.getUser();
         console.log(this.gs.getUser());
-        this._Us;
         // Create the form
         this.accountForm = this._formBuilder.group({
             full_name: [this.user.full_name],
             phone_number: [this.user.phone_number],
             title: [this.user.title],
-            description: [this.user.description],
+            about: [this.user.description],
             email: [this.user.email, Validators.email],
             country: [this.user.country],
         });
@@ -66,13 +65,7 @@ export class SettingsAccountComponent implements OnInit {
         this.files.splice(this.files.indexOf(event), 1);
     }
     updatePic() {
-        console.log('hi');
-        this.updatepicture = !this.updatepicture;
-    }
-    update() {
-        this._Us.update(this.accountForm.value).subscribe((data) => {
-         console.log(data);
-        });
-        // console.log(this.accountForm.value);
+        console.log('hi')
+        this.updatepicture = !this.updatepicture
     }
 }

@@ -78,15 +78,15 @@
                 </mat-form-field>
             </div>
 
-            <!-- Description -->
+            <!-- About -->
             <div class="sm:col-span-4">
                 <mat-form-field
                     class="fuse-mat-textarea fuse-mat-no-subscript w-full"
                 >
-                    <mat-label>Description</mat-label>
+                    <mat-label>About</mat-label>
                     <textarea
                         matInput
-                        [formControlName]="'description'"
+                        [formControlName]="'about'"
                         matTextareaAutosize
                     ></textarea>
                 </mat-form-field>
@@ -118,7 +118,7 @@
                         [svgIcon]="'heroicons_solid:mail'"
                         matPrefix
                     ></mat-icon>
-                    <input class="disabled" type="text"  [formControlName]="'email'" matInput />
+                    <input [formControlName]="'email'" matInput />
                 </mat-form-field>
             </div>
             <!-- Phone -->
@@ -164,7 +164,6 @@
                 mat-flat-button
                 type="button"
                 [color]="'primary'"
-                (click)="update()"
             >
                 Save
             </button>

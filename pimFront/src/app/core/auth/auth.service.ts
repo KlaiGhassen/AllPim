@@ -44,10 +44,7 @@ export class AuthService {
      * @param email
      */
     forgotPassword(email: string): Observable<any> {
-        return this._httpClient.post(
-            this.gs.uri + '/auth/forgot-password',
-            email
-        );
+        return this._httpClient.post('api/auth/forgot-password', email);
     }
 
     /**
@@ -55,13 +52,8 @@ export class AuthService {
      *
      * @param password
      */
-    resetPassword(password: string, id): Observable<any> {
-        let data = { password: this.gs.hashPassword(password), id: id };
-        console.log(data);
-        return this._httpClient.post(
-            this.gs.uri + '/auth/reset-password',
-            data
-        );
+    resetPassword(password: string): Observable<any> {
+        return this._httpClient.post('api/auth/reset-password', password);
     }
 
     /**
@@ -110,11 +102,14 @@ export class AuthService {
                 accessToken: this.accessToken,
             })
             .pipe(
+                
                 catchError(() =>
+                
                     // Return false
                     of(false)
                 ),
                 switchMap((response: any) => {
+                    
                     console.log(response);
                     this.gs.setUser(response.user);
                     console.log(this.gs.getUser());
@@ -130,6 +125,8 @@ export class AuthService {
                     // Return true
                     return of(true);
                 })
+               
+                
             );
     }
 
