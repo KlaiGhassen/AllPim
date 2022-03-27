@@ -140,7 +140,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         this._calendarService.getFromDatabase()
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((res)=>{
-                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,",res);
+                
                 this.events = cloneDeep(res);
 
                 // Mark for check
