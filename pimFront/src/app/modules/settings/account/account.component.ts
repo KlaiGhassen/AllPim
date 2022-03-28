@@ -68,6 +68,8 @@ export class SettingsAccountComponent implements OnInit {
         console.log(event);
         this.files.splice(this.files.indexOf(event), 1);
     }
+
+    
     updatePic() {
         console.log('hi');
         this.updatepicture = !this.updatepicture;

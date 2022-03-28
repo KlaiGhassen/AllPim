@@ -12,14 +12,15 @@
             <div class="content-center w-full">
                 <div *ngIf="updatepicture" fxLayout="column">
                     <div class="upload" ngx-dropzone accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
-                        (change)="onSelect($event)" [multiple]="false">
+                        (change)="onSelect($event)">
                         <ngx-dropzone-label>
-                            <button class="uploadButton" type="button">
+                            <!-- <button class="uploadButton" type="button">
                                 change photo
-                            </button>
+                            </button> -->
                         </ngx-dropzone-label>
-                        <ngx-dropzone-image-preview class="w-full" ngProjectAs="ngx-dropzone-preview"
-                            *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)" >
+                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                            <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
+
                         </ngx-dropzone-image-preview>
                     </div>
                 </div>
