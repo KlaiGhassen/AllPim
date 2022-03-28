@@ -119,9 +119,6 @@ router.delete("/:email", getOphto, async(req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-
-
 router.patch("/:email", getOphto, (req, res) => {
     console.log(req.params, req.body)
     if (req.body.country != null) {

@@ -5,10 +5,9 @@ const router = express.Router();
 var nodemailer = require("nodemailer");
 
 const jwt = require("jsonwebtoken");
-var val;
 
 router.post("/forgot-password", (req, res) => {
-  console.log("Forgot Password")
+  console.log("Forgot Password");
   let val;
   try {
     let email = req.body.email;
@@ -55,58 +54,71 @@ router.post("/forgot-password", (req, res) => {
   }
 });
 
-
 router.patch("/ophto/:email", getUserEmail, (req, res) => {
-  console.log(req.params, req.body)
-  console.log(res.ophto)
+  console.log(req.params, req.body);
+  console.log(res.ophto);
   // if (req.body.country != null) {
   //     res.ophto.country = req.body.country;
   // }
   if (req.body.email != null) {
-      res.ophto.email = req.body.email;
+    res.ophto.email = req.body.email;
   }
   if (req.body.password != null) {
-      res.ophto.password = req.body.password;
+    res.ophto.password = req.body.password;
   }
   if (req.body.phone_number != null) {
-      res.ophto.phone_number = req.body.phone_number;
+    res.ophto.phone_number = req.body.phone_number;
   }
   if (req.body.profilePicture != null) {
-      res.ophto.profilePicture = req.body.profilePicture;
+    res.ophto.profilePicture = req.body.profilePicture;
   }
   if (req.body.full_name != null) {
-      res.ophto.full_name = req.body.full_name;
+    res.ophto.full_name = req.body.full_name;
   }
   if (req.body.verified != null) {
-      res.ophto.verified = req.body.verified;
+    res.ophto.verified = req.body.verified;
   }
   if (req.body.social != null) {
-      res.ophto.social = req.body.social;
+    res.ophto.social = req.body.social;
   }
   if (req.body.role != null) {
-      res.ophto.role = req.body.role;
+    res.ophto.role = req.body.role;
   }
   if (req.body.description != null) {
-      res.ophto.description = req.body.description;
+    res.ophto.description = req.body.description;
   }
 
   try {
-      res.ophto.save().then((updatedophto) => {
-        console.loh(hello)
+    res.ophto.save().then((updatedophto) => {
+      console.log(hello);
+      res.json(updatedophto);
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+router.patch("/verification", async (req, res) => {
+  console.log("from verification");
+userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
+  let compte = user[0];
+  if (compte) {
+    console.log("Compte", compte);
+    compte.verified = true; 
+    try {
+    compte.save().then((updatedophto) => {
+      console.log("Updatedophto", updatedophto);
           res.json(updatedophto);
       });
   } catch (error) {
       res.status(400).json({ message: error.message });
   }
+  }
+})
 });
-
-
-router.post("/verified", (req, res) => {
+router.post("/verified",(req, res) => {
   let val;
   try {
     let email = req.body.email;
-    console.log("email", email);
-
     userdb.find({ email: email }).then((user) => {
       compte = user[0];
       if (compte) {
@@ -118,7 +130,6 @@ router.post("/verified", (req, res) => {
           };
           console.log(payload);
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-
           val = token;
           var transporter = nodemailer.createTransport({
             service: "gmail",
@@ -162,62 +173,42 @@ router.post("/verified", (req, res) => {
   }
 });
 
-router.patch("/verified", getUserEmail, async (req, res) => {
-  if (req.body.code == val) {
-    console.log(res.user);
-    res.user.verified = true;
-    console.log(res.user);
-  }
-  try {
-    res.user.save().then((updateduser) => {
-      res.json(updateduser);
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-router.post("/socauth", (req, res) => {
-  try {
-    let newUser = new userdb({
-      nom: req.body.nom,
+router.post("/socauth", async (req, res) => {
+  console.log(req.body);
+  const ophto = new userdb({
       email: req.body.email,
-      prenom: req.body.prenom,
-      image: req.body.image,
-      social: true,
-      verified: true,
+      password: req.body.password,
+      full_name: req.body.full_name,
       description: req.body.description,
+      social:req.body.social,
+      verified:req.body.verified,
+      profilePicture:req.body.image
     });
-    userdb.find({ email: newUser.email }).then((sss) => {
-      ss = sss[0];
-      console.log(ss);
-      if (ss) {
-        let payload = {
-          id: ss.id,
-          role: ss.role,
-        };
-        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-        res.json({
-          token: token,
-          user: ss,
-        });
-      } else {
-        newUser.save().then((user) => {
-          console.log("hello", user);
-          compte = user;
-          if (compte) {
+  try {
+      const compte = await ophto.save();
+      let payload = {
+        id: compte.id,
+        email: compte.email,
+      };
+      console.log(compte);
+      const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+
+      res.json({ accessToken: token, user: compte });
+    
+    } catch (err) {
+      console.log(err);
+      if (err.code === 11000) {
+        userdb.find({ email: req.body.email}).then((user) => {
+          let compte = user[0];
+          if (compte ) {
             let payload = {
               id: compte.id,
-              role: compte.role,
+              email: compte.email,
             };
             console.log(payload);
             const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-            console.log("hello", compte);
-
-            res.json({
-              token: token,
-              user: compte,
-            });
+    
+            res.json({ accessToken: token, user: compte });
           } else {
             res.status(401);
             res.json({
@@ -226,18 +217,10 @@ router.post("/socauth", (req, res) => {
           }
         });
       }
-    });
-  } catch (err) {
-    console.log(err.code);
-    if (err.code === 11000) {
-      res.json({ created: true });
-    }
+
   }
 });
 
-router.get("/", (req, res) => {
-  res.json({ test: "test" });
-});
 
 router.post("/sign-in", (req, res) => {
   try {
@@ -247,7 +230,7 @@ router.post("/sign-in", (req, res) => {
     console.log(email, password);
     userdb.find({ email: email, password: password }).then((user) => {
       let compte = user[0];
-      if (compte) {
+      if (compte ) {
         let payload = {
           id: compte.id,
           email: compte.email,
@@ -272,11 +255,9 @@ router.post("/sign-in", (req, res) => {
 
 router.post("/refresh-access-token", (req, res) => {
   try {
-    console.log("hellew", parseJwt(req.body.accessToken));
     userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
       let compte = user[0];
       if (compte) {
-        console.log("Compte", compte);
         let payload = {
           id: compte.id,
           email: compte.email,
@@ -372,7 +353,7 @@ router.get("/current/:id", (req, res) => {
   }
 });
 router.post("/reset-password", getUserById, async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
 
   if (req.body.password != null) {
     res.user.password = req.body.password;
@@ -387,7 +368,7 @@ router.post("/reset-password", getUserById, async (req, res) => {
   }
 });
 async function getUserById(req, res, next) {
-  console.log(req.body)
+  console.log(req.body);
   try {
     user = await userdb.find({ _id: req.body.id });
     if (user == null) {
@@ -400,6 +381,7 @@ async function getUserById(req, res, next) {
   next();
 }
 async function getUserEmail(req, res, next) {
+  console.log(req.body)
   try {
     user = await userdb.find({ email: req.body.email });
     if (user == null) {

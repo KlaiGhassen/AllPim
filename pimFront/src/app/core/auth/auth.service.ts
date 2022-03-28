@@ -63,6 +63,9 @@ export class AuthService {
             data
         );
     }
+    socialLog(data: any) {
+        return this._httpClient.post<any>(`${this.gs.uri}/auth/socauth`,data);
+      }
 
     /**
      * Sign in
@@ -81,21 +84,23 @@ export class AuthService {
             .post(this.gs.uri + '/auth/sign-in', credentials)
             .pipe(
                 switchMap((response: any) => {
-                    if (response.image) {
+                    console.log('response from service', response);
+                    if (response.user.verified) {
+                        this.gs.setUser(response.user);
+                        // Store the access token in the local storage
+                        this.accessToken = response.accessToken;
+
+                        // Set the authenticated flag to true
+                        this._authenticated = true;
+
+                        // Store the user on the user service
+                        this._userService.user = response.user;
+
+                        // Return a new observable with the response
+                        return of(response);
                     }
-
-                    this.gs.setUser(response.user);
-                    // Store the access token in the local storage
-                    this.accessToken = response.accessToken;
-
-                    // Set the authenticated flag to true
-                    this._authenticated = true;
-
-                    // Store the user on the user service
-                    this._userService.user = response.user;
-
-                    // Return a new observable with the response
                     return of(response);
+
                 })
             );
     }
@@ -147,10 +152,17 @@ export class AuthService {
         return of(true);
     }
 
-    confirmationMail(email) {
-        return this._httpClient.post<any>(`${this.gs.uri}/auth/verified`, {
-            email: email,
+    verification() {
+        return this._httpClient.patch<any>(`${this.gs.uri}/auth/verification`, {
+            accessToken: this.accessToken,
         });
+    }
+
+    confirmationMail(email) {
+        console.log('ConfirmationMail',email)
+        return this._httpClient.post<any>(`${this.gs.uri}/auth/verified`, 
+         {email:email},
+        );
     }
 
     /**
