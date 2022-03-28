@@ -124,6 +124,7 @@
             </button>
         </div>
     </form>
+    <div *ngIf="checkLicence() == false">
     <div *ngIf="updateLicense" fxLayout="column">
         <br>
         <div class="upload" ngx-dropzone accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
@@ -146,4 +147,5 @@
          >save License
     </button>
 
+</div>
 </div>
