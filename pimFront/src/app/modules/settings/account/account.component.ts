@@ -101,5 +101,16 @@ export class SettingsAccountComponent implements OnInit {
             this.load = false;
            });
       }
+
+      checkLicence(): Boolean {
+        const current = this.gs.getUser();
+        if(current.diploma === true) {
+            return true
+        }
+        else {
+            return false
+        }
+        
+      }
     
 }
