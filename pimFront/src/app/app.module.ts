@@ -41,7 +41,6 @@ const routerConfig: ExtraOptions = {
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
-        
         RouterModule.forRoot(appRoutes, routerConfig),
         RouterModule.forRoot(appRoutes),
 
@@ -74,7 +73,7 @@ const routerConfig: ExtraOptions = {
               },
               {
                 id: FacebookLoginProvider.PROVIDER_ID,
-                provider: new FacebookLoginProvider('505990200417179')
+                provider: new FacebookLoginProvider('759678765418980')
                 //              471159557632201
   
               }
