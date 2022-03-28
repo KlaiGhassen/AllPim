@@ -21,6 +21,14 @@ import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login'
 import { CalendarModule } from './modules/calendar/calendar.module';
 import { AppointementModule } from './modules/appointement/appointement.module';
 import { SharedModule } from './shared/shared.module';
+import { environment } from "../environments/environment";
+import { initializeApp } from "firebase/app";
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideFirebaseApp, getApp } from '@angular/fire/app';
+
+
+
+initializeApp(environment.firebase);
 
 
 
@@ -43,7 +51,8 @@ const routerConfig: ExtraOptions = {
         SharedModule,
         RouterModule.forRoot(appRoutes, routerConfig),
         RouterModule.forRoot(appRoutes),
-
+        provideFirestore(() => getFirestore()),
+        provideFirebaseApp(() => initializeApp( environment.firebase )),
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
         FuseConfigModule.forRoot(appConfig),

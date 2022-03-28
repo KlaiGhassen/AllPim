@@ -4,18 +4,22 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 
+import { BehaviorSubject } from 'rxjs'
+
 @Injectable({
     providedIn: 'root'
 })
 export class NotificationsService
 {
     private _notifications: ReplaySubject<Notification[]> = new ReplaySubject<Notification[]>(1);
+    currentMessage = new BehaviorSubject(null);
 
     /**
      * Constructor
      */
     constructor(private _httpClient: HttpClient)
     {
+        
     }
 
     // -----------------------------------------------------------------------------------------------------
