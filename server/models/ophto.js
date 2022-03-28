@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     password: String,
     phone_number: Number,
     profilePicture:{ type: String, default: "default.png" },
-    diploma: { type: String, default: "default.png" },
+    diploma: { type: Boolean, default: false },
     full_name: String,
     social: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },

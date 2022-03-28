@@ -7,7 +7,7 @@ export interface User
     status?: string;
     phone_number:Number;
     profilePicture:string;
-    diploma?:string;
+    diploma?:Boolean;
 
 
 }

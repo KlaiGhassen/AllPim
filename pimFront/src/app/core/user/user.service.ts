@@ -67,4 +67,15 @@ export class UserService
     {
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/'+user.email, user)
     }
+
+    updateLicense(email:string ,file:any)
+    {
+        return this._httpClient.patch<any>(this.gs.uri+'/ophto/license/'+email, {file: file})
+    }
+    postFile(fileToUpload: File) {
+        const formData: FormData = new FormData();
+        formData.append('file', fileToUpload, fileToUpload.name);
+        return this._httpClient.patch<any>(this.gs.uri+'/ophto/license/'+this.gs.getUser().email,formData,
+        );
+      }
 }

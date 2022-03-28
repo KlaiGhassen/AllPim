@@ -22,6 +22,9 @@ export class SettingsAccountComponent implements OnInit {
     accountForm: FormGroup;
     user;
     updatepicture = false;
+    updateLicense = true;
+    formData = new FormData(); 
+    load = false;
 
     /**
      * Constructor
@@ -69,10 +72,34 @@ export class SettingsAccountComponent implements OnInit {
         console.log('hi');
         this.updatepicture = !this.updatepicture;
     }
+
+    
     update() {
         this._Us.update(this.accountForm.value).subscribe((data) => {
          console.log(data);
         });
         // console.log(this.accountForm.value);
     }
+    onSelectedFile(event){
+        //console.log("fillllllllllllllllllllllllllllllllllllle",event.target.files)
+        
+          const file = event.target.files[0];
+          
+        
+      // Store form name as "file" with file data
+      this.formData.append("file", file, event.target.files[0].name);
+         
+         
+           
+        
+      }
+
+      savelicense(){
+          this.load = true;
+        this._Us.postFile(this.files[0]).subscribe((data) => {
+            console.log(data);
+            this.load = false;
+           });
+      }
+    
 }
