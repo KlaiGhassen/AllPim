@@ -11,12 +11,14 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
 import { SignUpClassicComponent } from 'app/modules/auth/sign-up/sign-up.component';
 import { authSignupRoutes } from 'app/modules/auth/sign-up/sign-up.routing';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
     declarations: [
         SignUpClassicComponent
     ],
     imports     : [
+        MatSelectModule,
         RouterModule.forChild(authSignupRoutes),
         MatButtonModule,
         MatCheckboxModule,

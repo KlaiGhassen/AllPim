@@ -46,6 +46,7 @@ export class SignUpClassicComponent implements OnInit {
             phoneNumber: ['', Validators.required],
             agreements: ['', Validators.requiredTrue],
             description: ['', Validators.required],
+            role:['', Validators.required]
         });
     }
 
