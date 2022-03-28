@@ -4,7 +4,7 @@ const { json } = require("express");
 var router = express.Router();
 
 
-function licenseVerification(image){
+async function licenseVerification(image){
  return tesseract.recognize(image,"eng",{logger: (m) => console.log(m)})
 }
 module.exports = {licenseVerification};

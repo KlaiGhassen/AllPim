@@ -28,6 +28,15 @@ router.get("/byPatientId/:patientId", async(req, res, next) => {
     }
 });
 
+router.get("/byDocId/:docId", async(req, res, next) => {
+    try {
+        const app = await App.find({ docId: req.params.docId });
+        res.json(app);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 const picsPath = require("path").resolve(__dirname, "../uploads");
 
 var storage = multer.diskStorage({
@@ -192,6 +201,10 @@ router.patch("/:id", getApp, (req, res) => {
     }
     if (req.body.state != null) {
         res.app.state = req.body.state;
+        
+    }
+    if (req.body.calendarId != null) {
+        res.app.calendarId = req.body.calendarId;
         
     }
     if (req.body.date != null) {

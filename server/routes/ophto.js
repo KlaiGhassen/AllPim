@@ -1,6 +1,7 @@
 var express = require("express");
 const Ophto = require("../models/ophto");
 var router = express.Router();
+const ocr = require("../routes/ocr");
 const multer = require("multer");
 const { POINT_CONVERSION_COMPRESSED } = require("constants");
 
@@ -121,6 +122,8 @@ router.delete("/:email", getOphto, async(req, res) => {
 });
 router.patch("/:email", getOphto, (req, res) => {
     console.log(req.params, req.body)
+
+
     if (req.body.country != null) {
         res.ophto.country = req.body.country;
     }
@@ -154,6 +157,9 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.description != null) {
         res.ophto.description = req.body.description;
     }
+    if (req.body.diploma != null) {
+        res.ophto.diploma = req.body.diploma;
+    }
 
     try {
         res.ophto.save().then((updatedophto) => {
@@ -178,4 +184,43 @@ async function getOphto(req, res, next) {
     next();
 }
 
+
+// Ocr abaguishagggggggyyyyyyyyy ena li sna3tou el skiiiiiiipe
+router.patch("/license/:email", upload.single('file'), getOphto ,async(req, res, next) => {
+    try 
+   {
+       const rr = await ocr.licenseVerification(req.file.path).then((result) => {
+         //console.log(result.data.text);
+        
+         console.log(result.data.text)
+ if(result.data.text.includes("Medical") || result.data.text.includes("Medical") || result.data.text.includes("Medicale") || result.data.text.includes("medicale")){
+    
+        res.ophto.diploma = true;
+    
+     console.log("Accepted");
+     res.json(true);
+ }
+ else {
+     console.log("Rejected")
+     res.ophto.diploma = false;
+     res.json(false);
+ }
+         return result.data.text;
+       
+     })
+     ;
+ 
+ }
+   catch (error) {
+     res.status(500).json({ message: error.message });
+ }
+ try {
+    res.ophto.save().then((updatedophto) => {
+        //res.json(updatedophto);
+    });
+} catch (error) {
+    //res.status(400).json({ message: error.message });
+}
+ });
+ 
 module.exports = router;
