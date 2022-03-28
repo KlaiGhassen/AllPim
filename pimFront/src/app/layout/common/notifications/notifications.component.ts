@@ -6,6 +6,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { environment } from "app/../environments/environment";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
 
 @Component({
     selector       : 'notifications',
@@ -19,6 +22,8 @@ export class NotificationsComponent implements OnInit, OnDestroy
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
 
+    title = 'af-notification';
+    message:any = null;
     notifications: Notification[];
     unreadCount: number = 0;
     private _overlayRef: OverlayRef;
@@ -45,22 +50,45 @@ export class NotificationsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        // Subscribe to notification changes
-        this._notificationsService.notifications$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((notifications: Notification[]) => {
+        //this.requestPermission();
+    // this.listen();
+    //     // Subscribe to notification changes
+    //     this._notificationsService.notifications$
+    //         .pipe(takeUntil(this._unsubscribeAll))
+    //         .subscribe((notifications: Notification[]) => {
 
-                // Load the notifications
-                this.notifications = notifications;
+    //             // Load the notifications
+    //             this.notifications = notifications;
 
-                // Calculate the unread count
-                this._calculateUnreadCount();
+    //             // Calculate the unread count
+    //             this._calculateUnreadCount();
 
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+    //             // Mark for check
+    //             this._changeDetectorRef.markForCheck();
+    //         });
     }
-
+    requestPermission() {
+        const messaging = getMessaging();
+        getToken(messaging, 
+         { vapidKey: environment.firebase.vapidKey}).then(
+           (currentToken) => {
+             if (currentToken) {
+               console.log("Hurraaa!!! we got the token.....");
+               console.log(currentToken);
+             } else {
+               console.log('No registration token available. Request permission to generate one.');
+             }
+         }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        });
+      }
+      listen() {
+        const messaging = getMessaging();
+        onMessage(messaging, (payload) => {
+          console.log('Message received. ', payload);
+          this.message=payload;
+        });
+      }
     /**
      * On destroy
      */
