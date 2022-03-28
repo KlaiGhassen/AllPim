@@ -354,6 +354,7 @@ router.get("/current/:id", (req, res) => {
 });
 router.post("/reset-password", getUserById, async (req, res) => {
   console.log(req.body);
+  console.log(res.user)
 
   if (req.body.password != null) {
     res.user.password = req.body.password;
