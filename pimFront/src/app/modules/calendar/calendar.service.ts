@@ -40,6 +40,7 @@ export class CalendarService
             else if (this.Gs.getUser().role == "simple"){
                 return this._httpClient.get<any>(`${this.Gs.uri}/appointement/byPatientId/${this.Gs.getUser()._id}`);
             }
+            return this._httpClient.get<any>(`${this.Gs.uri}/appointement`);
         };
 
         //get one event by id:
