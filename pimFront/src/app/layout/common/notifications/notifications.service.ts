@@ -58,9 +58,10 @@ export class NotificationsService
      */
     create(notification: Notification): Observable<Notification>
     {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.post<Notification>('api/common/notifications', {notification}).pipe(
+            switchMap(notifications => this._httpClient.post<Notification>(this.Gs.uri+'/notification', notification).pipe(
                 map((newNotification) => {
 
                     // Update the notifications with the new notification
