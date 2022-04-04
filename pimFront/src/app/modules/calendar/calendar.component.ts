@@ -606,6 +606,7 @@ patientId: null
                 this.ngOnInit();
                 this.notification.description = `${newEvent.patientId} have submitted an appointement`;
                 this.notification.icon = 'heroicons_solid:star';
+                this.notification.title = "new Appointement";
                 this.notification.time = Date();
                 this.notification.read = false;
                 this.notification.docId = this.gs.getUser()._id;
