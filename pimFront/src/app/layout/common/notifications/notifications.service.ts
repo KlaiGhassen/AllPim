@@ -5,6 +5,7 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 import { map, switchMap, take, tap } from 'rxjs/operators';
 
 import { BehaviorSubject } from 'rxjs'
+import { GlobalService } from 'app/global.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class NotificationsService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(private _httpClient: HttpClient,private Gs:GlobalService)
     {
         
     }
@@ -43,7 +44,7 @@ export class NotificationsService
      */
     getAll(): Observable<Notification[]>
     {
-        return this._httpClient.get<Notification[]>('api/common/notifications').pipe(
+        return this._httpClient.get<Notification[]>(this.Gs.uri+'/notification').pipe(
             tap((notifications) => {
                 this._notifications.next(notifications);
             })
@@ -113,7 +114,7 @@ export class NotificationsService
     {
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.delete<boolean>('api/common/notifications', {params: {id}}).pipe(
+            switchMap(notifications => this._httpClient.delete<boolean>(`${this.Gs.uri}/notification/${id}`).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted notification

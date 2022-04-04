@@ -1,6 +1,7 @@
 export interface Notification
 {
     id: string;
+    _id:string,
     icon?: string;
     image?: string;
     title?: string;
