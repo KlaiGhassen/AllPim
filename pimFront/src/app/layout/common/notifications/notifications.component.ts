@@ -160,7 +160,13 @@ export class NotificationsComponent implements OnInit, OnDestroy
     markAllAsRead(): void
     {
         // Mark all as read
-        this._notificationsService.markAllAsRead().subscribe();
+        //this._notificationsService.markAllAsRead().subscribe();
+        this.notifications.forEach((notification, index) => {
+                        
+            this._notificationsService.update(notification.id, notification).subscribe();
+            this.ngOnInit();
+        });
+        
     }
 
     /**

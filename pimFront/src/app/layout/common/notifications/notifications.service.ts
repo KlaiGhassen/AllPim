@@ -83,9 +83,8 @@ export class NotificationsService
     {
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.patch<Notification>('api/common/notifications', {
-                id,
-                notification
+            switchMap(notifications => this._httpClient.patch<Notification>(`${this.Gs.uri}/notification/markAsRead/${notification._id}`, {
+                read: true 
             }).pipe(
                 map((updatedNotification: Notification) => {
 
@@ -140,11 +139,12 @@ export class NotificationsService
     {
         return this.notifications$.pipe(
             take(1),
-            switchMap(notifications => this._httpClient.get<boolean>('api/common/notifications/mark-all-as-read').pipe(
+            switchMap(notifications => this._httpClient.get<boolean>(this.Gs.uri+'/notification').pipe(
                 map((isUpdated: boolean) => {
 
                     // Go through all notifications and set them as read
                     notifications.forEach((notification, index) => {
+                        
                         notifications[index].read = true;
                     });
 

@@ -114,7 +114,9 @@ router.patch("/:id", getApp, (req, res) => {
 
 //mark as read:
 router.patch("/markAsRead/:id", getApp, (req, res) => {
-        res.app.read = true;
+    if (req.body.read != null) {
+        res.app.read = req.body.read;
+    }
     try {
         res.app.save().then((updatedapp) => {
             res.json(updatedapp);
@@ -123,6 +125,7 @@ router.patch("/markAsRead/:id", getApp, (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
 
 
 
@@ -139,6 +142,7 @@ async function getApp(req, res, next) {
     res.app = app;
     next();
 }
+
 
 
 
