@@ -457,7 +457,7 @@ patientId: null
             id              : this.gs.getUser().full_name + now,
             calendarId      : '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
             patientId: this.gs.getUser()._id,
-            docId : "blawwww",
+            docId : this.gs.getUser()._id,
             title           : this.gs.getUser().full_name,
             date           : null,
             state        : 'Pending',
