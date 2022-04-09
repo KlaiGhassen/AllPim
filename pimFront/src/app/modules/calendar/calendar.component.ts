@@ -604,13 +604,15 @@ patientId: null
             // Reload events
             this._calendarService.reloadEvents().subscribe(()=>{this._closeEventPanel();
                 this.ngOnInit();
-                this.notification.description = `${newEvent.patientId} have submitted an appointement`;
+                this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
                 this.notification.icon = 'heroicons_solid:star';
                 this.notification.title = "new Appointement";
                 this.notification.time = Date();
                 this.notification.read = false;
                 this.notification.docId = this.gs.getUser()._id;
-                this.notification.patientId = this.gs.getUser()._id
+                this.notification.patientId = this.gs.getUser()._id;
+                this.notification.useRouter = true;
+                this.notification.link = '/calendar';
                 
                 this._notifservice.create(this.notification).subscribe((res) => {
                     console.log(res);

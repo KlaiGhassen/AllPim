@@ -65,6 +65,9 @@ router.post("/", async(req, res, next) => {
         description: req.body.description,
         time: req.body.time,
         read: req.body.read,
+        image: req.body.image,
+        link: req.body.link,
+        useRouter: req.body.useRouter,
     });
     try {
         const newNotification = await notification.save();

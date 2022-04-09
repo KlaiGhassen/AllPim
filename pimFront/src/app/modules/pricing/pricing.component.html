@@ -28,7 +28,7 @@
                     [ngClass]="{'bg-card pointer-events-none shadow': yearlyBilling,
                                 'bg-transparent': !yearlyBilling}"
                     mat-flat-button
-                    (click)="yearlyBilling = true"
+                    (click)="toggle()"
                     disableRipple>
                     Yearly billing
                 </button>
@@ -37,7 +37,7 @@
                     [ngClass]="{'bg-card pointer-events-none shadow': !yearlyBilling,
                                 'bg-transparent': yearlyBilling}"
                     mat-flat-button
-                    (click)="yearlyBilling = false"
+                    (click)="toggle()"
                     disableRipple>
                     Monthly billing
                 </button>
@@ -59,7 +59,7 @@
                                         <ng-container *ngIf="yearlyBilling">$0</ng-container>
                                         <ng-container *ngIf="!yearlyBilling">$0</ng-container>
                                     </div>
-                                    <div class="ml-2 text-lg text-secondary">/ mo</div>
+                                    <div class="ml-2 text-lg text-secondary">{{appendtype}}</div>
                                 </div>
                                 <div class="mt-1 lg:mt-3 text-sm lg:text-base text-secondary">
                                     <ng-container *ngIf="yearlyBilling">
@@ -83,22 +83,24 @@
                                 <div class="flex items-baseline lg:mt-4 whitespace-nowrap">
                                     <div class="hidden lg:block text-lg text-secondary">USD</div>
                                     <div class="lg:ml-2 text-2xl lg:text-4xl font-bold tracking-tight">
-                                        <ng-container *ngIf="yearlyBilling">$12</ng-container>
-                                        <ng-container *ngIf="!yearlyBilling">$15</ng-container>
+                                        <ng-container *ngIf="yearlyBilling">${{priceYear}}</ng-container>
+                                        <ng-container *ngIf="!yearlyBilling">${{priceMonth}}</ng-container>
                                     </div>
-                                    <div class="ml-2 text-lg text-secondary">/ mo</div>
+                                    <div class="ml-2 text-lg text-secondary">{{appendtype}}</div>
                                 </div>
                                 <div class="mt-1 lg:mt-3 text-sm lg:text-base text-secondary">
                                     <ng-container *ngIf="yearlyBilling">
                                         <div>billed yearly</div>
-                                        <div><b>$15.00</b> billed monthly</div>
+                                        <div><b>$27.00</b> billed monthly</div>
                                     </ng-container>
                                     <ng-container *ngIf="!yearlyBilling">
                                         <div>billed monthly</div>
-                                        <div><b>$12.00</b> billed yearly</div>
+                                        <div><b>$29.00</b> billed monthly</div>
                                     </ng-container>
                                 </div>
                                 <button
+                                id="buyPremium"
+                                (click)="pay(price_topay)"
                                     class="w-full min-h-8 h-8 lg:min-h-10 lg:h-10 mt-3 lg:mt-6"
                                     mat-flat-button
                                     [color]="'primary'">
