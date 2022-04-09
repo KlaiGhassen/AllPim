@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApexOptions } from 'ng-apexcharts';
-import { ProjectService } from 'app/modules/admin/dashboards/project/project.service';
+import { ProjectService } from './project.service';
+import { GlobalService } from 'app/global.service';
 
 @Component({
     selector       : 'project',
@@ -27,12 +28,13 @@ export class ProjectComponent implements OnInit, OnDestroy
      * Constructor
      */
     constructor(
+        private gs: GlobalService,
         private _projectService: ProjectService,
         private _router: Router
     )
     {
     }
-
+user ;
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
@@ -42,6 +44,7 @@ export class ProjectComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.user=this.gs.getUser();
         // Get the data
         this._projectService.data$
             .pipe(takeUntil(this._unsubscribeAll))

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from "../environments/environment";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -16,7 +17,10 @@ export class AppComponent implements OnInit
  
     title = 'af-notification';
     message:any = null;
-    constructor() {}
+    constructor() {
+    
+
+    }
     ngOnInit(): void {
       this.requestPermission();
       this.listen();

@@ -3,11 +3,11 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'dashboard',
+        title: 'dashboard',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/dashboard',
     },
     {
         id   : 'Calendar',
@@ -23,14 +23,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:currency-dollar',
         link : '/pricing'
     }
+ 
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example',
+        id   : 'dashboard',
+        title: 'dashboard',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/dashboard'
     }
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [

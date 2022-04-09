@@ -15,6 +15,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { projectRoutes } from './project.routing';
 import { ProjectComponent } from './project.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -33,8 +34,10 @@ import { ProjectComponent } from './project.component';
         MatTableModule,
         MatTabsModule,
         NgApexchartsModule,
-        TranslocoModule,
-        SharedModule
+        SharedModule,
+        TranslateModule
+        
+        
     ]
 })
 export class ProjectModule

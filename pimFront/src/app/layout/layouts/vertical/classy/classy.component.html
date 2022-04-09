@@ -44,13 +44,13 @@
         </div>
     </ng-container>
     <!-- Navigation footer hook -->
-    <ng-container fuseVerticalNavigationContentFooter>
+    <!-- <ng-container fuseVerticalNavigationContentFooter>
         <div class="flex flex-0 items-center justify-center h-16 pr-6 pl-2 mt-2 mb-4 opacity-12">
             <img
                 class="max-w-36"
                 src="assets/images/logo/logo-text-on-dark.svg">
         </div>
-    </ng-container>
+    </ng-container> -->
 </fuse-vertical-navigation>
 
 <!-- Wrapper -->
@@ -65,11 +65,9 @@
             <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
         </button>
         <!-- Components -->
-        
         <div class="flex items-center pl-2 ml-auto space-x-1 sm:space-x-2">
-             <languages></languages> 
-             
-            <!-- <fuse-fullscreen class="hidden md:block"></fuse-fullscreen> -->
+            <languages></languages>
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <search [appearance]="'bar'"></search>
             <shortcuts></shortcuts>
             <messages></messages>

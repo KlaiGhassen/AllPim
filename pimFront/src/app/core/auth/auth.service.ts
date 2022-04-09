@@ -192,6 +192,7 @@ export class AuthService {
             password: this.gs.hashPassword(data.password),
             description: data.description,
             phone_number: data.phoneNumber,
+            role:data.role
         });
     }
 

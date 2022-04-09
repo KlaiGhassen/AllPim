@@ -17,6 +17,7 @@ import { SettingsNotificationsComponent } from 'app/modules/settings/notificatio
 import { SettingsTeamComponent } from 'app/modules/settings/team/team.component';
 import { settingsRoutes } from 'app/modules/settings/settings.routing';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
         MatSidenavModule,
         MatSlideToggleModule,
         FuseAlertModule,
-        SharedModule
+        SharedModule,
+        TranslateModule
     ]
 })
 export class SettingsModule

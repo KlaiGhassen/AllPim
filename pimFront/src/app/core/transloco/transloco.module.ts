@@ -21,6 +21,7 @@ import { TranslocoHttpLoader } from 'app/core/transloco/transloco.http-loader';
                         id   : 'fr',
                         label: 'French'
                     },
+                   
                     {
                         id   : 'ar',
                         label: 'العربية'

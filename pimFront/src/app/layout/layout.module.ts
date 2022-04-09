@@ -49,6 +49,9 @@ const layoutModules = [
     exports     : [
         LayoutComponent,
         ...layoutModules
+    ],
+    providers: [
+        
     ]
 })
 export class LayoutModule

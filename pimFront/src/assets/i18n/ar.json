@@ -1,0 +1,33 @@
+{
+  
+    "welcome-back": "أهلا وسهلا",
+    "Project": "مشروع",
+    "Analytics": "تحليلي",
+    "Account": "الحساب",
+    "profile": "profil",
+    "Following information is publicly displayed, be careful!": "يتم عرض المعلومات التالية علنا، كن حذرا!",
+    "Name": "اسم",
+    "Title": "عنوان",
+    "description": "وصف",
+    "Brief description for your profile. Basic HTML and Emoji are allowed.": "وصف موجز لملف التعريف الخاص بك.يسمح HTML الأساسي والرموز التعبيرية.",
+    "Personal Information": "معلومات شخصية",
+    "Communication details in case we want to connect with you. These will be kept private.": "تفاصيل الاتصال في حال نود الاتصال بك.ستبقى هذه سرية.",
+    "Email": "بريد الالكتروني",
+    "Phone": "هاتف",
+    "Town": "مدينة",
+    "Update Medical License": "تحديث الترخيص الطبي",
+    "Save": "يحفظ",
+    "Manage your public profile and private information": "إدارة ملفك الشخصي العام ومعلوماتك الخاصة",
+    "Security": "Sécurité",
+    "Manage your password and 2-step verification preferences": "إدارة كلمات المرور الخاصة بك وتفضيلات التحقق من خطوتين",
+    "Change your password": "غير كلمة المرور الخاصة بك",
+    "You can only change your password twice within 24 hours!": "يمكنك فقط تغيير كلمة المرور الخاصة بك مرتين في غضون 24 ساعة!",
+    "New password": "كلمة المرور الجديدة",
+    "Confirm password": "تأكيد كلمة المرور",
+    "Minimum 8 characters. Must include numbers, letters and special characters.": "الحد الأدنى 8 أحرف.يجب أن تشمل الأرقام والأحرف والأحرف الخاصة.",
+    "Cancel": "يلغي",
+    "Settings": "إعدادات",
+    "save License":"الحفاظ على الترخيص",
+    "update picture": "تحديث الصورة"
+
+}

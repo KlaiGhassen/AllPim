@@ -88,16 +88,18 @@ router.get("/ophtoByEmail/:email", async(req, res, next) => {
 //add Ophto
 
 router.post("/", async(req, res, next) => {
-    console.log(req.body);
+    console.log("hello",req.body);
     const ophto = new Ophto({
         email: req.body.email,
         password: req.body.password,
         phone_number: req.body.phone_number,
         full_name: req.body.full_name,
         description: req.body.description,
+        role: req.body.role
     });
     try {
         const newOphto = await ophto.save();
+        console.log(newOphto.role)
         res.status(201).json({ newOphto });
     } catch (err) {
         console.log(err);

@@ -13,7 +13,7 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { AuthService } from './core/auth/auth.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth-interceptor.service';
 import { GlobalService } from './global.service';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -27,8 +27,15 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideFirebaseApp, getApp } from '@angular/fire/app';
 import { PricingModule } from './modules/pricing/pricing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
-initializeApp(environment.firebase);
+import {TranslateLoader, TranslateModule,} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+
+initializeApp(environment.firebase);
+export function HttpLoaderFactory(http:HttpClient){
+return new TranslateHttpLoader(http,"./assets/i18n/",".json")
+  
+}
 
 
   
@@ -44,6 +51,13 @@ const routerConfig: ExtraOptions = {
         
     ],
     imports     : [
+        TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })   ,  
         SocialLoginModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -74,7 +88,7 @@ const routerConfig: ExtraOptions = {
     ],
 
     providers: [
-        {
+      {
           provide: 'SocialAuthServiceConfig',
           useValue: {
             autoLogin: false,
