@@ -17,11 +17,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link : '/calendar'
     },
     {
-        id   : 'Appointement',
-        title: 'Appointement',
+        id   : 'Pricing',
+        title: 'Pricing',
         type : 'basic',
-        icon : 'heroicons_outline:calendar',
-        link : '/appointement'
+        icon : 'heroicons_outline:currency-dollar',
+        link : '/pricing'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [

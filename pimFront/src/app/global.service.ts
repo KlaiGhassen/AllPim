@@ -8,7 +8,8 @@ import { User } from "./entities/user";
 })
 export class GlobalService {
   private user: any;
-  uri: any ="http://localhost:3000"; //"http://192.168.1.187:3000"  // backend url
+ //uri: any ="http://192.168.1.187:3000" //"http://localhost:3000"; 
+   uri: any ="http://localhost:3000" // backend url
 
   constructor(private injector: Injector) {}
 
