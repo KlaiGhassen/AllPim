@@ -24,6 +24,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     /**
      * Constructor
      */
+   
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _router: Router,

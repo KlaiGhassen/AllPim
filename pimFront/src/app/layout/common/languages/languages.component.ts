@@ -52,9 +52,12 @@ export class LanguagesComponent implements OnInit, OnDestroy
         // Set the country iso codes for languages for flags
         this.flagCodes = {
             'en': 'us',
-            'tr': 'tr'
+            'fr': 'fr',
+            'ar': 'ar',
         };
     }
+
+      
 
     /**
      * On destroy
@@ -75,7 +78,17 @@ export class LanguagesComponent implements OnInit, OnDestroy
     setActiveLang(lang: string): void
     {
         // Set the active lang
-        this._translocoService.setActiveLang(lang);
+        // this._translocoService.setActiveLang(lang);
+        
+        // var $frame = $('.goog-te-menu-frame:first');
+        // if (! $frame.size()) {
+        // alert("Error: Could not find Google translate frame.");
+        // return false;
+        // }
+        // $frame.contents().find('.goog-te-menu2-item span.text:contains(' + lang + ')').get(0).click();
+        // return false;
+        // window.document.getElementById('stripe-script')
+
     }
 
     /**
