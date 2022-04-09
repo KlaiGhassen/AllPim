@@ -26,9 +26,6 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideFirebaseApp, getApp } from '@angular/fire/app';
 import { ServiceWorkerModule } from '@angular/service-worker';
-
-
-
 initializeApp(environment.firebase);
 
 
