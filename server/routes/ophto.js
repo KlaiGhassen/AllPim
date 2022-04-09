@@ -84,6 +84,15 @@ router.get("/ophtoByEmail/:email", async(req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get("/ophtoById/:id", async(req, res, next) => {
+    try {
+        const ophto = await Ophto.find({ _id: req.params.id });
+        res.json(ophto);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 //add Ophto
 
@@ -171,6 +180,7 @@ router.patch("/:email", getOphto, (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
 
 async function getOphto(req, res, next) {
     console.log(req.params.email)
