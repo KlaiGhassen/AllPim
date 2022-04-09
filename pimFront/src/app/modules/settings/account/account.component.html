@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl">
+<div *ngIf="user" class="w-full max-w-3xl">
     <!-- Form -->
     <form [formGroup]="accountForm">
         <!-- Section -->
@@ -24,8 +24,8 @@
                         </ngx-dropzone-image-preview>
                     </div>
                 </div>
-                <div *ngIf="!updatepicture">
-                    <!-- <img [src]="getSafeUrl()">             -->
+                <div *ngIf="!updatepicture ">
+                    <img class="max-h-50 max-w-50" [src]="getSafeUrl()">             
                 </div>
                 <button class="mt-4 align-center " mat-flat-button type="button" [color]="'primary'"
                     (click)="updatePic()">update picture

@@ -4,7 +4,12 @@ import {
     OnInit,
     ViewEncapsulation,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from 'app/core/auth/auth.service';
 import { UserService } from 'app/core/user/user.service';
@@ -18,22 +23,47 @@ import { GlobalService } from 'app/global.service';
 })
 export class SettingsAccountComponent implements OnInit {
     files: File[] = [];
-    private sanitizer: DomSanitizer;
     accountForm: FormGroup;
     user;
     updatepicture = false;
     updateLicense = true;
-    formData = new FormData(); 
+    formData = new FormData();
     load = false;
+    img = false;
 
     /**
      * Constructor
      */
     constructor(
+        private sanitizer: DomSanitizer,
         private _formBuilder: FormBuilder,
         private _Us: UserService,
         private gs: GlobalService
-    ) {}
+    ) {
+        this.user = this.gs.getUser();
+        this.donMedia();
+
+        let formControls = {
+            full_name: new FormControl(this.user.full_name, [
+                Validators.required,
+            ]),
+            email: new FormControl(this.user.email, [
+                Validators.required,
+                Validators.email,
+            ]),
+            phone_number: new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+            ]),
+            title: new FormControl(this.user.title, [Validators.required]),
+            description: new FormControl(this.user.description, [
+                Validators.required,
+            ]),
+            country: new FormControl(this.user.country, [Validators.required]),
+        };
+
+        this.accountForm = this._formBuilder.group(formControls);
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -44,21 +74,36 @@ export class SettingsAccountComponent implements OnInit {
      */
     ngOnInit(): void {
         this.user = this.gs.getUser();
-        console.log(this.gs.getUser());
-        this._Us;
+        console.log("user profilepic",this.user.profilePicture)
+        this.donMedia();
+
         // Create the form
-        this.accountForm = this._formBuilder.group({
-            full_name: [this.user.full_name],
-            phone_number: [this.user.phone_number],
-            title: [this.user.title],
-            description: [this.user.description],
-            email: [this.user.email, Validators.email],
-            country: [this.user.country],
+    }
+    donMedia() {
+        this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
+            var myFile = this.blobToFile(blob, 'my-image1.png');
+            const objectURL = URL.createObjectURL(blob);
+            const img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+            this.img = true;
+            console.log('the img', this.img);
+            this.user.profilePicture = objectURL;
         });
+    }
+    blobToFile(theBlob: Blob, fileName: string) {
+        var b: any = theBlob;
+        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        b.lastModifiedDate = new Date();
+        b.name = fileName;
+
+        //Cast to a File() type
+        return <File>theBlob;
     }
 
     getSafeUrl() {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.user.image);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.user.profilePicture
+        );
     }
     onSelect(event: any) {
         console.log(event);
@@ -69,50 +114,40 @@ export class SettingsAccountComponent implements OnInit {
         this.files.splice(this.files.indexOf(event), 1);
     }
 
-    
     updatePic() {
         console.log('hi');
         this.updatepicture = !this.updatepicture;
     }
 
-    
     update() {
         this._Us.update(this.accountForm.value).subscribe((data) => {
-         console.log(data);
+            console.log(data);
         });
         // console.log(this.accountForm.value);
     }
-    onSelectedFile(event){
+    onSelectedFile(event) {
         //console.log("fillllllllllllllllllllllllllllllllllllle",event.target.files)
-        
-          const file = event.target.files[0];
-          
-        
-      // Store form name as "file" with file data
-      this.formData.append("file", file, event.target.files[0].name);
-         
-         
-           
-        
-      }
 
-      savelicense(){
-          this.load = true;
+        const file = event.target.files[0];
+
+        // Store form name as "file" with file data
+        this.formData.append('file', file, event.target.files[0].name);
+    }
+
+    savelicense() {
+        this.load = true;
         this._Us.postFile(this.files[0]).subscribe((data) => {
             console.log(data);
             this.load = false;
-           });
-      }
+        });
+    }
 
-      checkLicence(): Boolean {
+    checkLicence(): Boolean {
         const current = this.gs.getUser();
-        if(current.diploma === true) {
-            return true
+        if (current.diploma === true) {
+            return true;
+        } else {
+            return false;
         }
-        else {
-            return false
-        }
-        
-      }
-    
+    }
 }

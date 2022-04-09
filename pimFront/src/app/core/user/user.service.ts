@@ -56,13 +56,22 @@ export class UserService
             tap((user) => {
                 this._user.next(user);
                 this.user=_user;
+                
             })
             
         );
 
     }
 
- 
+    downloadMedia(fileName: any): Observable<Blob> {
+        return this._httpClient.get(
+          ` ${this.gs.uri}/upload/download/` + fileName,
+          {
+            responseType: "blob",
+          }
+        );
+      }
+
     update(user: any)
     {
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/'+user.email, user)

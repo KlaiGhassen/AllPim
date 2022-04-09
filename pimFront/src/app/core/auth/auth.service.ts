@@ -64,8 +64,17 @@ export class AuthService {
         );
     }
     socialLog(data: any) {
-        return this._httpClient.post<any>(`${this.gs.uri}/auth/socauth`,data);
-      }
+        return this._httpClient.post<any>(`${this.gs.uri}/auth/socauth`, data);
+    }
+
+    downloadMedia(fileName: any): Observable<Blob> {
+        return this._httpClient.get(
+            ` ${this.gs.uri}/upload/download/` + fileName,
+            {
+                responseType: 'blob',
+            }
+        );
+    }
 
     /**
      * Sign in
@@ -86,21 +95,27 @@ export class AuthService {
                 switchMap((response: any) => {
                     console.log('response from service', response);
                     if (response.user.verified) {
-                        this.gs.setUser(response.user);
+                        this.downloadMedia(
+                            response.user.profilePicture
+                        ).subscribe((res) => {
+                            response.user.profilePicture = res;
+                            this.gs.setUser(response.user);
+                            this.accessToken = response.accessToken;
+
+                            // Set the authenticated flag to true
+                            this._authenticated = true;
+    
+                            // Store the user on the user service
+                            this._userService.user = response.user;
+    
+                            // Return a new observable with the response
+                            return of(response);
+                        });
+
                         // Store the access token in the local storage
-                        this.accessToken = response.accessToken;
-
-                        // Set the authenticated flag to true
-                        this._authenticated = true;
-
-                        // Store the user on the user service
-                        this._userService.user = response.user;
-
-                        // Return a new observable with the response
-                        return of(response);
+                       
                     }
                     return of(response);
-
                 })
             );
     }
@@ -159,10 +174,10 @@ export class AuthService {
     }
 
     confirmationMail(email) {
-        console.log('ConfirmationMail',email)
-        return this._httpClient.post<any>(`${this.gs.uri}/auth/verified`, 
-         {email:email},
-        );
+        console.log('ConfirmationMail', email);
+        return this._httpClient.post<any>(`${this.gs.uri}/auth/verified`, {
+            email: email,
+        });
     }
 
     /**
