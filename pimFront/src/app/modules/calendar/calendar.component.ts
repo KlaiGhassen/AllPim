@@ -24,6 +24,9 @@ import { CalendarService } from 'app/modules/calendar/calendar.service';
 import { Calendar, CalendarDrawerMode, CalendarEvent, CalendarEventEditMode, CalendarEventPanelMode, CalendarSettings } from 'app/modules/calendar/calendar.types';
 import { GlobalService } from 'app/global.service';
 import { HttpClient } from '@angular/common/http';
+import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+
 
 @Component({
     selector       : 'calendar',
@@ -37,6 +40,22 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild('eventPanel') private _eventPanel: TemplateRef<any>;
     @ViewChild('fullCalendar') private _fullCalendar: FullCalendarComponent;
     @ViewChild('drawer') private _drawer: MatDrawer;
+
+    notification: Notification= {
+        id: null,
+    _id:null,
+icon: null,
+image: null,
+title: null,
+description: null,
+time: '',
+link: null,
+useRouter: null,
+read: false,
+docId: null,
+patientId: null
+    };
+    
 
     calendars: Calendar[];
     calendarPlugins: any[] = [dayGridPlugin, interactionPlugin, listPlugin, momentPlugin, rrulePlugin, timeGridPlugin];
@@ -70,7 +89,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _viewContainerRef: ViewContainerRef,
         private gs: GlobalService,
-        private _httpClient: HttpClient
+        private _httpClient: HttpClient,
+        private _notifservice: NotificationsService
     )
     {
     }
@@ -437,7 +457,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
             id              : this.gs.getUser().full_name + now,
             calendarId      : '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
             patientId: this.gs.getUser()._id,
-            docId : "blawwww",
+            docId : this.gs.getUser()._id,
             title           : this.gs.getUser().full_name,
             date           : null,
             state        : 'Pending',
@@ -575,19 +595,34 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
         let newEvent = clone(this.eventForm.value);
 
         
-
+        
         
 
         // Add the event
         this._calendarService.addEvent(newEvent).subscribe(() => {
 
             // Reload events
-            this._calendarService.reloadEvents().subscribe();
+            this._calendarService.reloadEvents().subscribe(()=>{this._closeEventPanel();
+                this.ngOnInit();
+                this.notification.description = `${newEvent.patientId} have submitted an appointement`;
+                this.notification.icon = 'heroicons_solid:star';
+                this.notification.title = "new Appointement";
+                this.notification.time = Date();
+                this.notification.read = false;
+                this.notification.docId = this.gs.getUser()._id;
+                this.notification.patientId = this.gs.getUser()._id
+                
+                this._notifservice.create(this.notification).subscribe((res) => {
+                    console.log(res);
+                });
+            });
+            
 
             // Close the event panel
-            this._closeEventPanel();
-            this.ngOnInit();
+            
         });
+        
+            
     }
 
     /**

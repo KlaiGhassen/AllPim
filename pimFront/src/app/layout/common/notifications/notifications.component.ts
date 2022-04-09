@@ -8,6 +8,7 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { environment } from "app/../environments/environment";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { cloneDeep } from 'lodash';
 
 
 @Component({
@@ -50,6 +51,21 @@ export class NotificationsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this._notificationsService.getAll()
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((res)=>{
+                
+                this.notifications = cloneDeep(res);
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+                this._calculateUnreadCount();
+                this._changeDetectorRef.markForCheck();
+            });
+
+            // Calculate the unread count
+           
+            
         //this.requestPermission();
     // this.listen();
     //     // Subscribe to notification changes
@@ -144,7 +160,13 @@ export class NotificationsComponent implements OnInit, OnDestroy
     markAllAsRead(): void
     {
         // Mark all as read
-        this._notificationsService.markAllAsRead().subscribe();
+        //this._notificationsService.markAllAsRead().subscribe();
+        this.notifications.forEach((notification, index) => {
+                        
+            this._notificationsService.update(notification.id, notification).subscribe();
+            this.ngOnInit();
+        });
+        
     }
 
     /**
@@ -165,7 +187,11 @@ export class NotificationsComponent implements OnInit, OnDestroy
     delete(notification: Notification): void
     {
         // Delete the notification
-        this._notificationsService.delete(notification.id).subscribe();
+        this._notificationsService.delete(notification._id).subscribe(() => {
+            
+            this.ngOnInit();
+        });
+        this.ngOnInit();
     }
 
     /**
