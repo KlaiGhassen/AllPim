@@ -556,4 +556,16 @@ export class CalendarService
             })
         );
     }
+
+    //-------------------- methode traski
+       /**
+     * Get the current logged in user data
+     */
+        get(id: String)
+        { 
+            
+            return this._httpClient.get<any>(`${this.Gs.uri}/ophto/user/${id}`);
+            
+    
+        }
 }
