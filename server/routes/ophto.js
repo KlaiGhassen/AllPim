@@ -84,7 +84,7 @@ router.get("/ophtoByEmail/:email", async(req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 });
-router.get("/ophtoById/:id", async(req, res, next) => {
+router.get("/user/:id", async(req, res, next) => {
     try {
         const ophto = await Ophto.find({ _id: req.params.id });
         res.json(ophto);
