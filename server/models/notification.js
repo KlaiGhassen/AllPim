@@ -9,7 +9,10 @@ const notificationSchema = new mongoose.Schema({
     docId: String,
     description: String,
     time: { type: Date, default: Date.now },
-    read: Boolean
+    read: Boolean,
+    image: String,
+    link: String,
+    useRouter: Boolean,
 });
 
 module.exports = mongoose.model("notification", notificationSchema);
