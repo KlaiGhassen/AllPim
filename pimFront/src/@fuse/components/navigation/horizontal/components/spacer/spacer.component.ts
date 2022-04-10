@@ -9,7 +9,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
     selector       : 'fuse-horizontal-navigation-spacer-item',
     templateUrl    : './spacer.component.html',
     styles         : [],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class FuseHorizontalNavigationSpacerItemComponent implements OnInit, OnDestroy
 {

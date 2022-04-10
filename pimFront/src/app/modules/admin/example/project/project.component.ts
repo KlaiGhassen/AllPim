@@ -10,7 +10,7 @@ import { GlobalService } from 'app/global.service';
     selector       : 'project',
     templateUrl    : './project.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class ProjectComponent implements OnInit, OnDestroy
 {

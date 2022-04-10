@@ -13,7 +13,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
     templateUrl    : './collapsable.component.html',
     styles         : [],
     animations     : fuseAnimations,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, OnDestroy
 {

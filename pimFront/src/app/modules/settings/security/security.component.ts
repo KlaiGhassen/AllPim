@@ -15,7 +15,7 @@ import { finalize } from 'rxjs/operators';
     selector: 'settings-security',
     templateUrl: './security.component.html',
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SettingsSecurityComponent implements OnInit {
     securityForm: FormGroup;

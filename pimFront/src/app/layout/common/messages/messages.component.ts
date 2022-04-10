@@ -11,7 +11,7 @@ import { MessagesService } from 'app/layout/common/messages/messages.service';
     selector       : 'messages',
     templateUrl    : './messages.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'messages'
 })
 export class MessagesComponent implements OnInit, OnDestroy

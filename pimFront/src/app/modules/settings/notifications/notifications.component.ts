@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     selector       : 'settings-notifications',
     templateUrl    : './notifications.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class SettingsNotificationsComponent implements OnInit
 {

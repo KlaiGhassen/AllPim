@@ -32,7 +32,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
     selector       : 'calendar',
     templateUrl    : './calendar.component.html',
     styleUrls      : ['./calendar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     encapsulation  : ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy

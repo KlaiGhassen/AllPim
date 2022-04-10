@@ -10,7 +10,7 @@ import { UserService } from 'app/core/user/user.service';
     selector       : 'user',
     templateUrl    : './user.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'user'
 })
 export class UserComponent implements OnInit, OnDestroy
