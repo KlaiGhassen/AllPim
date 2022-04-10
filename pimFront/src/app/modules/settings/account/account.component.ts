@@ -1,5 +1,6 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     OnInit,
     ViewEncapsulation,
@@ -23,6 +24,8 @@ import { GlobalService } from 'app/global.service';
 })
 export class SettingsAccountComponent implements OnInit {
     files: File[] = [];
+    files2: File[] = [];
+
     accountForm: FormGroup;
     user;
     updatepicture = false;
@@ -31,6 +34,8 @@ export class SettingsAccountComponent implements OnInit {
     load = false;
     img = false;
 
+    profilePicture = undefined;
+
     /**
      * Constructor
      */
@@ -38,7 +43,8 @@ export class SettingsAccountComponent implements OnInit {
         private sanitizer: DomSanitizer,
         private _formBuilder: FormBuilder,
         private _Us: UserService,
-        private gs: GlobalService
+        private gs: GlobalService,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.user = this.gs.getUser();
         this.donMedia();
@@ -64,30 +70,28 @@ export class SettingsAccountComponent implements OnInit {
 
         this.accountForm = this._formBuilder.group(formControls);
     }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
-
     /**
      * On init
      */
     ngOnInit(): void {
         this.user = this.gs.getUser();
-        console.log("user profilepic",this.user.profilePicture)
+        console.log(this.user);
+        console.log('user profilepic', this.user.profilePicture);
         this.donMedia();
-
         // Create the form
     }
     donMedia() {
         this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
-            var myFile = this.blobToFile(blob, 'my-image1.png');
+            // var myFile = this.blobToFile(blob, 'my-image1.png');
             const objectURL = URL.createObjectURL(blob);
-            const img = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-            this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
-            this.img = true;
-            console.log('the img', this.img);
-            this.user.profilePicture = objectURL;
+            this.profilePicture =
+                this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+            this.changeDetectorRef.markForCheck();
+            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
         });
     }
     blobToFile(theBlob: Blob, fileName: string) {
@@ -98,12 +102,6 @@ export class SettingsAccountComponent implements OnInit {
 
         //Cast to a File() type
         return <File>theBlob;
-    }
-
-    getSafeUrl() {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.user.profilePicture
-        );
     }
     onSelect(event: any) {
         console.log(event);
