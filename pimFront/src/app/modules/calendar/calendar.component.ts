@@ -27,6 +27,7 @@ import { HttpClient } from '@angular/common/http';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { NotificationsComponent } from 'app/layout/common/notifications/notifications.component';
 
 
 @Component({
@@ -40,6 +41,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('eventPanel') private _eventPanel: TemplateRef<any>;
     @ViewChild('fullCalendar') private _fullCalendar: FullCalendarComponent;
     @ViewChild('drawer') private _drawer: MatDrawer;
+
+    notification_component: NotificationsComponent;
 
     notification: Notification = {
         id: null,
@@ -462,7 +465,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
             id: this.gs.getUser().full_name + now,
             calendarId: '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
             patientId: this.gs.getUser()._id,
-            docId: this.gs.getUser()._id,
+            //docId: this.gs.getUser()._id,
+            docId: "6240a1584a263be7668ff03f",
             title: this.gs.getUser().full_name,
             date: null,
             state: 'Pending',
@@ -600,21 +604,23 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
             // Reload events
             this._calendarService.reloadEvents().subscribe(() => {
                 this._closeEventPanel();
-                
+                this.ngOnInit();
 
                 this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
                 this.notification.icon = 'heroicons_solid:star';
                 this.notification.title = "new Appointement";
                 this.notification.time = Date();
                 this.notification.read = false;
-                this.notification.docId = this.gs.getUser()._id;
+                //this.notification.docId = this.gs.getUser()._id;
+                this.notification.docId = "6240a1584a263be7668ff03f";
                 this.notification.patientId = this.gs.getUser()._id;
                 this.notification.useRouter = true;
                 this.notification.link = '/calendar';
 
                 this._notifservice.create(this.notification).subscribe((res) => {
                     console.log(res);
-                    this.ngOnInit();
+                    this.notification_component.ngOnInit();
+                    
                 });
                 //this.ngOnInit();
             });
