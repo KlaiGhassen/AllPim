@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema(
     social: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     description: String,
-    role:String
+    role:String,
+    docId: String
   },
   {
     timestamps: true,

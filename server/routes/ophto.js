@@ -133,8 +133,6 @@ router.delete("/:email", getOphto, async(req, res) => {
 });
 router.patch("/:email", getOphto, (req, res) => {
     console.log(req.params, req.body)
-
-
     if (req.body.country != null) {
         res.ophto.country = req.body.country;
     }
@@ -170,6 +168,9 @@ router.patch("/:email", getOphto, (req, res) => {
     }
     if (req.body.diploma != null) {
         res.ophto.diploma = req.body.diploma;
+    }
+    if (req.body.docId != null) {
+        res.ophto.docId = req.body.docId;
     }
 
     try {
