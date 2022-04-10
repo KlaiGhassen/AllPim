@@ -604,6 +604,7 @@ patientId: null
             // Reload events
             this._calendarService.reloadEvents().subscribe(()=>{this._closeEventPanel();
                 this.ngOnInit();
+                
                 this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
                 this.notification.icon = 'heroicons_solid:star';
                 this.notification.title = "new Appointement";
