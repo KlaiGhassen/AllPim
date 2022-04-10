@@ -78,7 +78,7 @@ export class SignInClassicComponent implements OnInit {
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
         this.authService.authState.subscribe((user) => {
           let data={
-            full_name:user.firstName+ " "+user.lastName,
+            full_name:user.firstName+" "+user.lastName,
             email:user.email,
             image:user.photoUrl,
             social:true,

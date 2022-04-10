@@ -95,10 +95,7 @@ export class AuthService {
                 switchMap((response: any) => {
                     console.log('response from service', response);
                     if (response.user.verified) {
-                        this.downloadMedia(
-                            response.user.profilePicture
-                        ).subscribe((res) => {
-                            response.user.profilePicture = res;
+                      
                             this.gs.setUser(response.user);
                             this.accessToken = response.accessToken;
 
@@ -110,7 +107,7 @@ export class AuthService {
     
                             // Return a new observable with the response
                             return of(response);
-                        });
+                      
 
                         // Store the access token in the local storage
                        

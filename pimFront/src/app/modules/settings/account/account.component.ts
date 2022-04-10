@@ -23,6 +23,8 @@ import { GlobalService } from 'app/global.service';
 })
 export class SettingsAccountComponent implements OnInit {
     files: File[] = [];
+    files2: File[] = [];
+
     accountForm: FormGroup;
     user;
     updatepicture = false;
@@ -64,11 +66,9 @@ export class SettingsAccountComponent implements OnInit {
 
         this.accountForm = this._formBuilder.group(formControls);
     }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
-
     /**
      * On init
      */
@@ -76,7 +76,6 @@ export class SettingsAccountComponent implements OnInit {
         this.user = this.gs.getUser();
         console.log("user profilepic",this.user.profilePicture)
         this.donMedia();
-
         // Create the form
     }
     donMedia() {

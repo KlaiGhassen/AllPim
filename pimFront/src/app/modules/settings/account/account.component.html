@@ -18,7 +18,7 @@
                                 change photo
                             </button> -->
                         </ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files2" [file]="f" [removable]="true" (removed)="onRemove2(f)">
                             <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
 
                         </ngx-dropzone-image-preview>
@@ -123,7 +123,7 @@
         </div>
     </form>
     <div *ngIf="checkLicence() == false">
-    <div *ngIf="updateLicense" fxLayout="column">
+    <div *ngIf="updateLicense && user.role == ophto" fxLayout="column">
         <br>
         <div class="upload" ngx-dropzone accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
             (change)="onSelect($event)" [multiple]="false">

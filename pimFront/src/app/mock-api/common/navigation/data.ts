@@ -40,7 +40,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/dashboard'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -49,6 +49,6 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/dashboard'
     }
 ];

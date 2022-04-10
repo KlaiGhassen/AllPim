@@ -30,7 +30,6 @@ export class LanguagesComponent implements OnInit, OnDestroy {
      * Constructor
      */
     constructor(
-      
         private _translocoService: TranslocoService,
         private translateService:TranslateService,
     ) {
@@ -49,19 +48,22 @@ export class LanguagesComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-         this.localLang = localStorage.getItem('lang') ;
-        // Get the available languages from transloco
-        this.availableLangs = this._translocoService.getAvailableLangs();
-        // Subscribe to language changes
-        this.activeLang =  localStorage.getItem('lang') 
-        this.translateService.setDefaultLang(this.localLang)
-        this.translateService.use(localStorage.getItem('lang'))
-        
+
         this.flagCodes = {
             fr: 'fr',
             en: 'us',
             ar: 'ar',
         };
+         this.localLang = localStorage.getItem('lang') || 'en';
+         this.activeLang =  localStorage.getItem('lang') || 'en'; 
+
+        // Get the available languages from transloco
+        this.availableLangs = this._translocoService.getAvailableLangs();
+        // Subscribe to language changes
+        this.translateService.setDefaultLang(this.localLang)
+        this.translateService.use(localStorage.getItem('lang'))
+        
+      
     }
 
     /**
