@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Transaction } from './transaction.model';
+import { Transaction } from './pricing.model';
 import { GlobalService } from 'app/global.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';

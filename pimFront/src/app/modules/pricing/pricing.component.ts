@@ -1,5 +1,5 @@
 import { Component, OnInit , ViewEncapsulation } from '@angular/core';
-import { Transaction } from './transaction.model';
+import { Transaction } from './pricing.model';
 import { GlobalService } from 'app/global.service';
 import { PricingService } from './pricing.service';
 import { MatEndDate } from '@angular/material/datepicker';

@@ -24,6 +24,7 @@ import { CalendarRecurrenceComponent } from 'app/modules/calendar/recurrence/rec
 import { CalendarSettingsComponent } from 'app/modules/calendar/settings/settings.component';
 import { CalendarSidebarComponent } from 'app/modules/calendar/sidebar/sidebar.component';
 import { calendarRoutes } from 'app/modules/calendar/calendar.routing';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { calendarRoutes } from 'app/modules/calendar/calendar.routing';
         MatTooltipModule,
         FullCalendarModule,
         FuseDateRangeModule,
-        SharedModule
+        SharedModule,
+        MatSnackBarModule
     ],
     providers   : [
         {

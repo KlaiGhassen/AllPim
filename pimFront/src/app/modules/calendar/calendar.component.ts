@@ -26,37 +26,37 @@ import { GlobalService } from 'app/global.service';
 import { HttpClient } from '@angular/common/http';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
-    selector       : 'calendar',
-    templateUrl    : './calendar.component.html',
-    styleUrls      : ['./calendar.component.scss'],
+    selector: 'calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation  : ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None
 })
-export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy
-{
+export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('eventPanel') private _eventPanel: TemplateRef<any>;
     @ViewChild('fullCalendar') private _fullCalendar: FullCalendarComponent;
     @ViewChild('drawer') private _drawer: MatDrawer;
 
-    notification: Notification= {
+    notification: Notification = {
         id: null,
-    _id:null,
-icon: null,
-image: null,
-title: null,
-description: null,
-time: '',
-link: null,
-useRouter: null,
-read: false,
-docId: null,
-patientId: null
+        _id: null,
+        icon: null,
+        image: null,
+        title: null,
+        description: null,
+        time: '',
+        link: null,
+        useRouter: null,
+        read: false,
+        docId: null,
+        patientId: null
     };
-    
-
+    durationInSeconds = 5;
+    minimumDate;
     calendars: Calendar[];
     calendarPlugins: any[] = [dayGridPlugin, interactionPlugin, listPlugin, momentPlugin, rrulePlugin, timeGridPlugin];
     drawerMode: CalendarDrawerMode = 'side';
@@ -90,10 +90,16 @@ patientId: null
         private _viewContainerRef: ViewContainerRef,
         private gs: GlobalService,
         private _httpClient: HttpClient,
-        private _notifservice: NotificationsService
-    )
-    {
+        private _notifservice: NotificationsService,
+        private _snackBar: MatSnackBar
+    ) {
     }
+
+    openSnackBar() {
+        this._snackBar.openFromComponent(CalendarComponent, {
+          duration: this.durationInSeconds * 1000,
+        });
+      }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -102,14 +108,12 @@ patientId: null
     /**
      * Getter for event's recurrence status
      */
-    get recurrenceStatus(): string
-    {
+    get recurrenceStatus(): string {
         // Get the recurrence from event form
         const recurrence = this.eventForm.get('recurrence').value;
 
         // Return null, if there is no recurrence on the event
-        if ( !recurrence )
-        {
+        if (!recurrence) {
             return null;
         }
 
@@ -128,36 +132,56 @@ patientId: null
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Create the event form
         this.eventForm = this._formBuilder.group({
-            id              : ['23'],
-            calendarId      : [''],
+            id: ['23'],
+            calendarId: [''],
             patientId: this.gs.getUser()._id,
-            title           : this.gs.getUser().full_name,
-            docId     : [''],
-            date           : [null],
-            patientConfirm             : [false],
-            doctorConfirm        : [true],
-            state          : ['Pending'],
-            place      : ['']
+            title: this.gs.getUser().full_name,
+            docId: [''],
+            date: [null],
+            patientConfirm: [false],
+            doctorConfirm: [true],
+            state: ['Pending'],
+            place: ['']
         });
+        console.log("minnnnnnnnnnnnnnnnnnnnnnn:::::::", this.minimumDate)
+        // var today = new Date();
+        // var dd = today.getDate();
+        // var mm = today.getMonth() + 1; //January is 0!
+        // var yyyy = today.getFullYear();
+        // if (dd < 10) {
+        //     var ddd = '0' + dd
+        // }
+        // if (mm < 10) {
+        //    var mmm = '0' + mm
+        // }
+        // var todayy = yyyy + '-' + mm + '-' + dd;
+        // console.log(todayy)
+        // console.log(todayy)
+        // let tdd = moment(today,"YYYY-MM-DD")
+        // let parsedDate = moment(todayy,"YYYY-MM-DD");
+        // let outputDate = parsedDate.format("DD-MM-YYYY");
+        // //this.minimumDate = todayy.form;
+        // //window.document.getElementById("dateeee").setAttribute("min", todayy);
+
+        //  window.document.getElementById("rtx").setAttribute("min",outputDate);
 
         // houni el form 7ajti bel getuser by name
         this.eventFormByDoc = this._formBuilder.group({
-            id              : ['23'],
-            calendarId      : [''],
+            id: ['23'],
+            calendarId: [''],
             patientId: this.gs.getUser()._id,
-            title           : this.gs.getUser().full_name,
-            docId     : [''],
-            date           : [null],
-            patientConfirm             : [false],
-            doctorConfirm        : [true],
-            state          : ['Pending'],
-            place      : ['']
+            title: this.gs.getUser().full_name,
+            docId: [''],
+            date: [null],
+            patientConfirm: [false],
+            doctorConfirm: [true],
+            state: ['Pending'],
+            place: ['']
         });
-        
+
         // Get calendars
         this._calendarService.calendars$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -173,8 +197,8 @@ patientId: null
         // Get events
         this._calendarService.getFromDatabase()
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((res)=>{
-                
+            .subscribe((res) => {
+
                 this.events = cloneDeep(res);
 
                 // Mark for check
@@ -191,9 +215,9 @@ patientId: null
 
                 // Set the FullCalendar event time format based on the time format setting
                 this.eventTimeFormat = {
-                    hour    : settings.timeFormat === '12' ? 'numeric' : '2-digit',
-                    hour12  : settings.timeFormat === '12',
-                    minute  : '2-digit',
+                    hour: settings.timeFormat === '12' ? 'numeric' : '2-digit',
+                    hour12: settings.timeFormat === '12',
+                    minute: '2-digit',
                     meridiem: settings.timeFormat === '12' ? 'short' : false
                 };
 
@@ -204,16 +228,14 @@ patientId: null
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({matchingAliases}) => {
+            .subscribe(({ matchingAliases }) => {
 
                 // Set the drawerMode and drawerOpened if the given breakpoint is active
-                if ( matchingAliases.includes('md') )
-                {
+                if (matchingAliases.includes('md')) {
                     this.drawerMode = 'side';
                     this.drawerOpened = true;
                 }
-                else
-                {
+                else {
                     this.drawerMode = 'over';
                     this.drawerOpened = false;
                 }
@@ -225,28 +247,28 @@ patientId: null
         // Build the view specific FullCalendar options
         this.views = {
             dayGridMonth: {
-                eventLimit     : 3,
+                eventLimit: 3,
                 eventTimeFormat: this.eventTimeFormat,
-                fixedWeekCount : false
+                fixedWeekCount: false
             },
-            timeGrid    : {
-                allDayText        : '',
+            timeGrid: {
+                allDayText: '',
                 columnHeaderFormat: {
-                    weekday   : 'short',
-                    day       : 'numeric',
+                    weekday: 'short',
+                    day: 'numeric',
                     omitCommas: true
                 },
-                columnHeaderHtml  : (date): string => `<span class="fc-weekday">${moment(date).format('ddd')}</span>
+                columnHeaderHtml: (date): string => `<span class="fc-weekday">${moment(date).format('ddd')}</span>
                                                        <span class="fc-date">${moment(date).format('D')}</span>`,
-                slotDuration      : '01:00:00',
-                slotLabelFormat   : this.eventTimeFormat
+                slotDuration: '01:00:00',
+                slotLabelFormat: this.eventTimeFormat
             },
             timeGridWeek: {},
-            timeGridDay : {},
-            listYear    : {
-                allDayText      : 'All day',
-                eventTimeFormat : this.eventTimeFormat,
-                listDayFormat   : false,
+            timeGridDay: {},
+            listYear: {
+                allDayText: 'All day',
+                eventTimeFormat: this.eventTimeFormat,
+                listDayFormat: false,
                 listDayAltFormat: false
             }
         };
@@ -255,8 +277,7 @@ patientId: null
     /**
      * After view init
      */
-    ngAfterViewInit(): void
-    {
+    ngAfterViewInit(): void {
         // Get the full calendar API
         this._fullCalendarApi = this._fullCalendar.getApi();
 
@@ -275,15 +296,13 @@ patientId: null
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
 
         // Dispose the overlay
-        if ( this._eventPanelOverlayRef )
-        {
+        if (this._eventPanelOverlayRef) {
             this._eventPanelOverlayRef.dispose();
         }
     }
@@ -295,8 +314,7 @@ patientId: null
     /**
      * Toggle Drawer
      */
-    toggleDrawer(): void
-    {
+    toggleDrawer(): void {
         // Toggle the drawer
         this._drawer.toggle();
     }
@@ -304,12 +322,11 @@ patientId: null
     /**
      * Open recurrence panel
      */
-    openRecurrenceDialog(): void
-    {
+    openRecurrenceDialog(): void {
         // Open the dialog
         const dialogRef = this._matDialog.open(CalendarRecurrenceComponent, {
             panelClass: 'calendar-event-recurrence-dialog',
-            data      : {
+            data: {
                 event: this.eventForm.value
             }
         });
@@ -318,22 +335,19 @@ patientId: null
         dialogRef.afterClosed().subscribe((result) => {
 
             // Return if canceled
-            if ( !result || !result.recurrence )
-            {
+            if (!result || !result.recurrence) {
                 return;
             }
 
-           
+
 
             // If returned value is 'cleared'...
-            if ( result.recurrence === 'cleared' )
-            {
+            if (result.recurrence === 'cleared') {
                 // Clear the recurrence field if recurrence cleared
                 this.eventForm.get('recurrence').setValue(null);
             }
             // Otherwise...
-            else
-            {
+            else {
                 // Update the recurrence field with the result
                 this.eventForm.get('recurrence').setValue(result.recurrence);
             }
@@ -347,15 +361,14 @@ patientId: null
      * @param panelMode
      * @param eventEditMode
      */
-    changeEventPanelMode(panelMode: CalendarEventPanelMode, eventEditMode: CalendarEventEditMode = 'single'): void
-    {
+    changeEventPanelMode(panelMode: CalendarEventPanelMode, eventEditMode: CalendarEventEditMode = 'single'): void {
         // Set the panel mode
         this.panelMode = panelMode;
 
         // Set the event edit mode
         this.eventEditMode = eventEditMode;
 
-    
+
     }
 
     /**
@@ -363,10 +376,8 @@ patientId: null
      *
      * @param id
      */
-    getCalendar(id): Calendar
-    {
-        if ( !id )
-        {
+    getCalendar(id): Calendar {
+        if (!id) {
             return;
         }
 
@@ -378,14 +389,12 @@ patientId: null
      *
      * @param view
      */
-    changeView(view: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listYear'): void
-    {
+    changeView(view: 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay' | 'listYear'): void {
         // Store the view
         this.view = view;
 
         // If the FullCalendar API is available...
-        if ( this._fullCalendarApi )
-        {
+        if (this._fullCalendarApi) {
             // Set the view
             this._fullCalendarApi.changeView(view);
 
@@ -397,8 +406,7 @@ patientId: null
     /**
      * Moves the calendar one stop back
      */
-    previous(): void
-    {
+    previous(): void {
         // Go to previous stop
         this._fullCalendarApi.prev();
 
@@ -415,8 +423,7 @@ patientId: null
     /**
      * Moves the calendar to the current date
      */
-    today(): void
-    {
+    today(): void {
         // Go to today
         this._fullCalendarApi.today();
 
@@ -427,8 +434,7 @@ patientId: null
     /**
      * Moves the calendar one stop forward
      */
-    next(): void
-    {
+    next(): void {
         // Go to next stop
         this._fullCalendarApi.next();
 
@@ -447,24 +453,23 @@ patientId: null
      *
      * @param calendarEvent
      */
-    onDateClick(calendarEvent): void
-    {
+    onDateClick(calendarEvent): void {
         var now = new Date().getTime();
         //var dd = String(today.getDate()).padStart(2, '0');
         // Prepare the event
         const event = {
-            _id : null,
-            id              : this.gs.getUser().full_name + now,
-            calendarId      : '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
+            _id: null,
+            id: this.gs.getUser().full_name + now,
+            calendarId: '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
             patientId: this.gs.getUser()._id,
-            docId : this.gs.getUser()._id,
-            title           : this.gs.getUser().full_name,
-            date           : null,
-            state        : 'Pending',
-            doctorConfirm          : true,
-            patientConfirm  : false,
-            place      : 'Menzah',
-            
+            docId: this.gs.getUser()._id,
+            title: this.gs.getUser().full_name,
+            date: null,
+            state: 'Pending',
+            doctorConfirm: true,
+            patientConfirm: false,
+            place: 'Menzah',
+
         };
 
         // Set the event
@@ -472,7 +477,7 @@ patientId: null
 
         // Set the el on calendarEvent for consistency
         calendarEvent.el = calendarEvent.dayEl;
-       // console.log("test1::",calendarEvent.el);
+        // console.log("test1::",calendarEvent.el);
 
         // Reset the form and fill the event
         this.eventForm.reset();
@@ -490,9 +495,8 @@ patientId: null
      *
      * @param calendarEvent
      */
-    onEventClick(calendarEvent): void
-    {
-      
+    onEventClick(calendarEvent): void {
+
         // Find the event with the clicked event's id
         const event: any = cloneDeep(this.events.find(item => item.id === calendarEvent.event.id));
 
@@ -504,12 +508,12 @@ patientId: null
         let end;
 
         // If this is a recurring event...
-        
+
         // Otherwise...
-        
+
 
         // Set the range on the event
-        
+
 
         // Reset the form and fill the event
         this.eventForm.reset();
@@ -524,20 +528,17 @@ patientId: null
      *
      * @param calendarEvent
      */
-    onEventRender(calendarEvent): void
-    {
+    onEventRender(calendarEvent): void {
         // Get event's calendar
         const calendar = this.calendars.find(item => item.id === calendarEvent.event.extendedProps.calendarId);
 
         // Return if the calendar doesn't exist...
-        if ( !calendar )
-        {
+        if (!calendar) {
             return;
         }
 
         // If current view is year list...
-        if ( this.view === 'listYear' )
-        {
+        if (this.view === 'listYear') {
             // Create a new 'fc-list-item-date' node
             const fcListItemDate1 = `<td class="fc-list-item-date">
                                             <span>
@@ -553,20 +554,17 @@ patientId: null
             calendarEvent.el.getElementsByClassName('fc-event-dot')[0].classList.add(calendar.color);
 
             // Set the event's title to '(No title)' if event title is not available
-            if ( !calendarEvent.event.title )
-            {
+            if (!calendarEvent.event.title) {
                 calendarEvent.el.querySelector('.fc-list-item-title').innerText = '(No title)';
             }
         }
         // If current view is not month list...
-        else
-        {
+        else {
             // Set the color class of the event
             calendarEvent.el.classList.add(calendar.color);
 
             // Set the event's title to '(No title)' if event title is not available
-            if ( !calendarEvent.event.title )
-            {
+            if (!calendarEvent.event.title) {
                 calendarEvent.el.querySelector('.fc-title').innerText = '(No title)';
             }
         }
@@ -580,8 +578,7 @@ patientId: null
      *
      * @param calendar
      */
-    onCalendarUpdated(calendar): void
-    {
+    onCalendarUpdated(calendar): void {
         // Re-render the events
         this._fullCalendarApi.rerenderEvents();
     }
@@ -589,22 +586,22 @@ patientId: null
     /**
      * Add event
      */
-    addEvent(): void
-    {
+    addEvent(): void {
         // Get the clone of the event form value
         let newEvent = clone(this.eventForm.value);
 
-        
-        
-        
+
+
+
 
         // Add the event
         this._calendarService.addEvent(newEvent).subscribe(() => {
 
             // Reload events
-            this._calendarService.reloadEvents().subscribe(()=>{this._closeEventPanel();
-                this.ngOnInit();
+            this._calendarService.reloadEvents().subscribe(() => {
+                this._closeEventPanel();
                 
+
                 this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
                 this.notification.icon = 'heroicons_solid:star';
                 this.notification.title = "new Appointement";
@@ -614,40 +611,39 @@ patientId: null
                 this.notification.patientId = this.gs.getUser()._id;
                 this.notification.useRouter = true;
                 this.notification.link = '/calendar';
-                
+
                 this._notifservice.create(this.notification).subscribe((res) => {
                     console.log(res);
                     this.ngOnInit();
                 });
-                 this.ngOnInit();
+                //this.ngOnInit();
             });
             
+            //this.openSnackBar()
 
             // Close the event panel
-            
+
         });
-        
-            
+
+
     }
 
     /**
      * Update the event
      */
-    updateEvent(): void
-    {
+    updateEvent(): void {
         // Get the clone of the event form value
         let event = clone(this.eventForm.value);
         const {
-                  range,
-                  ...eventWithoutRange
-              } = event;
+            range,
+            ...eventWithoutRange
+        } = event;
 
         // Get the original event
         const originalEvent = this.events.find(item => item.id === event.id);
 
         // Return if there are no changes made to the event
-        if ( isEqual(eventWithoutRange, originalEvent) )
-        {
+        if (isEqual(eventWithoutRange, originalEvent)) {
             // Close the event panel
             this._closeEventPanel();
 
@@ -657,8 +653,7 @@ patientId: null
 
         //el update dyell el rojla 
         // If the event is a recurring event...
-        if ( event.recurrence && event.recurringEventId )
-        {
+        if (event.recurrence && event.recurringEventId) {
             // Update the recurring event on the server
             this._calendarService.updateRecurringEvent(event, originalEvent, this.eventEditMode).subscribe(() => {
 
@@ -667,19 +662,18 @@ patientId: null
 
                 // Close the event panel
                 this._closeEventPanel();
-                
+
             });
-            
+
             // Return
             return;
-            
+
         }
 
         // If the event is a non-recurring event...
-        if ( !event.recurrence && !event.recurringEventId )
-        {
+        if (!event.recurrence && !event.recurringEventId) {
             // Update the event on the server
-            this._calendarService.updateEvent(originalEvent._id , event).subscribe(() => {
+            this._calendarService.updateEvent(originalEvent._id, event).subscribe(() => {
 
                 // Close the event panel
                 this._closeEventPanel();
@@ -691,8 +685,7 @@ patientId: null
         }
 
         // If the event was a non-recurring event but now it will be a recurring event...
-        if ( event.recurrence && !event.recurringEventId )
-        {
+        if (event.recurrence && !event.recurringEventId) {
             // Set the event duration
             event.duration = moment(event.range.end).diff(moment(event.range.start), 'minutes');
 
@@ -714,8 +707,7 @@ patientId: null
         }
 
         // If the event was a recurring event but now it will be a non-recurring event...
-        if ( !event.recurrence && event.recurringEventId )
-        {
+        if (!event.recurrence && event.recurringEventId) {
             // Set the end date
             event.end = moment(event.start).add(event.duration, 'minutes').toISOString();
 
@@ -732,7 +724,7 @@ patientId: null
                 this._closeEventPanel();
             });
         }
-        
+
     }
 
     /**
@@ -741,11 +733,9 @@ patientId: null
      * @param event
      * @param mode
      */
-    deleteEvent(event, mode: CalendarEventEditMode = 'single'): void
-    {
+    deleteEvent(event, mode: CalendarEventEditMode = 'single'): void {
         // If the event is a recurring event...
-        if ( event.recurrence )
-        {
+        if (event.recurrence) {
             // Delete the recurring event on the server
             this._calendarService.deleteRecurringEvent(event, mode).subscribe(() => {
 
@@ -759,8 +749,7 @@ patientId: null
             this.ngOnInit();
         }
         // If the event is a non-recurring, normal event...
-        else
-        {
+        else {
             // Update the event on the server
             this._calendarService.deleteEvent(event._id).subscribe(() => {
 
@@ -782,13 +771,12 @@ patientId: null
      *
      * @private
      */
-    private _createEventPanelOverlay(positionStrategy): void
-    {
+    private _createEventPanelOverlay(positionStrategy): void {
         // Create the overlay
         this._eventPanelOverlayRef = this._overlay.create({
-            panelClass    : ['calendar-event-panel'],
-            backdropClass : '',
-            hasBackdrop   : true,
+            panelClass: ['calendar-event-panel'],
+            backdropClass: '',
+            hasBackdrop: true,
             scrollStrategy: this._overlay.scrollStrategies.reposition(),
             positionStrategy
         });
@@ -804,47 +792,44 @@ patientId: null
      *
      * @private
      */
-    private _openEventPanel(calendarEvent): void
-    {
+    private _openEventPanel(calendarEvent): void {
         const positionStrategy = this._overlay.position().flexibleConnectedTo(calendarEvent.el).withFlexibleDimensions(false).withPositions([
             {
-                originX : 'end',
-                originY : 'top',
+                originX: 'end',
+                originY: 'top',
                 overlayX: 'start',
                 overlayY: 'top',
-                offsetX : 8
+                offsetX: 8
             },
             {
-                originX : 'start',
-                originY : 'top',
+                originX: 'start',
+                originY: 'top',
                 overlayX: 'end',
                 overlayY: 'top',
-                offsetX : -8
+                offsetX: -8
             },
             {
-                originX : 'start',
-                originY : 'bottom',
+                originX: 'start',
+                originY: 'bottom',
                 overlayX: 'end',
                 overlayY: 'bottom',
-                offsetX : -8
+                offsetX: -8
             },
             {
-                originX : 'end',
-                originY : 'bottom',
+                originX: 'end',
+                originY: 'bottom',
                 overlayX: 'start',
                 overlayY: 'bottom',
-                offsetX : 8
+                offsetX: 8
             }
         ]);
 
         // Create the overlay if it doesn't exist
-        if ( !this._eventPanelOverlayRef )
-        {
+        if (!this._eventPanelOverlayRef) {
             this._createEventPanelOverlay(positionStrategy);
         }
         // Otherwise, just update the position
-        else
-        {
+        else {
             this._eventPanelOverlayRef.updatePositionStrategy(positionStrategy);
         }
 
@@ -860,8 +845,7 @@ patientId: null
      *
      * @private
      */
-    private _closeEventPanel(): void
-    {
+    private _closeEventPanel(): void {
         // Detach the overlay from the portal
         this._eventPanelOverlayRef.detach();
 
@@ -878,14 +862,12 @@ patientId: null
      *
      * @private
      */
-    private _updateRecurrenceRule(): void
-    {
+    private _updateRecurrenceRule(): void {
         // Get the event
         const event = this.eventForm.value;
 
         // Return if this is a non-recurring event
-        if ( !event.recurrence )
-        {
+        if (!event.recurrence) {
             return;
         }
 
@@ -901,8 +883,7 @@ patientId: null
         });
 
         // If there is a BYDAY rule, split that as well
-        if ( parsedRules['BYDAY'] )
-        {
+        if (parsedRules['BYDAY']) {
             parsedRules['BYDAY'] = parsedRules['BYDAY'].split(',');
         }
 
@@ -911,30 +892,26 @@ patientId: null
         // ... the frequency is WEEKLY and BYDAY has multiple values,
         // ... the frequency is MONTHLY and there isn't a BYDAY rule,
         // ... the frequency is YEARLY,
-        if ( parsedRules['FREQ'] === 'DAILY' ||
+        if (parsedRules['FREQ'] === 'DAILY' ||
             (parsedRules['FREQ'] === 'WEEKLY' && parsedRules['BYDAY'].length > 1) ||
             (parsedRules['FREQ'] === 'MONTHLY' && !parsedRules['BYDAY']) ||
-            parsedRules['FREQ'] === 'YEARLY' )
-        {
+            parsedRules['FREQ'] === 'YEARLY') {
             return;
         }
 
         // If the frequency is WEEKLY, update the BYDAY value with the new one
-        if ( parsedRules['FREQ'] === 'WEEKLY' )
-        {
+        if (parsedRules['FREQ'] === 'WEEKLY') {
             parsedRules['BYDAY'] = [moment(event.start).format('dd').toUpperCase()];
         }
 
         // If the frequency is MONTHLY, update the BYDAY value with the new one
-        if ( parsedRules['FREQ'] === 'MONTHLY' )
-        {
+        if (parsedRules['FREQ'] === 'MONTHLY') {
             // Calculate the weekday
             const weekday = moment(event.start).format('dd').toUpperCase();
 
             // Calculate the nthWeekday
             let nthWeekdayNo = 1;
-            while ( moment(event.start).isSame(moment(event.start).subtract(nthWeekdayNo, 'week'), 'month') )
-            {
+            while (moment(event.start).isSame(moment(event.start).subtract(nthWeekdayNo, 'week'), 'month')) {
                 nthWeekdayNo++;
             }
 
@@ -958,14 +935,12 @@ patientId: null
      *
      * @private
      */
-    private _updateEndValue(): void
-    {
+    private _updateEndValue(): void {
         // Get the event recurrence
         const recurrence = this.eventForm.get('recurrence').value;
 
         // Return if this is a non-recurring event
-        if ( !recurrence )
-        {
+        if (!recurrence) {
             return;
         }
 
@@ -981,8 +956,7 @@ patientId: null
         });
 
         // If there is an UNTIL rule...
-        if ( parsedRules['UNTIL'] )
-        {
+        if (parsedRules['UNTIL']) {
             // Use that to set the end date
             this.eventForm.get('end').setValue(parsedRules['UNTIL']);
 
@@ -991,8 +965,7 @@ patientId: null
         }
 
         // If there is a COUNT rule...
-        if ( parsedRules['COUNT'] )
-        {
+        if (parsedRules['COUNT']) {
             // Generate the RRule string
             const rrule = 'DTSTART=' + moment(this.eventForm.get('start').value).utc().format('YYYYMMDD[T]HHmmss[Z]') + '\nRRULE:' + recurrence;
 
@@ -1011,40 +984,40 @@ patientId: null
     }
 
     confirmDoctor(id: string, bolbol: Boolean) {
-        if(this.gs.getUser().role == "ophto") {
-        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe"}).subscribe(
-          (response) => {
-            
-            this.ngOnInit();
-          }
-        );
-    } else if(this.gs.getUser().role == "simple") {
-        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{patientConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe"}).subscribe(
-            (response) => {
-              
-              this.ngOnInit();
-            }
-          );
+        if (this.gs.getUser().role == "ophto") {
+            return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { doctorConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe" }).subscribe(
+                (response) => {
+
+                    this.ngOnInit();
+                }
+            );
+        } else if (this.gs.getUser().role == "simple") {
+            return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { patientConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe" }).subscribe(
+                (response) => {
+
+                    this.ngOnInit();
+                }
+            );
+        }
     }
-      }
 
-      declineDoctor(id: string, bolbol: Boolean) {
-        if(this.gs.getUser().role == "ophto") {
-        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"}).subscribe(
-          (response) => {
-            
-            this.ngOnInit();
-          }
-        );
-      } else if(this.gs.getUser().role == "simple") {
-        return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`,{patientConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529"}).subscribe(
-            (response) => {
-              
-              this.ngOnInit();
-            }
-          );
-      }
-      }
+    declineDoctor(id: string, bolbol: Boolean) {
+        if (this.gs.getUser().role == "ophto") {
+            return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529" }).subscribe(
+                (response) => {
 
-    
+                    this.ngOnInit();
+                }
+            );
+        } else if (this.gs.getUser().role == "simple") {
+            return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { patientConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529" }).subscribe(
+                (response) => {
+
+                    this.ngOnInit();
+                }
+            );
+        }
+    }
+
+
 }

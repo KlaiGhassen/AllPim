@@ -297,7 +297,9 @@
                                     [svgIcon]="'heroicons_outline:calendar'"></mat-icon>
                                     <mat-form-field class="fuse-mat-no-subscript flex-auto">
                                         <input 
+                                        id="rtx"
                                             matInput
+                                            min="minimumDate"
                                             #dateInput  name="date" type="datetime-local"
                                             [formControlName]="'date'"
                                             [placeholder]="'date'">
