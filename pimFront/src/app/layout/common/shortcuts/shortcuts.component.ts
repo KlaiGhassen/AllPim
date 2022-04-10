@@ -12,7 +12,7 @@ import { ShortcutsService } from 'app/layout/common/shortcuts/shortcuts.service'
     selector       : 'shortcuts',
     templateUrl    : './shortcuts.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'shortcuts'
 })
 export class ShortcutsComponent implements OnInit, OnDestroy

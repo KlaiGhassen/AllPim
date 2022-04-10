@@ -6,7 +6,7 @@ import { FSDocument, FSDocumentElement } from '@fuse/components/fullscreen/fulls
     selector       : 'fuse-fullscreen',
     templateUrl    : './fullscreen.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'fuseFullscreen'
 })
 export class FuseFullscreenComponent implements OnInit

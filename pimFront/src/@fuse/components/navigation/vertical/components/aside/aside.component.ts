@@ -11,7 +11,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
     selector       : 'fuse-vertical-navigation-aside-item',
     templateUrl    : './aside.component.html',
     styles         : [],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class FuseVerticalNavigationAsideItemComponent implements OnChanges, OnInit, OnDestroy
 {

@@ -7,7 +7,7 @@ import { CalendarService } from 'app/modules/calendar/calendar.service';
 @Component({
     selector       : 'calendar-settings',
     templateUrl    : './settings.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     encapsulation  : ViewEncapsulation.None
 })
 export class CalendarSettingsComponent implements OnInit, OnDestroy

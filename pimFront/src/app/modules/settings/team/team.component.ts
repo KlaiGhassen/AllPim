@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
     selector       : 'settings-team',
     templateUrl    : './team.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class SettingsTeamComponent implements OnInit
 {

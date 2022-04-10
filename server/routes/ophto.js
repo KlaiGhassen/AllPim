@@ -172,7 +172,6 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.docId != null) {
         res.ophto.docId = req.body.docId;
     }
-
     try {
         res.ophto.save().then((updatedophto) => {
             res.json(updatedophto);

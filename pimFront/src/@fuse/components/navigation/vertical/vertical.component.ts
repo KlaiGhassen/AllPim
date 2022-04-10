@@ -17,7 +17,7 @@ import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
     styleUrls      : ['./vertical.component.scss'],
     animations     : fuseAnimations,
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'fuseVerticalNavigation'
 })
 export class FuseVerticalNavigationComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy

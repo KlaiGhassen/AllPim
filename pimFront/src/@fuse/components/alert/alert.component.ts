@@ -12,7 +12,7 @@ import { FuseUtilsService } from '@fuse/services/utils/utils.service';
     templateUrl    : './alert.component.html',
     styleUrls      : ['./alert.component.scss'],
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     animations     : fuseAnimations,
     exportAs       : 'fuseAlert'
 })

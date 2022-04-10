@@ -11,7 +11,7 @@ import { FuseUtilsService } from '@fuse/services/utils/utils.service';
     styleUrls      : ['./horizontal.component.scss'],
     animations     : fuseAnimations,
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'fuseHorizontalNavigation'
 })
 export class FuseHorizontalNavigationComponent implements OnChanges, OnInit, OnDestroy

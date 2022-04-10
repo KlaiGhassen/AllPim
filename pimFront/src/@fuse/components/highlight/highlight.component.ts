@@ -7,7 +7,7 @@ import { FuseHighlightService } from '@fuse/components/highlight/highlight.servi
     templateUrl    : './highlight.component.html',
     styleUrls      : ['./highlight.component.scss'],
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'fuseHighlight'
 })
 export class FuseHighlightComponent implements OnChanges, AfterViewInit

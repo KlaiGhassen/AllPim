@@ -20,7 +20,7 @@
                         class="upload"
                         ngx-dropzone
                         accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
-                        (change)="onSelect($event)"
+                        (change)="onSelectProfilePecture($event)"
                     >
                         <ngx-dropzone-label>
                             <!-- <button class="uploadButton" type="button">
@@ -29,10 +29,10 @@
                         </ngx-dropzone-label>
                         <ngx-dropzone-image-preview
                             ngProjectAs="ngx-dropzone-preview"
-                            *ngFor="let f of files2"
+                            *ngFor="let f of filesProfilePicture"
                             [file]="f"
                             [removable]="true"
-                            (removed)="onRemove2(f)"
+                            (removed)="onRemoveProfilePecture(f)"
                         >
                             <!-- <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label> -->
                         </ngx-dropzone-image-preview>
@@ -183,9 +183,9 @@
 
         <!-- Actions -->
         <div class="flex items-center justify-end">
-            <button mat-stroked-button type="button">
+            <!-- <button mat-stroked-button type="button">
                 {{ "Cancel" | translate }}
-            </button>
+            </button> -->
             <button
                 class="ml-4"
                 mat-flat-button
@@ -198,7 +198,7 @@
         </div>
     </form>
     <div *ngIf="checkLicence() == false">
-        <div *ngIf="updateLicense && user.role == 'ophto'" fxLayout="column">
+        <div *ngIf="user.role =='ophto'" fxLayout="column">
             <br />
             <div
                 class="upload"
@@ -223,9 +223,7 @@
                 >
                 </ngx-dropzone-image-preview>
             </div>
-        </div>
-
-        <button
+            <button
             (click)="savelicense()"
             type="submit"
             class="mt-4 align-center"
@@ -235,5 +233,8 @@
         >
             {{ "save License" | translate }}
         </button>
+        </div>
+
+    
     </div>
 </div>

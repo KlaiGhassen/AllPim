@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
     selector       : 'error-404',
     templateUrl    : './error-404.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class Error404Component
 {

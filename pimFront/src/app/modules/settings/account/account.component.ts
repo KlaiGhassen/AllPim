@@ -20,11 +20,11 @@ import { GlobalService } from 'app/global.service';
     selector: 'settings-account',
     templateUrl: './account.component.html',
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SettingsAccountComponent implements OnInit {
     files: File[] = [];
-    files2: File[] = [];
+    filesProfilePicture: File[] = [];
 
     accountForm: FormGroup;
     user;
@@ -47,6 +47,7 @@ export class SettingsAccountComponent implements OnInit {
         private changeDetectorRef: ChangeDetectorRef
     ) {
         this.user = this.gs.getUser();
+        console.log(this.user);
         this.donMedia();
 
         let formControls = {
@@ -110,6 +111,14 @@ export class SettingsAccountComponent implements OnInit {
     onRemove(event: any) {
         console.log(event);
         this.files.splice(this.files.indexOf(event), 1);
+    }
+    onSelectProfilePecture(event: any) {
+        console.log(event);
+        this.filesProfilePicture.push(...event.addedFiles);
+    }
+    onRemoveProfilePecture(event: any) {
+        console.log(event);
+        this.filesProfilePicture.splice(this.filesProfilePicture.indexOf(event), 1);
     }
 
     updatePic() {

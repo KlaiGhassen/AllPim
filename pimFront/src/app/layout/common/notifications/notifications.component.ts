@@ -15,7 +15,7 @@ import { cloneDeep } from 'lodash';
     selector       : 'notifications',
     templateUrl    : './notifications.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
     exportAs       : 'notifications'
 })
 export class NotificationsComponent implements OnInit, OnDestroy

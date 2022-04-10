@@ -31,11 +31,11 @@ import { NotificationsComponent } from 'app/layout/common/notifications/notifica
 
 
 @Component({
-    selector: 'calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    selector       : 'calendar',
+    templateUrl    : './calendar.component.html',
+    styleUrls      : ['./calendar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    encapsulation  : ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('eventPanel') private _eventPanel: TemplateRef<any>;

@@ -10,7 +10,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
     selector       : 'fuse-vertical-navigation-group-item',
     templateUrl    : './group.component.html',
     styles         : [],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class FuseVerticalNavigationGroupItemComponent implements OnInit, OnDestroy
 {
