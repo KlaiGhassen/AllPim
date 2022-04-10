@@ -30,10 +30,10 @@ router.get("/byDocId/checkSubs/:docId", async(req, res, next) => {
     var lyoum = new Date()
     
     try {
-        const transaction =  Transaction.find({ docId: req.params.docId, state: true});
+        const transaction = await Transaction.find({ docId: req.params.docId, state: true});
         
         if(lyoum < new Date(transaction[0].endDate)){
-        res.json(true);
+         res.json(transaction);
     }
     else{
         res.json(false);
