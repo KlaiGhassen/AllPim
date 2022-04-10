@@ -1,5 +1,6 @@
 var express = require("express");
 const Transaction = require("../models/transaction");
+const Notification = require("../models/notification");
 var router = express.Router();
 
 
@@ -29,9 +30,9 @@ router.get("/byDocId/checkSubs/:docId", async(req, res, next) => {
     var lyoum = new Date()
     
     try {
-        const transaction = await Transaction.find({ docId: req.params.docId, state: true});
+        const transaction =  Transaction.find({ docId: req.params.docId, state: true});
         
-        if(lyoum < new Date(transaction[0].endDate) && lyoum > new Date(transaction[0].startDate )){
+        if(lyoum < new Date(transaction[0].endDate)){
         res.json(true);
     }
     else{
@@ -43,6 +44,54 @@ router.get("/byDocId/checkSubs/:docId", async(req, res, next) => {
 });
 
 
+
+//update all transactions state
+router.patch("/updateAll", getAll, (req, res) => {
+    var lyoum = new Date()
+   
+    res.transaction.forEach((element) => {
+        if(lyoum > new Date(element.endDate) && element.state == true ){
+            element.state = false;
+            try {
+                element.save().then((updatedapp) => {
+                   
+                   //post notification 
+                   const notification = new Notification({
+                    id: req.body.id,
+                    icon: "heroicons_solid:star",
+                    title: req.body.title,
+                    patientId: "",
+                    docId: element.docId,
+                    description: "your subscription has expired.",
+                    time: lyoum,
+                    read: false,
+                    image: null,
+                    link: "/pricing",
+                    useRouter: true,
+                });
+                try {
+                    const newNotification =  notification.save();
+            
+                    res.status(201).json({ newNotification });
+                } catch (err) {
+                    console.log(err);
+                    
+                }
+                   
+                });
+            } catch (error) {
+                console.log("mmmmmm")
+            }
+        }
+        
+    
+        
+        
+    });
+    
+});
+
+
 // get one transaction by 
 
 router.get("/:id", getApp, (req, res) => {
@@ -50,7 +99,6 @@ router.get("/:id", getApp, (req, res) => {
     //console.log("olaaaaaaaaaaaaaaa",res.transaction.start)
     res.json(res.transaction);
 });
-
 
 
 
@@ -105,6 +153,22 @@ async function getApp(req, res, next) {
     console.log(req.params.id)
     try {
         transaction = await Transaction.findById(req.params.id );
+        if (transaction == null) {
+            return res.status(404).json({ message: "cannot find transaction" });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+    res.transaction = transaction;
+    next();
+
+    
+}
+
+async function getAll(req, res, next) {
+   // console.log(req.params.id)
+    try {
+        transaction = await Transaction.find();
         if (transaction == null) {
             return res.status(404).json({ message: "cannot find transaction" });
         }

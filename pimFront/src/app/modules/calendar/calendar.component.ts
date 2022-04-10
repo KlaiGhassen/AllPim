@@ -617,7 +617,9 @@ patientId: null
                 
                 this._notifservice.create(this.notification).subscribe((res) => {
                     console.log(res);
+                    this.ngOnInit();
                 });
+                 this.ngOnInit();
             });
             
 
