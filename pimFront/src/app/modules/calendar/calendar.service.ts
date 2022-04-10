@@ -561,11 +561,8 @@ export class CalendarService
        /**
      * Get the current logged in user data
      */
-        get(id: String)
+        getUserById(id: String)
         { 
-            
             return this._httpClient.get<any>(`${this.Gs.uri}/ophto/user/${id}`);
-            
-    
         }
 }
