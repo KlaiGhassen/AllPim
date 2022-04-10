@@ -91,7 +91,6 @@ export class SettingsAccountComponent implements OnInit {
             this.profilePicture =
                 this.sanitizer.bypassSecurityTrustUrl(objectURL);
 
-            this.changeDetectorRef.markForCheck();
             // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
         });
     }

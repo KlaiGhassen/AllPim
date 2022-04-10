@@ -41,9 +41,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('eventPanel') private _eventPanel: TemplateRef<any>;
     @ViewChild('fullCalendar') private _fullCalendar: FullCalendarComponent;
     @ViewChild('drawer') private _drawer: MatDrawer;
-
     notification_component: NotificationsComponent;
-
     notification: Notification = {
         id: null,
         _id: null,

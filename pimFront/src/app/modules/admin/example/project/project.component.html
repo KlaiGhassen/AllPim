@@ -60,7 +60,7 @@
                 [animationDuration]="'0'">
 
                 <!-- Home -->
-                <mat-tab label="Home">
+                <mat-tab label="Home" *ngIf="user.role == 'ophto'">
                     <ng-template matTabContent>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
                             <!-- Summary -->
@@ -132,196 +132,114 @@
                                 </div>
                             </div>
                             <!-- Github issues summary -->
-                            <div class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                <div class="flex flex-col sm:flex-row items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Github Issues Summary</div>
-                                    <div class="mt-3 sm:mt-0 sm:ml-2">
-                                        <mat-button-toggle-group
-                                            value="this-week"
-                                            #githubIssuesWeekSelector="matButtonToggleGroup">
-                                            <mat-button-toggle value="last-week">Last Week</mat-button-toggle>
-                                            <mat-button-toggle value="this-week">This Week</mat-button-toggle>
-                                        </mat-button-toggle-group>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 grid-flow-row gap-6 w-full mt-8 sm:mt-4">
-                                    <!-- New vs. Closed -->
-                                    <div class="flex flex-col flex-auto">
-                                        <div class="font-medium text-secondary">New vs. Closed</div>
-                                        <div class="flex flex-col flex-auto">
-                                            <apx-chart
-                                                class="flex-auto w-full h-80"
-                                                [chart]="chartGithubIssues.chart"
-                                                [colors]="chartGithubIssues.colors"
-                                                [dataLabels]="chartGithubIssues.dataLabels"
-                                                [grid]="chartGithubIssues.grid"
-                                                [labels]="chartGithubIssues.labels"
-                                                [legend]="chartGithubIssues.legend"
-                                                [plotOptions]="chartGithubIssues.plotOptions"
-                                                [series]="chartGithubIssues.series[githubIssuesWeekSelector.value]"
-                                                [states]="chartGithubIssues.states"
-                                                [stroke]="chartGithubIssues.stroke"
-                                                [tooltip]="chartGithubIssues.tooltip"
-                                                [xaxis]="chartGithubIssues.xaxis"
-                                                [yaxis]="chartGithubIssues.yaxis"></apx-chart>
-                                        </div>
-                                    </div>
-                                    <!-- Overview -->
-                                    <div class="flex flex-col">
-                                        <div class="font-medium text-secondary">Overview</div>
-                                        <div class="flex-auto grid grid-cols-4 gap-4 mt-6">
-                                            <!-- New issues -->
-                                            <div class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400">
-                                                <div class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['new-issues']}}
-                                                </div>
-                                                <div class="mt-1 text-sm sm:text-lg font-medium">New Issues</div>
-                                            </div>
-                                            <!-- Closed -->
-                                            <div class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-500">
-                                                <div class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['closed-issues']}}
-                                                </div>
-                                                <div class="mt-1 text-sm sm:text-lg font-medium">Closed</div>
-                                            </div>
-                                            <!-- Fixed -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
-                                                <div class="text-5xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['fixed']}}
-                                                </div>
-                                                <div class="mt-1 text-sm font-medium text-center">Fixed</div>
-                                            </div>
-                                            <!-- Won't fix -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
-                                                <div class="text-5xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['wont-fix']}}
-                                                </div>
-                                                <div class="mt-1 text-sm font-medium text-center">Won't Fix</div>
-                                            </div>
-                                            <!-- Re-opened -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
-                                                <div class="text-5xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['re-opened']}}
-                                                </div>
-                                                <div class="mt-1 text-sm font-medium text-center">Re-opened</div>
-                                            </div>
-                                            <!-- Needs triage -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
-                                                <div class="text-5xl font-semibold leading-none tracking-tight">
-                                                    {{data.githubIssues.overview[githubIssuesWeekSelector.value]['needs-triage']}}
-                                                </div>
-                                                <div class="mt-1 text-sm font-medium text-center">Needs Triage</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Task distribution -->
-                            <div class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                <div class="flex flex-col sm:flex-row items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Task Distribution</div>
-                                    <div class="mt-3 sm:mt-0 sm:ml-2">
-                                        <mat-button-toggle-group
-                                            value="this-week"
-                                            #taskDistributionWeekSelector="matButtonToggleGroup">
-                                            <mat-button-toggle value="last-week">Last Week</mat-button-toggle>
-                                            <mat-button-toggle value="this-week">This Week</mat-button-toggle>
-                                        </mat-button-toggle-group>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col flex-auto mt-6">
-                                    <apx-chart
-                                        class="flex-auto w-full h-80"
-                                        [chart]="chartTaskDistribution.chart"
-                                        [labels]="chartTaskDistribution.labels"
-                                        [legend]="chartTaskDistribution.legend"
-                                        [plotOptions]="chartTaskDistribution.plotOptions"
-                                        [series]="chartTaskDistribution.series[taskDistributionWeekSelector.value]"
-                                        [states]="chartTaskDistribution.states"
-                                        [stroke]="chartTaskDistribution.stroke"
-                                        [theme]="chartTaskDistribution.theme"
-                                        [tooltip]="chartTaskDistribution.tooltip"
-                                        [yaxis]="chartTaskDistribution.yaxis"></apx-chart>
-                                </div>
-                                <div class="grid grid-cols-2 border-t divide-x -m-6 mt-4 bg-gray-50 dark:bg-transparent">
-                                    <div class="flex flex-col items-center justify-center p-6 sm:p-8">
-                                        <div class="text-5xl font-semibold leading-none tracking-tighter">
-                                            {{data.taskDistribution.overview[taskDistributionWeekSelector.value]['new']}}
-                                        </div>
-                                        <div class="mt-1 text-center text-secondary">New tasks</div>
-                                    </div>
-                                    <div class="flex flex-col items-center justify-center p-6 sm:p-8">
-                                        <div class="text-5xl font-semibold leading-none tracking-tighter">
-                                            {{data.taskDistribution.overview[taskDistributionWeekSelector.value]['completed']}}
-                                        </div>
-                                        <div class="mt-1 text-center text-secondary">Completed tasks</div>
-                                    </div>
-                                </div>
-                            </div>
+                          
                             <!-- Schedule -->
-                            <div class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                <div class="flex flex-col sm:flex-row items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Schedule</div>
-                                    <div class="mt-3 sm:mt-0 sm:ml-2">
-                                        <mat-button-toggle-group
-                                            value="today"
-                                            #scheduleDaySelector="matButtonToggleGroup">
-                                            <mat-button-toggle value="today">Today</mat-button-toggle>
-                                            <mat-button-toggle value="tomorrow">Tomorrow</mat-button-toggle>
-                                        </mat-button-toggle-group>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col mt-2 divide-y">
-                                    <ng-container *ngFor="let scheduleItem of data.schedule[scheduleDaySelector.value]; trackBy: trackByFn">
-                                        <div class="flex flex-row items-center justify-between py-4 px-0.5">
-                                            <div class="flex flex-col">
-                                                <div class="font-medium">{{scheduleItem.title}}</div>
-                                                <div class="flex flex-col sm:flex-row sm:items-center -ml-0.5 mt-2 sm:mt-1 space-y-1 sm:space-y-0 sm:space-x-3">
-                                                    <ng-container *ngIf="scheduleItem.time">
-                                                        <div class="flex items-center">
-                                                            <mat-icon
-                                                                class="icon-size-5 text-hint"
-                                                                [svgIcon]="'heroicons_solid:clock'"></mat-icon>
-                                                            <div class="ml-1.5 text-md text-secondary">{{scheduleItem.time}}</div>
-                                                        </div>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="scheduleItem.location">
-                                                        <div class="flex items-center">
-                                                            <mat-icon
-                                                                class="icon-size-5 text-hint"
-                                                                [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
-                                                            <div class="ml-1.5 text-md text-secondary">{{scheduleItem.location}}</div>
-                                                        </div>
-                                                    </ng-container>
-                                                </div>
-                                            </div>
-                                            <button mat-icon-button>
-                                                <mat-icon [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
-                                            </button>
-                                        </div>
-                                    </ng-container>
-                                </div>
-                            </div>
+                    
                         </div>
                     </ng-template>
                 </mat-tab>
+                <mat-tab label="Home" *ngIf="user.role == 'simple'">
+                    <ng-template matTabContent>
+                        <div class="flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow overflow-hidden sm:bg-card">
+                            <div class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-r">
+                                <!-- Background - @formatter:off -->
+                                <!-- Rings -->
+                                <svg class="absolute inset-0 pointer-events-none"
+                                     viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+                                    <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                                        <circle r="234" cx="196" cy="23"></circle>
+                                        <circle r="234" cx="790" cy="491"></circle>
+                                    </g>
+                                </svg>
+                                <!-- Dots -->
+                                <svg class="absolute -top-16 -right-16 text-gray-700"
+                                     viewBox="0 0 220 192" width="220" height="192" fill="none">
+                                    <defs>
+                                        <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"></rect>
+                                </svg>
+                                <!-- @formatter:on -->
+                                <!-- Content -->
+ <!-- Logo -->
+ <div class="w-12">
+    <img src="assets/images/logo/logo.svg">
+</div>
 
-              
-
+<!-- Title -->
+<div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign in</div>
+<div class="flex items-baseline mt-0.5 font-medium">
+  
+</div>                            </div>
+                            <div class="w-full sm:w-auto py-8 px-4 sm:p-12 md:p-16">
+                                <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+                                 
+                                    <div class="z-10 relative w-full max-w-2xl">
+                                        <div class="text-7xl font-bold leading-none text-gray-100">
+                                            <div>Welcome to</div>
+                                            <div>our community</div>
+                                        </div>
+                                        <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
+                                            Fuse helps developers to build organized and well coded dashboards full of beautiful and rich modules.
+                                            Join us and start building your application today.
+                                        </div>
+                                        <div class="flex items-center mt-8">
+                                            <div class="flex flex-0 items-center -space-x-1.5">
+                                                <img
+                                                    class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                                                    src="assets/images/avatars/female-18.jpg">
+                                                <img
+                                                    class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                                                    src="assets/images/avatars/female-11.jpg">
+                                                <img
+                                                    class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                                                    src="assets/images/avatars/male-09.jpg">
+                                                <img
+                                                    class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                                                    src="assets/images/avatars/male-16.jpg">
+                                            </div>
+                                            <div class="ml-4 font-medium tracking-tight text-gray-400">More than 17k people joined us, it's your turn</div>
+                                        </div>
+                                    </div>
+                                 
+                                   
+                    
+                                    <!-- Alert -->
+                                    <fuse-alert
+                                        class="mt-8 -mb-4"
+                                        *ngIf="showAlert"
+                                        [appearance]="'outline'"
+                                        [showIcon]="false"
+                                        [type]="alert.type"
+                                        [@shake]="alert.type === 'error'">
+                                        {{alert.message}}
+                                    </fuse-alert>
+                    
+                                    <!-- Sign in form -->
+                             
+                                </div>
+                            </div>
+                        </div>
+                        
+                    
+                    </ng-template>
+                </mat-tab>
                 <!-- Team -->
-                <mat-tab label="Team">
+                <mat-tab label="Ophtolmolgues" *ngIf="user.role == 'simple'">
                     <ng-template matTabContent>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
-                            <ng-container *ngFor="let member of data.teamMembers">
+                            <ng-container *ngFor="let member of data">
                                 <div class="flex flex-col flex-auto items-center bg-card shadow rounded-2xl overflow-hidden">
                                     <!-- Avatar & Info -->
                                     <div class="flex flex-col flex-auto w-full p-8 text-center">
                                         <div class="w-32 h-32 mx-auto rounded-full overflow-hidden">
                                             <img
                                                 class="w-full h-full object-cover"
-                                                [src]="member.avatar">
+                                                [src]="member.profilePicture">
                                         </div>
-                                        <div class="mt-6 font-medium">{{member.name}}</div>
+                                        <div class="mt-6 font-medium">{{member.full_name}}</div>
                                         <div class="text-secondary">{{member.title}}</div>
                                     </div>
                                     <!-- Email & Phone -->
@@ -334,14 +252,14 @@
                                                 [svgIcon]="'heroicons_solid:mail'"></mat-icon>
                                             <span class="ml-2">Email</span>
                                         </a>
-                                        <a
+                                        <Button
                                             class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
-                                            [href]="'tel:' + member.phone">
+                                           >
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
                                                 [svgIcon]="'heroicons_solid:phone'"></mat-icon>
                                             <span class="ml-2">Call</span>
-                                        </a>
+                                    </Button>
                                     </div>
                                 </div>
                             </ng-container>

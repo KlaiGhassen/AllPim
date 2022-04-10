@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { GlobalService } from 'app/global.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,8 @@ export class ProjectService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(private _httpClient: HttpClient,
+       private gs: GlobalService, )
     {
     }
 
@@ -28,7 +30,14 @@ export class ProjectService
     {
         return this._data.asObservable();
     }
-
+    downloadMedia(fileName: any): Observable<Blob> {
+        return this._httpClient.get(
+          ` ${this.gs.uri}/upload/download/` + fileName,
+          {
+            responseType: "blob",
+          }
+        );
+      }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -38,7 +47,7 @@ export class ProjectService
      */
     getData(): Observable<any>
     {
-        return this._httpClient.get('api/dashboards/project').pipe(
+        return this._httpClient.get(this.gs.uri+'/ophto').pipe(
             tap((response: any) => {
                 this._data.next(response);
             })
