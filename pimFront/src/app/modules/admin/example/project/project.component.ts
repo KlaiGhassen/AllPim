@@ -66,6 +66,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this._projectService.data$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
+                console.log(data);
                 data.forEach((elm) => {
                     console.log(elm.profilePicture);
                     this._projectService.downloadMedia(elm.profilePicture).subscribe((blob) => {

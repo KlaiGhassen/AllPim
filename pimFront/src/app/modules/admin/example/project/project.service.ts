@@ -47,7 +47,7 @@ export class ProjectService
      */
     getData(): Observable<any>
     {
-        return this._httpClient.get(this.gs.uri+'/ophto').pipe(
+        return this._httpClient.get(this.gs.uri+'/ophto/role').pipe(
             tap((response: any) => {
                 this._data.next(response);
             })

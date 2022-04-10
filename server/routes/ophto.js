@@ -56,9 +56,9 @@ router.post("/file", upload.single("file"), function(req, res, next) {
 
 //get all ophtos
 
-router.get("/", async(req, res, next) => {
+router.get("/role", async(req, res, next) => {
     try {
-        const ophtos = await Ophto.find();
+        const ophtos = await Ophto.find({role:"ophto"});
         res.json(ophtos);
     } catch (error) {
         res.status(500).json({ message: error.message });
