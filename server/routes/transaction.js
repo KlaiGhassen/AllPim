@@ -33,7 +33,9 @@ router.get("/byDocId/checkSubs/:docId", async(req, res, next) => {
         const transaction = await Transaction.find({ docId: req.params.docId, state: true});
         
         if(lyoum < new Date(transaction[0].endDate)){
-         res.json(transaction);
+            var daysleft = transaction[0].endDate.getTime() - lyoum.getTime();            
+            var Difference_In_Days = daysleft / (1000 * 3600 * 24);
+         res.json(Math.ceil(Difference_In_Days));
     }
     else{
         res.json(false);
