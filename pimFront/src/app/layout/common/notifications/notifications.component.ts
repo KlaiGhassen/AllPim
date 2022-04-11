@@ -9,6 +9,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { environment } from "app/../environments/environment";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { cloneDeep } from 'lodash';
+import { GlobalService } from 'app/global.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class NotificationsComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
+        private gs: GlobalService
     )
     {
     }
@@ -51,7 +53,8 @@ export class NotificationsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this._notificationsService.getAll()
+        if(this.gs.getUser().role == "ophto"){
+            this._notificationsService.getAllByDoc(this.gs.getUser()._id)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((res)=>{
                 
@@ -62,6 +65,21 @@ export class NotificationsComponent implements OnInit, OnDestroy
                 this._calculateUnreadCount();
                 this._changeDetectorRef.markForCheck();
             });
+
+        } else if(this.gs.getUser().role == "simple"){
+            this._notificationsService.getAllByPatient(this.gs.getUser()._id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((res)=>{
+                
+                this.notifications = cloneDeep(res);
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+                this._calculateUnreadCount();
+                this._changeDetectorRef.markForCheck();
+            });
+        }
+        
 
             // Calculate the unread count
            

@@ -51,6 +51,23 @@ export class NotificationsService
         );
     }
 
+    getAllByPatient(id): Observable<Notification[]>
+    {
+        return this._httpClient.get<Notification[]>(`${this.Gs.uri}/notification/byPatientId/${id}`).pipe(
+            tap((notifications) => {
+                this._notifications.next(notifications);
+            })
+        );
+    }
+    getAllByDoc(id): Observable<Notification[]>
+    {
+        return this._httpClient.get<Notification[]>(`${this.Gs.uri}/notification/byDocId/${id}`).pipe(
+            tap((notifications) => {
+                this._notifications.next(notifications);
+            })
+        );
+    }
+
     /**
      * Create a notification
      *

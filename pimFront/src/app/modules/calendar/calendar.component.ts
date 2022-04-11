@@ -458,7 +458,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         var now = new Date().getTime();
         //var dd = String(today.getDate()).padStart(2, '0');
         // Prepare the event
-        const event = {
+        var event = {
             _id: null,
             id: this.gs.getUser().full_name + now,
             calendarId: '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
@@ -991,7 +991,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.gs.getUser().role == "ophto") {
             return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { doctorConfirm: bolbol, state: "Confirmed", calendarId: "5dab5f7b-757a-4467-ace1-305fe07b11fe" }).subscribe(
                 (response) => {
-
                     this.ngOnInit();
                 }
             );
@@ -1009,7 +1008,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.gs.getUser().role == "ophto") {
             return this._httpClient.patch(`${this.gs.uri}/appointement/${id}`, { doctorConfirm: bolbol, state: "Declined", calendarId: "09887870-f85a-40eb-8171-1b13d7a7f529" }).subscribe(
                 (response) => {
-
                     this.ngOnInit();
                 }
             );

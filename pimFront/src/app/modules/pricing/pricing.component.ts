@@ -72,7 +72,7 @@ export class PricingComponent implements OnInit {
 
         this.token = token
 
-        alert('Token Created!!');
+        //alert('Token Created!!');
       }
       
     });
