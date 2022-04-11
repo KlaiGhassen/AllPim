@@ -16,6 +16,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { projectRoutes } from './project.routing';
 import { ProjectComponent } from './project.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
@@ -37,6 +38,7 @@ import {MatDialogModule} from '@angular/material/dialog';
         NgApexchartsModule,
         SharedModule,
         TranslateModule,
+        NgxDropzoneModule,
         MatDialogModule
         
         

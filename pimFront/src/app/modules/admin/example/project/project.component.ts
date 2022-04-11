@@ -23,7 +23,9 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 @Component({
     selector: 'project',
     templateUrl: './project.component.html',
+    styleUrls: ['./project.component.scss'],
     encapsulation: ViewEncapsulation.None,
+
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ProjectComponent implements OnInit, OnDestroy {
@@ -70,9 +72,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         private _calendarService: CalendarService,
         private _notifservice: NotificationsService
     ) {}
-
-    // ------------------------------
-    //  Dialog
     openDialog(docId, place, dd): void {
         const dialogRef = this.dialog.open(DialogAppointementComponent, {
           width: '250px',
@@ -121,11 +120,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
     // ------------------------------
 
-    onSelect(event: any) {
+
+    onSelectPredection(event: any) {
         console.log(event);
         this.filesPredection.push(...event.addedFiles);
     }
-    onRemove(event: any) {
+    onRemovePredection(event: any) {
         console.log(event);
         this.filesPredection.splice(this.filesPredection.indexOf(event), 1);
     }
@@ -146,17 +146,20 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 console.log(data);
                 data.forEach((elm) => {
                     console.log(elm.profilePicture);
-                    this._projectService.downloadMedia(elm.profilePicture).subscribe((blob) => {
-                        // var myFile = this.blobToFile(blob, 'my-image1.png');
-                        const objectURL = URL.createObjectURL(blob);
-                        this.picture = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-                        // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
-                        elm.profilePicture = this.picture;
-                        console.log(elm.profilePicture);
-                        this.data.push(elm);
-                    });
-
-                  
+                    this._projectService
+                        .downloadMedia(elm.profilePicture)
+                        .subscribe((blob) => {
+                            // var myFile = this.blobToFile(blob, 'my-image1.png');
+                            const objectURL = URL.createObjectURL(blob);
+                            this.picture =
+                                this.sanitizer.bypassSecurityTrustUrl(
+                                    objectURL
+                                );
+                            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+                            elm.profilePicture = this.picture;
+                            console.log(elm.profilePicture);
+                            this.data.push(elm);
+                        });
                 });
                 // Store the data
                 // Prepare the chart data
@@ -177,8 +180,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
         //     },
         // };
     }
-    donMedia(picName) {
-      
+    disease;
+    loading=false;
+    uploadPredection = false;
+    upload() {
+        this.loading =true;
+
+        console.log('hello');
+        this.gs
+            .postFileToPy(this.filesPredection[0])
+            .subscribe((data: any) => {
+                console.log(data);
+                this.loading =false;
+                this.disease=data.disease
+            });
+
     }
 
     /**

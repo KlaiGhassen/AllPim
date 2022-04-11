@@ -137,7 +137,7 @@ export class SettingsAccountComponent implements OnInit {
         const file = event.target.files[0];
 
         // Store form name as "file" with file data
-        this.formData.append('file', file, event.target.files[0].name);
+    this.formData.append('file', file, event.target.files[0].name);
     }
 
     savelicense() {
