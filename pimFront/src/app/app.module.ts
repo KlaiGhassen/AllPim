@@ -29,6 +29,7 @@ import { PricingModule } from './modules/pricing/pricing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {TranslateLoader, TranslateModule,} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DialogAppointementComponent } from './modules/admin/dialog-appointement/dialog-appointement.component';
 
 
 initializeApp(environment.firebase);
@@ -48,6 +49,7 @@ const routerConfig: ExtraOptions = {
 @NgModule({
     declarations: [
         AppComponent,
+        DialogAppointementComponent,
         
     ],
     imports     : [
