@@ -12,6 +12,13 @@ import { ApexOptions } from 'ng-apexcharts';
 import { ProjectService } from './project.service';
 import { GlobalService } from 'app/global.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DialogAppointementComponent } from '../../dialog-appointement/dialog-appointement.component';
+import { CalendarService } from 'app/modules/calendar/calendar.service';
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { CalendarEvent } from 'app/modules/calendar/calendar.types';
+import { Notification } from 'app/layout/common/notifications/notifications.types';
+
 
 @Component({
     selector: 'project',
@@ -31,6 +38,23 @@ export class ProjectComponent implements OnInit, OnDestroy {
     user;
     selectedProject: string = 'ACME Corp. Backend App';
     filesPredection: File[] = [];
+    newEvent;
+
+    notification: Notification = {
+        id: null,
+        _id: null,
+        icon: null,
+        image: null,
+        title: null,
+        description: null,
+        time: '',
+        link: null,
+        useRouter: null,
+        read: false,
+        docId: null,
+        patientId: null
+    };
+    brag
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -41,8 +65,61 @@ export class ProjectComponent implements OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private gs: GlobalService,
         private _projectService: ProjectService,
-        private _router: Router
+        private _router: Router,
+        public dialog: MatDialog,
+        private _calendarService: CalendarService,
+        private _notifservice: NotificationsService
     ) {}
+
+    // ------------------------------
+    //  Dialog
+    openDialog(docId, place, dd): void {
+        const dialogRef = this.dialog.open(DialogAppointementComponent, {
+          width: '250px',
+          
+          data: {docId: docId, place: place},
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+         // this.animal = result;
+        });
+      }
+      
+         /**
+     * Add event
+     */
+    addEvent(docId: string, place:string) {
+       
+        var now = new Date().getTime();
+        // Get the clone of the event form value
+        let newEvent = new CalendarEvent("123",'1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc', this.gs.getUser()._id, this.gs.getUser().full_name + now, docId , true, false, 'Pending', this.brag, place);
+
+
+        // Add the event
+        this._calendarService.addEvent(newEvent).subscribe(() => {
+                this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
+                this.notification.icon = 'heroicons_solid:star';
+                this.notification.title = "new Appointement";
+                this.notification.time = Date();
+                this.notification.read = false;
+                //this.notification.docId = this.gs.getUser()._id;
+                this.notification.docId = docId;
+                this.notification.patientId = this.gs.getUser()._id;
+                this.notification.useRouter = true;
+                this.notification.link = '/calendar';
+
+                this._notifservice.create(this.notification).subscribe((res) => {
+                    console.log(res);
+                    //this.notification_component.ngOnInit();
+                    
+                });
+                //this.ngOnInit();
+            
+      
+      });
+    }
+    // ------------------------------
 
     onSelect(event: any) {
         console.log(event);
@@ -467,3 +544,5 @@ export class ProjectComponent implements OnInit, OnDestroy {
     //     };
     // }
 }
+
+

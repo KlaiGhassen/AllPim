@@ -16,6 +16,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { projectRoutes } from './project.routing';
 import { ProjectComponent } from './project.component';
 import { TranslateModule } from '@ngx-translate/core';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { TranslateModule } from '@ngx-translate/core';
         MatTabsModule,
         NgApexchartsModule,
         SharedModule,
-        TranslateModule
+        TranslateModule,
+        MatDialogModule
         
         
     ]

@@ -440,6 +440,7 @@
                                         </a>
                                         <Button
                                             class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
+                                            (click)="openDialog(member._id,member.country)"
                                         >
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
@@ -447,7 +448,7 @@
                                                     'heroicons_solid:phone'
                                                 "
                                             ></mat-icon>
-                                            <span class="ml-2">Call</span>
+                                            <span class="ml-2">Take an appointement</span>
                                         </Button>
                                     </div>
                                 </div>
