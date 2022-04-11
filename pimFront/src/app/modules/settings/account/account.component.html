@@ -47,21 +47,35 @@
                 </div>
                 <button
                     class="mt-4 align-center"
+                    type="button"
+                    mat-stroked-button
+                    [color]="'primary'"
+                    (click)="updatePic()"
+                    *ngIf="updatepicture"
+                >
+                    {{ "cancel" | translate }}
+                </button>
+                <button
+                    class="mt-4 align-center"
+                    type="button"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="updatePic()"
+                    *ngIf="!updatepicture"
+                >
+                    {{ "update picture" | translate }}
+                </button>
+
+                <button
+                    *ngIf="updatepicture"
+                    class="ml-4"
                     mat-flat-button
                     type="button"
                     [color]="'primary'"
-                    (click)="updatePic()"
+                    (click)="updatedPicture()"
                 >
-                    <ng-container *ngIf="updatepicture; else elseBlock">
-                        {{ "cancel" | translate }}
-                    </ng-container>
-
-                    <ng-template #elseBlock>
-                        {{ "update picture" | translate }}
-                    </ng-template>
+                    {{ "Save" | translate }}
                 </button>
-
-                <!-- license -->
             </div>
         </div>
 
@@ -198,7 +212,7 @@
         </div>
     </form>
     <div *ngIf="checkLicence() == false">
-        <div *ngIf="user.role =='ophto'" fxLayout="column">
+        <div *ngIf="user.role == 'ophto'" fxLayout="column">
             <br />
             <div
                 class="upload"
@@ -224,17 +238,15 @@
                 </ngx-dropzone-image-preview>
             </div>
             <button
-            (click)="savelicense()"
-            type="submit"
-            class="mt-4 align-center"
-            mat-flat-button
-            type="button"
-            [color]="'primary'"
-        >
-            {{ "save License" | translate }}
-        </button>
+                (click)="savelicense()"
+                type="submit"
+                class="mt-4 align-center"
+                mat-flat-button
+                type="button"
+                [color]="'primary'"
+            >
+                {{ "save License" | translate }}
+            </button>
         </div>
-
-    
     </div>
 </div>

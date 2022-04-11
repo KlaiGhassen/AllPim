@@ -23,7 +23,6 @@ export class SettingsSecurityComponent implements OnInit {
         type: 'success',
         message: '',
     };
-    resetPasswordForm: FormGroup;
     showAlert: boolean = false;
 
     /**
@@ -60,16 +59,14 @@ export class SettingsSecurityComponent implements OnInit {
         // Create the form
     }
     update() {
-        console.log(this.gs.getUser().id
-        );
-        {
+      
             // Return if the form is invalid
-            if (this.resetPasswordForm.invalid) {
+            if (this.securityForm.invalid) {
                 return;
             }
 
             // Disable the form
-            this.resetPasswordForm.disable();
+            this.securityForm.disable();
 
             // Hide the alert
             this.showAlert = false;
@@ -77,17 +74,17 @@ export class SettingsSecurityComponent implements OnInit {
             // Send the request to the server
             this._authService
                 .resetPassword(
-                    this.resetPasswordForm.get('password').value,
+                    this.securityForm.get('password').value,
                     this.gs.getUser()._id
                 )
 
                 .pipe(
                     finalize(() => {
                         // Re-enable the form
-                        this.resetPasswordForm.enable();
+                        this.securityForm.enable();
 
                         // Reset the form
-                        this.resetPasswordForm.reset();
+                        this.securityForm.reset();
 
                         // Show the alert
                         this.showAlert = true;
@@ -95,13 +92,17 @@ export class SettingsSecurityComponent implements OnInit {
                 )
                 .subscribe(
                     (response) => {
+                        console.log(response);
                         // Set the alert
                         this.alert = {
                             type: 'success',
                             message: 'Your password has been reset.',
                         };
+
                     },
                     (response) => {
+                        console.log(response);
+
                         // Set the alert
                         this.alert = {
                             type: 'error',
@@ -109,6 +110,5 @@ export class SettingsSecurityComponent implements OnInit {
                         };
                     }
                 );
-        }
     }
 }

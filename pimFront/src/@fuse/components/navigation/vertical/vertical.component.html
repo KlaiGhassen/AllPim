@@ -14,6 +14,7 @@
 
         <!-- Content header -->
         <div class="fuse-vertical-navigation-content-header">
+            
             <ng-content select="[fuseVerticalNavigationContentHeader]"></ng-content>
         </div>
 
@@ -21,8 +22,9 @@
         <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
             <!-- Skip the hidden items -->
             <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
-
                 <!-- Aside -->
+            <ng-container *ngIf="item.Role == user.role ">
+
                 <ng-container *ngIf="item.type === 'aside'">
                     <fuse-vertical-navigation-aside-item
                         [item]="item"
@@ -37,8 +39,11 @@
                 <ng-container *ngIf="item.type === 'basic'">
                     <fuse-vertical-navigation-basic-item
                         [item]="item"
-                        [name]="name"></fuse-vertical-navigation-basic-item>
+                        [name]="name"
+                        
+                        ></fuse-vertical-navigation-basic-item>
                 </ng-container>
+            </ng-container>
 
                 <!-- Collapsable -->
                 <ng-container *ngIf="item.type === 'collapsable'">

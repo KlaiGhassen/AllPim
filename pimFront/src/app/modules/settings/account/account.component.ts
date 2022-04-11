@@ -58,7 +58,7 @@ export class SettingsAccountComponent implements OnInit {
                 Validators.required,
                 Validators.email,
             ]),
-            phone_number: new FormControl('', [
+            phone_number: new FormControl(this.user.phone_number, [
                 Validators.required,
                 Validators.minLength(6),
             ]),
@@ -127,12 +127,12 @@ export class SettingsAccountComponent implements OnInit {
 
     update() {
         this._Us.update(this.accountForm.value).subscribe((data) => {
-            console.log(data);
+         console.log(data);
+            this._Us.user=data;
+            this.gs.setUser(data);
         });
-        // console.log(this.accountForm.value);
     }
     onSelectedFile(event) {
-        //console.log("fillllllllllllllllllllllllllllllllllllle",event.target.files)
 
         const file = event.target.files[0];
 
@@ -155,5 +155,20 @@ export class SettingsAccountComponent implements OnInit {
         } else {
             return false;
         }
+    }
+    updatedPicture(){
+        this.load= true;
+        this.profilePicture=null;
+        this._Us.postFileOphto(this.filesProfilePicture[0]).subscribe((data) => {
+            this._Us.user=data;
+            this.gs.setUser(data);
+            this.load = false;
+            this.updatepicture=!this.updatepicture
+            this.filesProfilePicture= [];
+            this.ngOnInit()
+
+
+        });
+
     }
 }

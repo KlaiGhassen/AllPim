@@ -10,6 +10,7 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { GlobalService } from 'app/global.service';
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -58,11 +59,13 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
     private _fuseScrollbarDirectives!: QueryList<FuseScrollbarDirective>;
     private _fuseScrollbarDirectivesSubscription: Subscription;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    user;
 
     /**
      * Constructor
      */
     constructor(
+        private gs:GlobalService,
         private _animationBuilder: AnimationBuilder,
         private _changeDetectorRef: ChangeDetectorRef,
         private _elementRef: ElementRef,
@@ -73,6 +76,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _fuseUtilsService: FuseUtilsService
     )
     {
+        this.user= this.gs.getUser()
+
         this._handleAsideOverlayClick = (): void => {
             this.closeAside();
         };
@@ -285,12 +290,14 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
             this.transparentOverlay = coerceBooleanProperty(changes.transparentOverlay.currentValue);
         }
     }
-
     /**
      * On init
      */
     ngOnInit(): void
     {
+       this.user= this.gs.getUser()
+
+
         // Make sure the name input is not an empty string
         if ( this.name === '' )
         {

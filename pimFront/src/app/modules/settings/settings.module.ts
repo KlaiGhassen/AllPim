@@ -40,7 +40,9 @@ import { TranslateModule } from '@ngx-translate/core';
         MatSlideToggleModule,
         FuseAlertModule,
         SharedModule,
-        TranslateModule
+        TranslateModule,
+        
+        
     ]
 })
 export class SettingsModule

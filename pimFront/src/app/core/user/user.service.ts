@@ -51,7 +51,6 @@ export class UserService
      */
     get(): Observable<User>
     { let _user = this.gs.getUser();
-        console.log("cuureent user",_user);
         return this._httpClient.get<User>(this.gs.uri+'/auth/current/'+_user._id).pipe(
             tap((user) => {
                 this._user.next(user);
@@ -74,6 +73,7 @@ export class UserService
 
     update(user: any)
     {
+        console.log(user);
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/'+user.email, user)
     }
 
@@ -85,6 +85,12 @@ export class UserService
         const formData: FormData = new FormData();
         formData.append('file', fileToUpload, fileToUpload.name);
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/license/'+this.gs.getUser().email,formData,
+        );
+      }
+      postFileOphto(fileToUpload: File) {
+        const formData: FormData = new FormData();
+        formData.append('file', fileToUpload, fileToUpload.name);
+        return this._httpClient.patch<any>(this.gs.uri+'/ophto/'+this.gs.getUser().email,formData,
         );
       }
 }

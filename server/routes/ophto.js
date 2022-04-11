@@ -131,8 +131,8 @@ router.delete("/:email", getOphto, async(req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-router.patch("/:email", getOphto, (req, res) => {
-    console.log(req.params, req.body)
+router.patch("/:email",upload.single('file'), getOphto, (req, res) => {
+console.log("patch methode",req.body)
     if (req.body.country != null) {
         res.ophto.country = req.body.country;
     }
@@ -145,9 +145,7 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.phone_number != null) {
         res.ophto.phone_number = req.body.phone_number;
     }
-    if (req.body.profilePicture != null) {
-        res.ophto.profilePicture = req.body.profilePicture;
-    }
+  
     if (req.body.full_name != null) {
         res.ophto.full_name = req.body.full_name;
     }
@@ -172,6 +170,11 @@ router.patch("/:email", getOphto, (req, res) => {
     if (req.body.docId != null) {
         res.ophto.docId = req.body.docId;
     }
+    if (req.file != null ) {
+        res.ophto.profilePicture = req.file.filename;
+    }
+ 
+
     try {
         res.ophto.save().then((updatedophto) => {
             res.json(updatedophto);

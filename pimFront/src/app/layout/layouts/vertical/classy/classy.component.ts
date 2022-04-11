@@ -8,6 +8,8 @@ import { Navigation } from 'app/core/navigation/navigation.types';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import { GlobalService } from 'app/global.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector     : 'classy-layout',
@@ -24,8 +26,11 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     /**
      * Constructor
      */
-   
+     profilePicture;
     constructor(
+        private sanitizer: DomSanitizer,
+        private _Us: UserService,
+        private gs:GlobalService,
         private _activatedRoute: ActivatedRoute,
         private _router: Router,
         private _navigationService: NavigationService,
@@ -34,6 +39,17 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _fuseNavigationService: FuseNavigationService
     )
     {
+    }
+
+    donMedia() {
+        this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
+            // var myFile = this.blobToFile(blob, 'my-image1.png');
+            const objectURL = URL.createObjectURL(blob);
+            this.profilePicture =
+                this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -57,6 +73,9 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.user= this.gs.getUser();
+this.donMedia();
+
         // Subscribe to navigation data
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))

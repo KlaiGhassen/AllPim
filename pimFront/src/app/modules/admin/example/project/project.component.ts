@@ -12,13 +12,17 @@ import { ApexOptions } from 'ng-apexcharts';
 import { ProjectService } from './project.service';
 import { GlobalService } from 'app/global.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { DialogAppointementComponent } from '../../dialog-appointement/dialog-appointement.component';
 import { CalendarService } from 'app/modules/calendar/calendar.service';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { CalendarEvent } from 'app/modules/calendar/calendar.types';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
-
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'project',
@@ -41,6 +45,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     selectedProject: string = 'ACME Corp. Backend App';
     filesPredection: File[] = [];
     newEvent;
+    profilePicture;
 
     notification: Notification = {
         id: null,
@@ -54,9 +59,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
         useRouter: null,
         read: false,
         docId: null,
-        patientId: null
+        patientId: null,
     };
-    brag
+    brag;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -64,6 +69,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
      * Constructor
      */
     constructor(
+        private _Us: UserService,
         private sanitizer: DomSanitizer,
         private gs: GlobalService,
         private _projectService: ProjectService,
@@ -74,52 +80,59 @@ export class ProjectComponent implements OnInit, OnDestroy {
     ) {}
     openDialog(docId, place, dd): void {
         const dialogRef = this.dialog.open(DialogAppointementComponent, {
-          width: '250px',
-          
-          data: {docId: docId, place: place},
+            width: '250px',
+
+            data: { docId: docId, place: place },
         });
-    
-        dialogRef.afterClosed().subscribe(result => {
-          console.log('The dialog was closed');
-         // this.animal = result;
+
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log('The dialog was closed');
+            // this.animal = result;
         });
-      }
-      
-         /**
+    }
+
+    /**
      * Add event
      */
-    addEvent(docId: string, place:string) {
-       
+    addEvent(docId: string, place: string) {
         var now = new Date().getTime();
         // Get the clone of the event form value
-        let newEvent = new CalendarEvent("123",'1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc', this.gs.getUser()._id, this.gs.getUser().full_name + now, docId , true, false, 'Pending', this.brag, place);
-
+        let newEvent = new CalendarEvent(
+            '123',
+            '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
+            this.gs.getUser()._id,
+            this.gs.getUser().full_name + now,
+            docId,
+            true,
+            false,
+            'Pending',
+            this.brag,
+            place
+        );
 
         // Add the event
         this._calendarService.addEvent(newEvent).subscribe(() => {
-                this.notification.description = `${this.gs.getUser().full_name} have submitted an appointement`;
-                this.notification.icon = 'heroicons_solid:star';
-                this.notification.title = "new Appointement";
-                this.notification.time = Date();
-                this.notification.read = false;
-                //this.notification.docId = this.gs.getUser()._id;
-                this.notification.docId = docId;
-                this.notification.patientId = this.gs.getUser()._id;
-                this.notification.useRouter = true;
-                this.notification.link = '/calendar';
+            this.notification.description = `${
+                this.gs.getUser().full_name
+            } have submitted an appointement`;
+            this.notification.icon = 'heroicons_solid:star';
+            this.notification.title = 'new Appointement';
+            this.notification.time = Date();
+            this.notification.read = false;
+            //this.notification.docId = this.gs.getUser()._id;
+            this.notification.docId = docId;
+            this.notification.patientId = this.gs.getUser()._id;
+            this.notification.useRouter = true;
+            this.notification.link = '/calendar';
 
-                this._notifservice.create(this.notification).subscribe((res) => {
-                    console.log(res);
-                    //this.notification_component.ngOnInit();
-                    
-                });
-                //this.ngOnInit();
-            
-      
-      });
+            this._notifservice.create(this.notification).subscribe((res) => {
+                console.log(res);
+                //this.notification_component.ngOnInit();
+            });
+            //this.ngOnInit();
+        });
     }
     // ------------------------------
-
 
     onSelectPredection(event: any) {
         console.log(event);
@@ -137,8 +150,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     /**
      * On init
      */
+     donMedia() {
+        this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
+            // var myFile = this.blobToFile(blob, 'my-image1.png');
+            const objectURL = URL.createObjectURL(blob);
+            this.profilePicture =
+                this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+        });
+    }
     ngOnInit(): void {
+
         this.user = this.gs.getUser();
+        this.donMedia();
+
         // Get the data
         this._projectService.data$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -181,20 +207,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
         // };
     }
     disease;
-    loading=false;
+    loading = false;
     uploadPredection = false;
     upload() {
-        this.loading =true;
+        this.loading = true;
 
         console.log('hello');
-        this.gs
-            .postFileToPy(this.filesPredection[0])
-            .subscribe((data: any) => {
-                console.log(data);
-                this.loading =false;
-                this.disease=data.disease
-            });
-
+        this.gs.postFileToPy(this.filesPredection[0]).subscribe((data: any) => {
+            console.log(data);
+            this.loading = false;
+            this.disease = data.disease;
+        });
     }
 
     /**
@@ -560,5 +583,3 @@ export class ProjectComponent implements OnInit, OnDestroy {
     //     };
     // }
 }
-
-
