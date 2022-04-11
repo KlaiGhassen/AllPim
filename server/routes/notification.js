@@ -30,6 +30,15 @@ router.get("/byDocId/:docId", async(req, res, next) => {
     }
 });
 
+router.get("/byPatientId/:patientId", async(req, res, next) => {
+    try {
+        const app = await Notification.find({ patientId: req.params.patientId });
+        res.json(app);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // get one notification by 
 router.get("/:id", getApp, (req, res) => {
     console.log(res.app)
