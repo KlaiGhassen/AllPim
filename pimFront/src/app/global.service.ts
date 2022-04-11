@@ -9,9 +9,9 @@ import { HttpClient } from "@angular/common/http";
 })
 export class GlobalService {
   private user: any;
- //uri: any ="http://192.168.1.187:3000" //"http://localhost:3000"; 
-   uri: any ="http://localhost:3000" // backend url
-   PredectionUri :any = "http://localhost:8000"
+ uri: any ="http://192.168.142.167:3000" //"http://localhost:3000"; 
+  // uri: any ="http://localhost:3000" // backend url
+   PredectionUri :any = "http://192.168.142.167:8000"
 
   constructor(private injector: Injector, 
     private _httpClient: HttpClient) {}
