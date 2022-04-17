@@ -4,6 +4,7 @@ import { debounceTime, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Observable, of, Subject } from 'rxjs';
 import { Note } from '../notes.types';
 import { NotesService } from '../notes.service';
+import { GlobalService } from 'app/global.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         @Inject(MAT_DIALOG_DATA) private _data: { note: Note },
         private _notesService: NotesService,
-        private _matDialogRef: MatDialogRef<NotesDetailsComponent>
+        private _matDialogRef: MatDialogRef<NotesDetailsComponent>,
+        private gs: GlobalService,
     )
     {
     }
@@ -54,34 +56,17 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
         {
             // Create an empty note
             const note = {
-                id       : null,
-                title    : '',
-                content  : '',
-                tasks    : null,
-                image    : null,
-                reminder : null,
-                labels   : [],
-                archived : false,
-                createdAt: null,
-                updatedAt: null
+                _id: null,
+                id: null,
+                title: null,
+                content: null,
+                docId: this.gs.getUser()._id,
+                archived: false
             };
 
             this.note$ = of(note);
         }
 
-
-
-        // Subscribe to note updates
-        this.noteChanged
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(500),
-                switchMap(note => this._notesService.updateNote(note)))
-            .subscribe(() => {
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
     }
 
     /**
@@ -105,7 +90,7 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
      */
     createNote(note: Note): void
     {
-        this._notesService.createNote(note).pipe(
+        this._notesService.createNote(note,this.gs.getUser()._id).pipe(
             map(() => {
                 // Get the note
                 this.note$ = this._notesService.note$;
@@ -148,7 +133,7 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
      */
     deleteNote(note: Note): void
     {
-        this._notesService.deleteNote(note)
+        this._notesService.deleteNote(note,this.gs.getUser()._id)
             .subscribe((isDeleted) => {
 
                 // Return if the note wasn't deleted...

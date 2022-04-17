@@ -5,6 +5,7 @@ import { map, switchMap, take, tap } from 'rxjs/operators';
 
 import { cloneDeep } from 'lodash-es';
 import { Note } from './notes.types';
+import { GlobalService } from 'app/global.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class NotesService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(private _httpClient: HttpClient, private Gs:GlobalService)
     {
     }
 
@@ -34,7 +35,7 @@ export class NotesService
      */
     get notes$(): Observable<Note[]>
     {
-        return this._notes.asObservable();
+        return this._httpClient.get<any>(this.Gs.uri+'/note');
     }
 
     /**
@@ -60,9 +61,9 @@ export class NotesService
     /**
      * Get notes
      */
-    getNotes(): Observable<Note[]>
+    getNotes(id: String): Observable<Note[]>
     {
-        return this._httpClient.get<Note[]>('api/apps/notes/all').pipe(
+        return this._httpClient.get<Note[]>(`${this.Gs.uri}/note/byDocId/${id}`).pipe(
             tap((response: Note[]) => {
                 this._notes.next(response);
             })
@@ -99,74 +100,37 @@ export class NotesService
         );
     }
 
-    /**
-     * Add task to the given note
-     *
-     * @param note
-     * @param task
-     */
-    addTask(note: Note, task: string): Observable<Note>
-    {
-        return this._httpClient.post<Note>('api/apps/notes/tasks', {
-            note,
-            task
-        }).pipe(switchMap(() => this.getNotes().pipe(
-            switchMap(() => this.getNoteById(note.id))
-        )));
-    }
+
 
     /**
      * Create note
      *
      * @param note
      */
-    createNote(note: Note): Observable<Note>
+    createNote(note: Note, id:String): Observable<Note>
     {
-        return this._httpClient.post<Note>('api/apps/notes', {note}).pipe(
-            switchMap(response => this.getNotes().pipe(
+        return this._httpClient.post<Note>(`${this.Gs.uri}/note`,note).pipe(
+            switchMap(response => this.getNotes(id).pipe(
                 switchMap(() => this.getNoteById(response.id).pipe(
                     map(() => response)
                 ))
             )));
     }
 
-    /**
-     * Update the note
-     *
-     * @param note
-     */
-    updateNote(note: Note): Observable<Note>
-    {
-        // Clone the note to prevent accidental reference based updates
-        const updatedNote = cloneDeep(note) as any;
-
-        // Before sending the note to the server, handle the labels
-        if ( updatedNote.labels.length )
-        {
-            updatedNote.labels = updatedNote.labels.map(label => label.id);
-        }
-
-        return this._httpClient.patch<Note>('api/apps/notes', {updatedNote}).pipe(
-            tap((response) => {
-
-                // Update the notes
-                this.getNotes().subscribe();
-            })
-        );
-    }
+    
 
     /**
      * Delete the note
      *
      * @param note
      */
-    deleteNote(note: Note): Observable<boolean>
+    deleteNote(note: Note, id:string): Observable<boolean>
     {
-        return this._httpClient.delete<boolean>('api/apps/notes', {params: {id: note.id}}).pipe(
+        return this._httpClient.delete<boolean>(`${this.Gs.uri}/note/${note.id}`).pipe(
             map((isDeleted: boolean) => {
 
                 // Update the notes
-                this.getNotes().subscribe();
+                this.getNotes(id).subscribe();
 
                 // Return the deleted status
                 return isDeleted;

@@ -9,6 +9,7 @@ import { cloneDeep } from 'lodash-es';
 import { Note } from '../notes.types';
 import { NotesService } from '../notes.service';
 import { NotesDetailsComponent } from '../details/details.component';
+import { GlobalService } from 'app/global.service';
 
 @Component({
     selector       : 'notes-list',
@@ -36,7 +37,8 @@ export class NotesListComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _matDialog: MatDialog,
-        private _notesService: NotesService
+        private _notesService: NotesService,
+        private gs: GlobalService,
     )
     {
     }
@@ -64,7 +66,7 @@ export class NotesListComponent implements OnInit, OnDestroy
     {
         // Request the data from the server
      
-        this._notesService.getNotes().subscribe();
+        this._notesService.getNotes(this.gs.getUser()._id).subscribe();
 
         // Get labels
       
