@@ -68,6 +68,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
     },
     {
+        id   : 'ColorBlind',
+        title: 'ColorBlind',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/colorblind',
+        Role:"simple"
+
+
+
+    },
+    {
         id   : 'Settings',
         title: 'Settings',
         type : 'basic',

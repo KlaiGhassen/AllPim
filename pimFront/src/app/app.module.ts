@@ -27,6 +27,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideFirebaseApp, getApp } from '@angular/fire/app';
 import { PricingModule } from './modules/pricing/pricing.module';
+import { ColorblindModule } from './modules/colorblind/colorblind.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {TranslateLoader, TranslateModule,} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
