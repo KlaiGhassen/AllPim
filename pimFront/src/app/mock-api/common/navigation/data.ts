@@ -28,6 +28,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
     },
     {
+        id   : 'Notes',
+        title: 'Notes',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/notes',
+        Role:"ophto"
+
+
+
+    },
+    {
         id   : 'Settings',
         title: 'Settings',
         type : 'basic',

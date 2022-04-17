@@ -79,6 +79,7 @@ export const appRoutes: Route[] = [
             {path: 'dashboard', loadChildren: () => import('app/modules/admin/example/project/project.module').then(m => m.ProjectModule)},
             {path: 'settings', loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule)},        
             {path: 'calendar', loadChildren: () => import('app/modules/calendar/calendar.module').then(m => m.CalendarModule)},
+            {path: 'notes', loadChildren: () => import('app/modules/notes/notes.module').then(m => m.NotesModule)},
             {path: 'pricing', loadChildren: () => import('app/modules/pricing/pricing.module').then(m => m.PricingModule)},
             //{path: 'Appointements', loadChildren: () => import('app/modules/appointement/appointement.module').then(m => m.CalendarModule)},
             {path: '404-not-found', pathMatch: 'full', loadChildren: () => import('app/modules/error-404/error-404.module').then(m => m.Error404Module)},

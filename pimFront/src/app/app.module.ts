@@ -19,6 +19,7 @@ import { GlobalService } from './global.service';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider,FacebookLoginProvider} from 'angularx-social-login';
 import { CalendarModule } from './modules/calendar/calendar.module';
+import { NotesModule } from './modules/notes/notes.module';
 import { AppointementModule } from './modules/appointement/appointement.module';
 import { SharedModule } from './shared/shared.module';
 import { environment } from "../environments/environment";
