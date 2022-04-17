@@ -126,7 +126,7 @@ export class NotesService
      */
     deleteNote(note: Note, id:string): Observable<boolean>
     {
-        return this._httpClient.delete<boolean>(`${this.Gs.uri}/note/${note.id}`).pipe(
+        return this._httpClient.delete<boolean>(`${this.Gs.uri}/note/${note._id}`).pipe(
             map((isDeleted: boolean) => {
 
                 // Update the notes

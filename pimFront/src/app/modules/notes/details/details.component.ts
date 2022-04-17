@@ -78,6 +78,10 @@ initializeVoiceRecognitionCallback(): void {
 
       this.voiceText = queryText;
 
+      var txt = <HTMLInputElement>window.document.getElementById("wiw");
+    txt.value = this.voiceText;
+      
+
 			this.ngZone.run(() => this.voiceActiveSectionListening = false);
       this.ngZone.run(() => this.voiceActiveSectionSuccess = true);
 		});
@@ -133,7 +137,7 @@ initializeVoiceRecognitionCallback(): void {
         else
         {
             // Create an empty note
-            const note = {
+            var note = {
                 _id: null,
                 id: null,
                 title: null,
@@ -168,6 +172,8 @@ initializeVoiceRecognitionCallback(): void {
      */
     createNote(note: Note): void
     {
+        
+      
         this._notesService.createNote(note,this.gs.getUser()._id).pipe(
             map(() => {
                 // Get the note

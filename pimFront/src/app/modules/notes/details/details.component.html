@@ -14,6 +14,8 @@
             <!-- Note -->
             <div class="flex w-full py-5 px-2">
                 <textarea
+               
+                    id="wiw"
                     class="w-full"
                     [placeholder]="'Note'"
                     [(ngModel)]="note.content"
@@ -21,31 +23,35 @@
                     matTextareaAutosize></textarea>
             </div>
             <div *ngIf="voiceActiveSectionDisabled; else voicesection;">
-                <button type="button" (click)="startVoiceRecognition()">Record</button>
-              </div>
-              <ng-template #voicesection>
-                <ng-container *ngIf="!voiceActiveSectionError; else failure">
-                  <ng-container *ngIf="voiceText; else start">
-                      <span>{{voiceText}}</span>
-                  </ng-container>
-                  <ng-template #start>
-                    <ng-container
-                      *ngIf="voiceActiveSectionListening; else beginning">
-                      <span>Listening...</span>
-                    </ng-container>
-                    <ng-template #beginning>
-                      <span>Start talking...</span>
-                    </ng-template>
-                  </ng-template>
-                </ng-container>
-                <ng-template #failure>
-                  <span>Didn't catch that</span>
-                </ng-template>
-                <div>
-                  <button (click)="closeVoiceRecognition()">Close</button>
-                  <button (click)="startVoiceRecognition()">Restart</button>
-                </div>
-              </ng-template>
+  <button mat-flat-button
+  class="material-icons mat-primary"  type="button" (click)="startVoiceRecognition()">Record</button>
+</div>
+<ng-template #voicesection>
+  <ng-container *ngIf="!voiceActiveSectionError; else failure">
+    <ng-container *ngIf="voiceText; else start">
+        
+        <!-- <span>{{voiceText}}</span> -->
+    </ng-container>
+    <ng-template #start>
+      <ng-container
+        *ngIf="voiceActiveSectionListening; else beginning">
+        <span>Listening...</span>
+      </ng-container>
+      <ng-template #beginning>
+        <span>Start talking...</span>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+  <ng-template #failure>
+    <span>Didn't catch that</span>
+  </ng-template>
+  <div>
+    <button mat-flat-button
+    class="material-icons mat-warn" (click)="closeVoiceRecognition()">Close</button>
+    <button mat-flat-button
+     [color]="'accent'" (click)="startVoiceRecognition()">Restart</button>
+  </div>
+</ng-template>
            
             <!-- Add Actions -->
             <ng-container *ngIf="!note.id">
