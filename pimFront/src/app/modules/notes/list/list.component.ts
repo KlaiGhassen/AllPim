@@ -15,7 +15,7 @@ import { GlobalService } from 'app/global.service';
     selector       : 'notes-list',
     templateUrl    : './list.component.html',
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class NotesListComponent implements OnInit, OnDestroy
 {

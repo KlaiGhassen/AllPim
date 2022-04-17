@@ -1,17 +1,15 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-
+import { NgZone } from '@angular/core';
 @Component({
     selector       : 'notes',
     templateUrl    : './notes.component.html',
-    encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotesComponent
 {
     /**
      * Constructor
      */
-    constructor()
+    constructor(private ngZone: NgZone)
     {
     }
 }

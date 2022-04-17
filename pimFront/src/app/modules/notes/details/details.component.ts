@@ -5,20 +5,26 @@ import { Observable, of, Subject } from 'rxjs';
 import { Note } from '../notes.types';
 import { NotesService } from '../notes.service';
 import { GlobalService } from 'app/global.service';
+import { NgZone } from '@angular/core';
 
+declare const annyang: any;
 
 @Component({
     selector       : 'notes-details',
     templateUrl    : './details.component.html',
-    encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotesDetailsComponent implements OnInit, OnDestroy
 {
+    voiceActiveSectionDisabled: boolean = true;
+	voiceActiveSectionError: boolean = false;
+	voiceActiveSectionSuccess: boolean = false;
+	voiceActiveSectionListening: boolean = false;
+	voiceText: any;
     note$: Observable<Note>;
 
     noteChanged: Subject<Note> = new Subject<Note>();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    
 
     /**
      * Constructor
@@ -29,6 +35,7 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
         private _notesService: NotesService,
         private _matDialogRef: MatDialogRef<NotesDetailsComponent>,
         private gs: GlobalService,
+        private ngZone: NgZone
     )
     {
     }
@@ -36,6 +43,77 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
+
+
+    
+initializeVoiceRecognitionCallback(): void {
+		annyang.addCallback('error', (err: { error: string; }) => {
+      if(err.error === 'network'){
+        this.voiceText = "Internet is require";
+        annyang.abort();
+        this.ngZone.run(() => this.voiceActiveSectionSuccess = true);
+      } else if (this.voiceText === undefined) {
+				this.ngZone.run(() => this.voiceActiveSectionError = true);
+				annyang.abort();
+			}
+		});
+
+		annyang.addCallback('soundstart', () => {
+      this.ngZone.run(() => this.voiceActiveSectionListening = true);
+		});
+
+		annyang.addCallback('end', () => {
+      if (this.voiceText === undefined) {
+        this.ngZone.run(() => this.voiceActiveSectionError = true);
+				annyang.abort();
+			}
+		});
+
+		annyang.addCallback('result', (userSaid: any[]) => {
+			this.ngZone.run(() => this.voiceActiveSectionError = false);
+
+			let queryText: any = userSaid[0];
+
+			annyang.abort();
+
+      this.voiceText = queryText;
+
+			this.ngZone.run(() => this.voiceActiveSectionListening = false);
+      this.ngZone.run(() => this.voiceActiveSectionSuccess = true);
+		});
+	}
+
+	startVoiceRecognition(): void {
+    this.voiceActiveSectionDisabled = false;
+		this.voiceActiveSectionError = false;
+		this.voiceActiveSectionSuccess = false;
+    this.voiceText = undefined;
+
+		if (annyang) {
+			let commands = {
+				'demo-annyang': () => { }
+			};
+
+			annyang.addCommands(commands);
+
+      this.initializeVoiceRecognitionCallback();
+
+			annyang.start({ autoRestart: false });
+		}
+	}
+
+	closeVoiceRecognition(): void {
+    this.voiceActiveSectionDisabled = true;
+		this.voiceActiveSectionError = false;
+		this.voiceActiveSectionSuccess = false;
+		this.voiceActiveSectionListening = false;
+		this.voiceText = undefined;
+
+		if(annyang){
+      annyang.abort();
+    }
+	}
+
 
     /**
      * On init
