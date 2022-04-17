@@ -69,8 +69,7 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
             this.note$ = of(note);
         }
 
-        // Get the labels
-        
+
 
         // Subscribe to note updates
         this.noteChanged
@@ -113,82 +112,7 @@ export class NotesDetailsComponent implements OnInit, OnDestroy
             })).subscribe();
     }
 
-    /**
-     * Upload image to given note
-     *
-     * @param note
-     * @param fileList
-     */
-    uploadImage(note: Note, fileList: FileList): void
-    {
-        // Return if canceled
-        if ( !fileList.length )
-        {
-            return;
-        }
-
-        const allowedTypes = ['image/jpeg', 'image/png'];
-        const file = fileList[0];
-
-        // Return if the file is not allowed
-        if ( !allowedTypes.includes(file.type) )
-        {
-            return;
-        }
-
-        this._readAsDataURL(file).then((data) => {
-
-            // Update the image
-            note.image = data;
-
-            // Update the note
-            this.noteChanged.next(note);
-        });
-    }
-
-    /**
-     * Remove the image on the given note
-     *
-     * @param note
-     */
-    removeImage(note: Note): void
-    {
-        note.image = null;
-
-        // Update the note
-        this.noteChanged.next(note);
-    }
-
-    /**
-     * Add an empty tasks array to note
-     *
-     * @param note
-     */
-    addTasksToNote(note): void
-    {
-        if ( !note.tasks )
-        {
-            note.tasks = [];
-        }
-    }
-
-    /**
-     * Add task to the given note
-     *
-     * @param note
-     * @param task
-     */
-    addTaskToNote(note: Note, task: string): void
-    {
-        if ( task.trim() === '' )
-        {
-            return;
-        }
-
-        // Add the task
-        this._notesService.addTask(note, task).subscribe();
-    }
-
+    
 
 
     /**

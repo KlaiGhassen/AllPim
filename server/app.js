@@ -13,6 +13,7 @@ var appointment = require("./routes/appointement")
 var notification = require("./routes/notification")
 var ophto = require ("./routes/ophto")
 var transaction = require ("./routes/transaction")
+var note = require ("./routes/note")
 
 //const swaggerJsDocs = require("swagger-jsdoc");
 //const swaggerUi = require("swagger-ui-express");
@@ -69,6 +70,7 @@ app.use("/appointement",appointment);
 app.use("/notification",notification);
 app.use("/ophto",ophto);
 app.use("/transaction",transaction);
+app.use("/note",note);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

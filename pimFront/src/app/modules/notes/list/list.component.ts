@@ -99,12 +99,6 @@ export class NotesListComponent implements OnInit, OnDestroy
                 const isArchive = filter === 'archived';
                 filteredNotes = filteredNotes.filter(note => note.archived === isArchive);
 
-                // Filter by label
-                if ( filter.startsWith('label:') )
-                {
-                    const labelId = filter.split(':')[1];
-                    filteredNotes = filteredNotes.filter(note => !!note.labels.find(item => item.id === labelId));
-                }
 
                 return filteredNotes;
             })
