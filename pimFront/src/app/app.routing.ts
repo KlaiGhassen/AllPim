@@ -3,6 +3,9 @@ import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
+import { MedicalfollowupComponent } from './modules/medicalfollowup/addmfu/medicalfollowup.component';
+import { AllmdfComponent } from './modules/medicalfollowup/allmdf/allmdf.component';
+import { PrescriptationComponent } from './modules/medicalfollowup/prescriptation/prescriptation.component';
 
 
 // @formatter:off
@@ -82,9 +85,21 @@ export const appRoutes: Route[] = [
             {path: 'colorblind', loadChildren: () => import('app/modules/colorblind/colorblind.module').then(m => m.ColorblindModule)},
             {path: 'notes', loadChildren: () => import('app/modules/notes/notes.module').then(m => m.NotesModule)},
             {path: 'pricing', loadChildren: () => import('app/modules/pricing/pricing.module').then(m => m.PricingModule)},
+
+            { path: 'get', loadChildren: () => import('app/modules/medicalfollowup/get/get.module').then(m => m.GetModule) },
+            { path: 'update', loadChildren: () => import('app/modules/medicalfollowup/addmfu/medicalfollowup.module').then(m => m.MedicalfollowupModule) },
+            { path: 'patient', loadChildren: () => import('app/modules/patient/patient.module').then(m => m.patientModule) },
+            { path: 'MedicalfollowupModule', loadChildren: () => import('app/modules/medicalfollowup/addmfu/medicalfollowup.module').then(m => m.MedicalfollowupModule) },
+            { path: 'allmdf', loadChildren: () => import('app/modules/medicalfollowup/allmdf/allmdf.module').then(m => m.allmdfModule) },
+            { path: "medicalFollowUp/:id", component: MedicalfollowupComponent, },
+            { path: "allmdf/:id", component: AllmdfComponent, },
+            { path: 'prescription', loadChildren: () => import('app/modules/medicalfollowup/prescriptation/prescriptation.module').then(m => m.prescriptionModule) },
+            { path: "prescription/:id", component: PrescriptationComponent, },
             //{path: 'Appointements', loadChildren: () => import('app/modules/appointement/appointement.module').then(m => m.CalendarModule)},
             {path: '404-not-found', pathMatch: 'full', loadChildren: () => import('app/modules/error-404/error-404.module').then(m => m.Error404Module)},
-            {path: '**', redirectTo: '404-not-found'}
+            {path: '**', redirectTo: '404-not-found'},
+            //
+            
          
            
             
@@ -92,6 +107,7 @@ export const appRoutes: Route[] = [
         ]
    
     },
+    
 
 
 

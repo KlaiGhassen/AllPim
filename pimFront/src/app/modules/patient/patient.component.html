@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Work Abroad Application Form </title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="testbox">
+        <form #myform="ngForm" (ngSubmit)="submit(myform)">
+            <div class="banner">
+                <h1>Add new patient</h1>
+            </div>
+            <div class="item">
+                <label for="full_name">Name<span>*</span></label>
+                <input ngModel type="text" class="form-control" name="full_name" [(ngModel)]="full_name" #valName="ngModel" />
+                <div class="alert alert-danger" *ngIf="!valName.value && valName.touched">Name is required</div>
+            </div>
+            <div class="item">
+                <label for="Bday">Date of Birth<span>*</span></label>
+                <input ngModel type="date" name="bdate" [(ngModel)]="Bday" required="required" />
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="item">
+                <div class="name-item">
+                    <div>
+                        <label for="email">Email Address<span>*</span></label>
+                        <input ngModel type="text" class="form-control" name="email" [(ngModel)]="email" />
+                    </div>
+                    <div>
+                        <label for="phoneNumber">Phone Number</label>
+                        <input ngModel type="text" class="form-control" name="phoneNumber" [(ngModel)]="phoneNumber" required="required" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>gender</mat-label>
+                    <select matNativeControl [(ngModel)]="selectedGender" name="gender">
+      <option value="" selected></option>
+      <option *ngFor="let gender of gender" [value]="gender.value">
+        {{gender.viewValue}}
+      </option>
+    </select>
+                </mat-form-field>
+            </div>
+            <div class="btn-block">
+                <button type="submit" (click)="AddPatient(myform)">APPLY</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

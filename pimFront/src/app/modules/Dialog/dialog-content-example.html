@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Details</h2>
+<mat-dialog-content class="mat-typography">
+
+    <form class="form">
+        <div class="form-group">
+
+            <div class="form-outline">
+                <label class="form-label" for="medical_analysis_interpretation">Medical analysis interpretation</label>
+                <textarea class="form-control" disabled>{{this.mdf.medical_analysis_interpretation}}</textarea>
+
+            </div>
+        </div>
+        <div class="form-outline">
+            <label class="form-label" for="chronic_diseases">Chronic diseases</label>
+            <textarea class="form-control" rows="4" disabled>{{this.mdf.chronic_diseases}}</textarea>
+
+        </div>
+
+        <div class="form-outline">
+            <label class="form-label" for="notes">notes</label>
+            <textarea class="form-control" disabled>{{this.mdf.notes}}</textarea>
+
+        </div>
+
+
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Back</button>
+</mat-dialog-actions>

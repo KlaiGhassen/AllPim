@@ -40,6 +40,16 @@ var storage = multer.diskStorage({
 var upload = multer({
     storage: storage,
 });
+
+router.get("/patientById/:id", async(req, res, next) => {
+    try {
+        const patient = await Patient.findOne({ _id: req.params.id });
+        res.json(patient);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // download picture to the server
 router.post("/file", upload.single("file"), function(req, res, next) {
     if (!req.file) {
@@ -92,7 +102,8 @@ router.post("/", async(req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         phoneNumber: req.body.phoneNumber,
-        full_name: req.body.FirstName,
+        full_name: req.body.full_name,
+        gender: req.body.gender,
         description: req.body.description,
     });
     try {

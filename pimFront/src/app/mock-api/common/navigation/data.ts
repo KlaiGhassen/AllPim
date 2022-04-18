@@ -95,7 +95,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:currency-dollar',
         link : '/pricing',
         Role:"ophto"
-    }
+    },
+    {
+        id   : 'medicalfollowup',
+        title: 'Patients',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/get',
+        Role:"ophto"
+    },
     
  
 ];

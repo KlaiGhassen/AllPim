@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="card">
+                <div class="text-4xl font-extrabold tracking-tight">&nbsp;&nbsp;&nbsp; Patient List</div>
+                <div class="bs-example">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12 bg-light text-right">
+                                <a routerLink="/patient" routerLinkActive="active" (click)="AddPatient() ">
+                                    <button class="ml-4" mat-flat-button [color]="'primary'"> <!-- Add Patient button -->
+                                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                    <span class="ml-2 mr-1">Add patient</span>
+                                </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-header">
+
+                    <igx-input-group type="search" class="search">
+                        <input #search igxInput placeholder="Search Contacts" [(ngModel)]="searchContact">
+                    </igx-input-group>
+
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" mdbTable mdbTableScroll scrollY="true" maxHeight="200" bordered="true">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Name</th>
+                                <th>email</th>
+                                <th>phoneNumber</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let medicalfollowup of medicalfollowup | igxFilter: filterContacts ">
+                                <td class="table-img"><img src={{medicalfollowup.profilePicture}} alt="">
+                                </td>
+                                <td>
+                                    <h6 class="mb-0 font-13">{{medicalfollowup.full_name}}</h6>
+                                </td>
+                                <td>{{medicalfollowup.email}}</td>
+
+                                <td>
+                                    <div class="badge-outline col-red">{{medicalfollowup.phoneNumber}}</div>
+                                </td>
+
+                                <td>
+                                    <a routerLink="/Details" routerLinkActive="active" (click)="DetailsPatients(medicalfollowup) ">
+
+                                        <button mat-icon-button aria-label="Example icon button with a open in new tab icon">
+                                                <mat-icon>open_in_new</mat-icon>
+                                            </button>
+
+                                    </a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
