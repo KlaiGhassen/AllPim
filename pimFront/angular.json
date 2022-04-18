@@ -58,7 +58,9 @@
                             "src/styles/styles.scss",
                             "src/styles/tailwind.scss"
                         ],
-                        "scripts": [],
+                        "scripts": [
+                            "src/assets/js/annyang.min.js"
+                        ],
                         "serviceWorker": true,
                         "ngswConfigPath": "ngsw-config.json"
                     },
@@ -133,7 +135,9 @@
                         "styles": [
                             "src/styles/styles.scss"
                         ],
-                        "scripts": []
+                        "scripts": [
+                            "src/assets/js/annyang.min.js"
+                        ]
                     }
                 },
                 "lint": {

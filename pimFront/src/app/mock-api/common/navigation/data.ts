@@ -28,6 +28,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
     },
     {
+        id   : 'Notes',
+        title: 'Notes',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/notes',
+        Role:"ophto"
+
+
+
+    },
+    {
         id   : 'Settings',
         title: 'Settings',
         type : 'basic',
@@ -51,6 +62,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:calendar',
         link : '/calendar',
+        Role:"simple"
+
+
+
+    },
+    {
+        id   : 'ColorBlind',
+        title: 'ColorBlind',
+        type : 'basic',
+        icon : 'heroicons_outline:calendar',
+        link : '/colorblind',
         Role:"simple"
 
 

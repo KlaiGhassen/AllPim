@@ -40,7 +40,6 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
      */
     constructor(
         public chatService: ChatService,
-        private _changeDetectorRef: ChangeDetectorRef,
         private _messagesService: MessagesService,
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef
@@ -72,7 +71,7 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
                 __v: 0,
                 country: 'Manouba',
                 unreaded: {
-                    count: 0,
+                    count: 2,
                 },
                 undelivred: {
                     count: 0,
@@ -85,21 +84,20 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
             });
             console.log('Time Out chat service list  ', this.contacts);
 
-            this._changeDetectorRef.markForCheck();
+            
         }, 5000);
         // Subscribe to message changes
-        this._messagesService.messages$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((messages: Message[]) => {
-                // Load the messages
-                this.messages = messages;
+        // this._messagesService.messages$
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe((messages: Message[]) => {
+        //         // Load the messages
+        //         this.messages = messages;
 
-                // Calculate the unread count
-                this._calculateUnreadCount();
+        //         // Calculate the unread count
+        //         this._calculateUnreadCount();
 
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+        //         // Mark for check
+        //     });
     }
     ngOnChanges(changes: SimpleChanges): void {
         console.log('changes ', changes);
@@ -125,56 +123,56 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * Open the messages panel
      */
-    openPanel(): void {
-        // Return if the messages panel or its origin is not defined
-        if (!this._messagesPanel || !this._messagesOrigin) {
-            return;
-        }
+    // openPanel(): void {
+    //     // Return if the messages panel or its origin is not defined
+    //     if (!this._messagesPanel || !this._messagesOrigin) {
+    //         return;
+    //     }
 
-        // Create the overlay if it doesn't exist
-        if (!this._overlayRef) {
-            this._createOverlay();
-        }
+    //     // Create the overlay if it doesn't exist
+    //     if (!this._overlayRef) {
+    //         this._createOverlay();
+    //     }
 
-        // Attach the portal to the overlay
-        this._overlayRef.attach(
-            new TemplatePortal(this._messagesPanel, this._viewContainerRef)
-        );
-    }
+    //     // Attach the portal to the overlay
+    //     this._overlayRef.attach(
+    //         new TemplatePortal(this._messagesPanel, this._viewContainerRef)
+    //     );
+    // }
 
     /**
      * Close the messages panel
      */
-    closePanel(): void {
-        this._overlayRef.detach();
-    }
+    // closePanel(): void {
+    //     this._overlayRef.detach();
+    // }
 
     /**
      * Mark all messages as read
      */
-    markAllAsRead(): void {
-        // Mark all as read
-        this._messagesService.markAllAsRead().subscribe();
-    }
+    // markAllAsRead(): void {
+    //     // Mark all as read
+    //     this._messagesService.markAllAsRead().subscribe();
+    // }
 
     /**
      * Toggle read status of the given message
      */
-    toggleRead(message: Message): void {
-        // Toggle the read status
-        message.read = !message.read;
+    // toggleRead(message: Message): void {
+    //     // Toggle the read status
+    //     message.read = !message.read;
 
-        // Update the message
-        this._messagesService.update(message.id, message).subscribe();
-    }
+    //     // Update the message
+    //     this._messagesService.update(message.id, message).subscribe();
+    // }
 
     /**
      * Delete the given message
      */
-    delete(message: Message): void {
-        // Delete the message
-        this._messagesService.delete(message.id).subscribe();
-    }
+    // delete(message: Message): void {
+    //     // Delete the message
+    //     this._messagesService.delete(message.id).subscribe();
+    // }
 
     /**
      * Track by function for ngFor loops
@@ -182,9 +180,9 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any {
-        return item.id || index;
-    }
+    // trackByFn(index: number, item: any): any {
+    //     return item.id || index;
+    // }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Private methods
@@ -193,63 +191,63 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * Create the overlay
      */
-    private _createOverlay(): void {
-        // Create the overlay
-        this._overlayRef = this._overlay.create({
-            hasBackdrop: true,
-            backdropClass: 'fuse-backdrop-on-mobile',
-            scrollStrategy: this._overlay.scrollStrategies.block(),
-            positionStrategy: this._overlay
-                .position()
-                .flexibleConnectedTo(
-                    this._messagesOrigin._elementRef.nativeElement
-                )
-                .withLockedPosition(true)
-                .withPush(true)
-                .withPositions([
-                    {
-                        originX: 'start',
-                        originY: 'bottom',
-                        overlayX: 'start',
-                        overlayY: 'top',
-                    },
-                    {
-                        originX: 'start',
-                        originY: 'top',
-                        overlayX: 'start',
-                        overlayY: 'bottom',
-                    },
-                    {
-                        originX: 'end',
-                        originY: 'bottom',
-                        overlayX: 'end',
-                        overlayY: 'top',
-                    },
-                    {
-                        originX: 'end',
-                        originY: 'top',
-                        overlayX: 'end',
-                        overlayY: 'bottom',
-                    },
-                ]),
-        });
+    // private _createOverlay(): void {
+    //     // Create the overlay
+    //     this._overlayRef = this._overlay.create({
+    //         hasBackdrop: true,
+    //         backdropClass: 'fuse-backdrop-on-mobile',
+    //         scrollStrategy: this._overlay.scrollStrategies.block(),
+    //         positionStrategy: this._overlay
+    //             .position()
+    //             .flexibleConnectedTo(
+    //                 this._messagesOrigin._elementRef.nativeElement
+    //             )
+    //             .withLockedPosition(true)
+    //             .withPush(true)
+    //             .withPositions([
+    //                 {
+    //                     originX: 'start',
+    //                     originY: 'bottom',
+    //                     overlayX: 'start',
+    //                     overlayY: 'top',
+    //                 },
+    //                 {
+    //                     originX: 'start',
+    //                     originY: 'top',
+    //                     overlayX: 'start',
+    //                     overlayY: 'bottom',
+    //                 },
+    //                 {
+    //                     originX: 'end',
+    //                     originY: 'bottom',
+    //                     overlayX: 'end',
+    //                     overlayY: 'top',
+    //                 },
+    //                 {
+    //                     originX: 'end',
+    //                     originY: 'top',
+    //                     overlayX: 'end',
+    //                     overlayY: 'bottom',
+    //                 },
+    //             ]),
+    //     });
 
-        // Detach the overlay from the portal on backdrop click
-        this._overlayRef.backdropClick().subscribe(() => {
-            this._overlayRef.detach();
-        });
-    }
+    //     // Detach the overlay from the portal on backdrop click
+    //     this._overlayRef.backdropClick().subscribe(() => {
+    //         this._overlayRef.detach();
+    //     });
+    // }
 
-    /**
-     * Calculate the unread count
-     *
-     * @private
-     */
-    private _calculateUnreadCount(): void {
-        let count = 0;
+    // /**
+    //  * Calculate the unread count
+    //  *
+    //  * @private
+    //  */
+    // private _calculateUnreadCount(): void {
+    //     let count = 0;
 
-        if (this.messages && this.messages.length) {
-            count = this.messages.filter((message) => !message.read).length;
-        }
-    }
+    //     if (this.messages && this.messages.length) {
+    //         count = this.messages.filter((message) => !message.read).length;
+    //     }
+    // }
 }

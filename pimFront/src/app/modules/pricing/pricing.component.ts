@@ -22,6 +22,11 @@ export class PricingComponent implements OnInit {
 
   constructor(private gs: GlobalService, private _pricingService:PricingService) { }
   handler:any = null;
+ 
+
+  
+
+
   ngOnInit() {
     
     //console.log(this.gs.getUser()._id)

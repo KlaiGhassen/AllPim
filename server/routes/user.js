@@ -12,6 +12,7 @@ router.get("/current/:id", async(req, res) => {
 
 router.get("/contacts", async (req, res) => {
   const  { _id}  = req.body.payload.compte
+  console.log(_id)
   console.log("id",_id)
   try {
     const contacts = await User.aggregate([

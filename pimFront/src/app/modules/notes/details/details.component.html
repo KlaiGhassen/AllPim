@@ -1,0 +1,124 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160 -m-6">
+    <ng-container *ngIf="(note$ | async) as note">
+        <!-- Image -->
+        
+        <div class="m-4">
+            <!-- Title -->
+            <div>
+                <input
+                    class="w-full p-2 text-2xl"
+                    [placeholder]="'Title'"
+                    [(ngModel)]="note.title"
+                    (input)="updateNoteDetails(note)">
+            </div>
+            <!-- Note -->
+            <div class="flex w-full py-5 px-2">
+                <textarea
+               
+                    id="wiw"
+                    class="w-full"
+                    [placeholder]="'Note'"
+                    [(ngModel)]="note.content"
+                    (input)="updateNoteDetails(note)"
+                    matTextareaAutosize></textarea>
+            </div>
+            <div *ngIf="voiceActiveSectionDisabled; else voicesection;">
+  <button mat-flat-button
+  class="material-icons mat-primary"  type="button" (click)="startVoiceRecognition()">Record</button>
+</div>
+<ng-template #voicesection>
+  <ng-container *ngIf="!voiceActiveSectionError; else failure">
+    <ng-container *ngIf="voiceText; else start">
+        
+        <!-- <span>{{voiceText}}</span> -->
+    </ng-container>
+    <ng-template #start>
+      <ng-container
+        *ngIf="voiceActiveSectionListening; else beginning">
+        <span>Listening...</span>
+      </ng-container>
+      <ng-template #beginning>
+        <span>Start talking...</span>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+  <ng-template #failure>
+    <span>Didn't catch that</span>
+  </ng-template>
+  <div>
+    <button mat-flat-button
+    class="material-icons mat-warn" (click)="closeVoiceRecognition()">Close</button>
+    <button mat-flat-button
+     [color]="'accent'" (click)="startVoiceRecognition()">Restart</button>
+  </div>
+</ng-template>
+           
+            <!-- Add Actions -->
+            <ng-container *ngIf="!note.id">
+                <div class="flex items-center justify-end mt-4">
+                    <!-- Save -->
+                    <button
+                        mat-flat-button
+                        [color]="'primary'"
+                        [disabled]="!note.title && !note.content"
+                        (click)="createNote(note)">
+                        Save
+                    </button>
+                    <button
+                            mat-icon-button
+                            (click)="deleteNote(note)">
+                            <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        </button>
+                </div>
+            </ng-container>
+            <!-- Edit Actions -->
+            <ng-container *ngIf="note.id">
+                <div class="flex items-center justify-between mt-4">
+                    <div class="flex items-center space-x-2">
+                        <!-- Image -->
+                        <div>
+                            <input
+                                id="image-file-input"
+                                class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                type="file"
+                                [multiple]="false"
+                                [accept]="'image/jpeg, image/png'"
+                                (change)="uploadImage(note, imageFileInput.files)"
+                                #imageFileInput>
+                            <label
+                                class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-gray-400 hover:bg-opacity-20 dark:hover:bg-black dark:hover:bg-opacity-5"
+                                for="image-file-input"
+                                matRipple>
+                                <mat-icon [svgIcon]="'heroicons_outline:photograph'"></mat-icon>
+                            </label>
+                        </div>
+                        <!-- Checklist -->
+                        
+                        <!-- Labels -->
+                        
+                        
+                        <!-- Archive -->
+                        <button
+                            mat-icon-button
+                            (click)="toggleArchiveOnNote(note)">
+                            <mat-icon [svgIcon]="'heroicons_outline:archive'"></mat-icon>
+                        </button>
+                        <!-- Delete -->
+                        <button
+                            mat-icon-button
+                            (click)="deleteNote(note)">
+                            <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        </button>
+                    </div>
+                    <!-- Close -->
+                    <button
+                        mat-flat-button
+                        matDialogClose>
+                        Close
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+</div>

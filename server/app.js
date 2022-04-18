@@ -16,6 +16,7 @@ var transaction = require ("./routes/transaction")
 const userRoute = require("./routes/user");
 const messageRoute = require("./routes/message");
 const authMiddleware = require("./middlewares/auth");
+var note = require ("./routes/note")
 
 //const swaggerJsDocs = require("swagger-jsdoc");
 //const swaggerUi = require("swagger-ui-express");
@@ -75,6 +76,7 @@ app.use("/appointement",appointment);
 app.use("/notification",notification);
 app.use("/ophto",ophto);
 app.use("/transaction",transaction);
+app.use("/note",note);
 
 app.use(authMiddleware);
 app.use("/api/user", userRoute);
