@@ -32,6 +32,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DialogAppointementComponent } from './modules/admin/dialog-appointement/dialog-appointement.component';
 
 
+
 initializeApp(environment.firebase);
 export function HttpLoaderFactory(http:HttpClient){
 return new TranslateHttpLoader(http,"./assets/i18n/",".json")
@@ -90,6 +91,11 @@ const routerConfig: ExtraOptions = {
     ],
 
     providers: [
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor ,
+        multi: true,
+      },
       {
           provide: 'SocialAuthServiceConfig',
           useValue: {

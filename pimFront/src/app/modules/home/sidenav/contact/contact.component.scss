@@ -1,0 +1,90 @@
+:host {
+  .containerChat {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      background-color: rgb(215, 215, 215);
+    }
+
+    &.active {
+      background-color: rgb(215, 215, 215);
+    }
+
+    &.not-readed-messageChat {
+      border-left: 10px solid #25d366;
+    }
+
+    .message-contentChat {
+      padding: 5px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-width: 0;
+
+      .message-infoChat {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+
+        .contact-nameChat {
+          font-size: 18px;
+          font-weight: bolder;
+
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .timeChat {
+          font-size: 12px;
+        }
+      }
+
+      .messageChat {
+        height: 18px;
+        display: flex;
+        gap: 5px;
+
+        justify-content: space-between;
+
+        .typingChat {
+          color: #25d366;
+        }
+
+        .readedChat {
+          color: #6f6fff;
+        }
+
+        .unreaded-countChat {
+          background: #25d366;
+          color: white;
+          font-weight: bold;
+          font-size: 12px;
+          padding: 1px;
+          border-radius: 50%;
+
+          width: 18px;
+          display: grid;
+          place-content: center;
+        }
+
+        .last-messageChat {
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+}

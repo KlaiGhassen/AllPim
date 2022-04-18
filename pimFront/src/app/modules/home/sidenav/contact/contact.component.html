@@ -1,0 +1,44 @@
+<div
+  class="containerChat"
+  [routerLink]="['/chat', contact._id]"
+  routerLinkActive="active"
+  [ngClass]="{ 'not-readed-messageChat': contact.unreaded.count > 0 }"
+>
+  <app-profile-picture src="/assets/user.png"></app-profile-picture>
+  <div class="message-contentChat">
+    <div class="message-infoChat">
+      <span class="contact-nameChat">
+        {{ contact.full_name }}
+      </span>
+
+      <span *ngIf="contact.latest_message" class="timeChat">
+        {{ contact.latest_message.createdAt | latestMessageDate }}
+      </span>
+    </div>
+
+    <div class="messageChat">
+      <span
+        class="typingChat"
+        *ngIf="contact.typings.length > 0; else latestMessage"
+        >typing...</span
+      >
+      <ng-template #latestMessage>
+        <ng-container
+          *ngIf="
+            contact.latest_message && contact.latest_message.to === contact._id
+          "
+        >
+          <app-check-mark [message]="contact.latest_message"></app-check-mark>
+        </ng-container>
+
+        <span *ngIf="contact.latest_message" class="last-messageChat">
+          {{ contact.latest_message.message }}
+        </span>
+      </ng-template>
+
+      <div class="unreaded-countChat" *ngIf="contact.unreaded.count > 0">
+        {{ contact.unreaded.count }}
+      </div>
+    </div>
+  </div>
+</div>

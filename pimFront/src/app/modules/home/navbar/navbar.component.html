@@ -1,0 +1,11 @@
+<div class="containerChat">
+  <div class="profileChat">
+    <app-profile-picture
+      src="/assets/user.png"
+      [size]="'normal'"
+    ></app-profile-picture>
+    <span class="user-nameChat"> {{ user.full_name}} </span>
+  </div>
+  <div class="fillChat"></div>
+  <button (click)="signOut()" class="btn">sign out</button>
+</div>

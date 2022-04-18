@@ -1,0 +1,33 @@
+:host {
+  width: 100%;
+  height: 100%;
+  .containerChat {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+
+    box-sizing: border-box;
+
+    .contentChat {
+      flex: 1 1 0;
+      position: relative;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: stretch;
+
+      min-width: min-content;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+
+      padding: 10px;
+
+      .loadingChat {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

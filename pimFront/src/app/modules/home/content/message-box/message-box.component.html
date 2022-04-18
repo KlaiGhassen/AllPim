@@ -1,0 +1,14 @@
+<div class="containerChat">
+  <div
+    class="contentChat"
+    [ngClass]="user._id === message.from ? 'from-userChat' : 'from-contactChat'"
+  >
+    <span class="message-contentChat">{{ message.message }}</span>
+    <div class="footerChat">
+      <span>{{ message.createdAt | messageDate }}</span>
+      <ng-container *ngIf="message && message.from === user._id">
+        <app-check-mark [message]="message"></app-check-mark>
+      </ng-container>
+    </div>
+  </div>
+</div>

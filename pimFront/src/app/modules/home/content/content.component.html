@@ -1,0 +1,12 @@
+<div *ngIf="contact && currentUser" class="containerChat">
+  <div class="contentChat" (scroll)="detectScroll($event)">
+    <ng-container *ngFor="let message of contact.messages">
+      <app-message-box
+        [message]="message"
+        [currentUser]="currentUser"
+      ></app-message-box>
+    </ng-container>
+    <div *ngIf="contact.messages_loading" class="loadingChat">loading...</div>
+  </div>
+  <app-input [contact]="contact" [currentUser]="currentUser"></app-input>
+</div>

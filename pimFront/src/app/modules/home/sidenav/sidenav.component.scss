@@ -1,0 +1,23 @@
+:host {
+  position: relative;
+  max-width: 350px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  display: flex;
+  .containerChat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    padding: 5px 0;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  :host {
+    max-width: 300px;
+  }
+}

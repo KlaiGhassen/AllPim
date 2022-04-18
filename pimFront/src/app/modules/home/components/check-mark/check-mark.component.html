@@ -1,0 +1,13 @@
+<ng-container *ngIf="message.readed; else checkForDelivred">
+  <span class="readedChat">&#10003;&#10003;</span>
+</ng-container>
+
+<ng-template #checkForDelivred>
+  <ng-container *ngIf="message.delivred; else default">
+    <span>&#10003;&#10003;</span>
+  </ng-container>
+
+  <ng-template #default>
+    <span>&#10003;</span>
+  </ng-template>
+</ng-template>

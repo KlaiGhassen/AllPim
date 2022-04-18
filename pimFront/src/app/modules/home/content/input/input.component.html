@@ -1,0 +1,13 @@
+<div class="containerChat">
+  <textarea
+    placeholder="text to send..."
+    rows="1"
+    appTextareaAutosize
+    [minRows]="1"
+    [maxRows]="3"
+    [(ngModel)]="text"
+    (focus)="onFocus()"
+    (blur)="onblur()"
+  ></textarea>
+  <button (click)="sendMessage()" class="btnChat">send</button>
+</div>
