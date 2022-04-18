@@ -1,5 +1,5 @@
 var express = require("express");
-const Ophto = require("../models/ophto");
+const Ophto = require("../models/Users");
 var router = express.Router();
 const ocr = require("../routes/ocr");
 const multer = require("multer");

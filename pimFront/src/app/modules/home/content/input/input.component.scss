@@ -1,0 +1,39 @@
+.containerChat {
+  display: flex;
+  align-items: flex-end;
+  background: whitesmoke;
+  padding: 5px 10px;
+  gap: 10px;
+
+  textarea {
+    flex: 1;
+    padding: 8px 5px;
+    margin-bottom: 3px;
+    resize: none;
+  }
+}
+
+.btnChat {
+  background-color: #25d366;
+  border: solid 2px #25d366;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: transparent;
+    color: #25d366;
+  }
+
+  &:active {
+    background-color: #25d366;
+    color: white;
+    opacity: 0.7;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

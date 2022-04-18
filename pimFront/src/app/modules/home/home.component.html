@@ -1,0 +1,9 @@
+<div class="containerChat" *ngIf="chatService.finishLoading">
+  <!-- <app-navbar [user]="user"></app-navbar> -->
+  <div class="contentChat">
+    <app-sidenav></app-sidenav>
+    <div class="content-componentChat">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

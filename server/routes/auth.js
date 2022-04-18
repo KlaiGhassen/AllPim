@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const userdb = require("../models/ophto");
+const userdb = require("../models/Users");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 
@@ -191,7 +191,7 @@ router.post("/socauth", async (req, res) => {
         email: compte.email,
       };
       console.log(compte);
-      const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+      const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
 
       res.json({ accessToken: token, user: compte });
     
@@ -206,7 +206,7 @@ router.post("/socauth", async (req, res) => {
               email: compte.email,
             };
             console.log(payload);
-            const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+            const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
     
             res.json({ accessToken: token, user: compte });
           } else {
@@ -231,12 +231,8 @@ router.post("/sign-in", (req, res) => {
     userdb.find({ email: email, password: password }).then((user) => {
       let compte = user[0];
       if (compte ) {
-        let payload = {
-          id: compte.id,
-          email: compte.email,
-        };
-        console.log(payload);
-        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+      
+        const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
 
         res.json({ accessToken: token, user: compte });
       } else {
@@ -254,16 +250,19 @@ router.post("/sign-in", (req, res) => {
 });
 
 router.post("/refresh-access-token", (req, res) => {
-  try {
-    userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
-      let compte = user[0];
+  console.log(req.body);
+  try { 
+    console.log("chekc here ",parseJwt(req.body.accessToken).compte._id)
+    userdb.findOne({ _id: parseJwt(req.body.accessToken).compte._id }).then((user) => {
+      console.log("hello",user);
+      let compte = user;
       if (compte) {
         let payload = {
           id: compte.id,
           email: compte.email,
         };
         console.log(payload);
-        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+        const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
         res.json({ accessToken: token, user: compte });
       } else {
         res.status(401);
@@ -293,7 +292,7 @@ router.post("/googleCheck", (req, res) => {
           role: compte.role,
         };
         console.log(payload);
-        const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+        const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
         let userLogin = {
           token: token,
           identifant: compte.identifant,

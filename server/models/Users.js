@@ -14,10 +14,12 @@ const userSchema = new mongoose.Schema(
     verified: { type: Boolean, default: false },
     description: String,
     role:String,
-    docId: String
+    docId: String,
+    user_name:String,
+    contacts:[mongoose.Types.ObjectId]
   },
   {
     timestamps: true,
-  }
+  },
 );
-module.exports = mongoose.model("ophto", userSchema);
+module.exports = mongoose.model("users", userSchema);

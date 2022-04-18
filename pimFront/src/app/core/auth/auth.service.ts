@@ -98,6 +98,7 @@ export class AuthService {
                       
                             this.gs.setUser(response.user);
                             this.accessToken = response.accessToken;
+                            this.gs.currentUser=response.user;
 
                             // Set the authenticated flag to true
                             this._authenticated = true;
@@ -135,6 +136,8 @@ export class AuthService {
                     console.log(response);
                     this.gs.setUser(response.user);
                     console.log(this.gs.getUser());
+                    this.gs.currentUser=response.user;
+
                     // Store the access token in the local storage
                     this.accessToken = response.accessToken;
 

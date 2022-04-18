@@ -17,6 +17,13 @@ var note = require("./routes/note")
 var medicalFollowUp = require("./routes/medicalfollowup")
 var patient = require("./routes/patient")
 var prescription = require("./routes/prescription");
+var ophto = require("./routes/ophto")
+var transaction = require("./routes/transaction")
+const userRoute = require("./routes/user");
+const messageRoute = require("./routes/message");
+const authMiddleware = require("./middlewares/auth");
+var note = require("./routes/note")
+
 //const swaggerJsDocs = require("swagger-jsdoc");
 //const swaggerUi = require("swagger-ui-express");
 var app = express();
@@ -65,8 +72,11 @@ app.use(cookieParser());
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
+
 db.once("open", () => console.log("Connected to DataBase"));
 app.use("/upload", uploadDownload);
+
+
 app.use("/auth", authUser);
 app.use("/appointement", appointment);
 app.use("/notification", notification);
@@ -77,6 +87,9 @@ app.use("/medicalFollowUp", medicalFollowUp)
 app.use("/patient", patient)
 app.use("/prescription", prescription)
 
+app.use(authMiddleware);
+app.use("/api/user", userRoute);
+app.use("/api/message", messageRoute);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));

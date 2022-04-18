@@ -95,6 +95,7 @@ export const appRoutes: Route[] = [
             { path: "allmdf/:id", component: AllmdfComponent, },
             { path: 'prescription', loadChildren: () => import('app/modules/medicalfollowup/prescriptation/prescriptation.module').then(m => m.prescriptionModule) },
             { path: "prescription/:id", component: PrescriptationComponent, },
+            {path: 'chat', loadChildren: () => import('app/modules/home/home.module').then(m => m.HomeModule)},
             //{path: 'Appointements', loadChildren: () => import('app/modules/appointement/appointement.module').then(m => m.CalendarModule)},
             {path: '404-not-found', pathMatch: 'full', loadChildren: () => import('app/modules/error-404/error-404.module').then(m => m.Error404Module)},
             {path: '**', redirectTo: '404-not-found'},

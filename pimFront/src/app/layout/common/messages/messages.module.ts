@@ -7,10 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MessagesComponent } from 'app/layout/common/messages/messages.component';
 import { SharedModule } from 'app/shared/shared.module';
+import { UnredaedMsgPipe } from './unredaed-msg.pipe';
 
 @NgModule({
     declarations: [
-        MessagesComponent
+        MessagesComponent,
+        UnredaedMsgPipe
     ],
     imports     : [
         RouterModule,

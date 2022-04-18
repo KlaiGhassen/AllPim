@@ -103,6 +103,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/get',
         Role:"ophto"
+    },{
+        id   : 'chat',
+        title: 'Chat',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/chat',
+        Role:"ophto"   
+    },
+    {
+        id   : 'chat',
+        title: 'Chat',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/chat',
+        Role:"simple"   
     },
     
  

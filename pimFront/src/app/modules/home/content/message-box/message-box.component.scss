@@ -1,0 +1,39 @@
+:host {
+  .containerChat {
+    padding: 5px;
+    display: flex;
+
+    .contentChat {
+      padding: 8px 12px;
+      max-width: 70%;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 0 8px 0;
+      gap: 3px;
+
+      &.from-userChat {
+        margin-left: auto;
+        background-color: #25d366;
+        color: white;
+      }
+
+      &.from-contactChat {
+        background-color: white;
+        color: gray;
+      }
+
+      .message-contentChat {
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+      }
+
+      .footerChat {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 10px;
+        gap: 5px;
+      }
+    }
+  }
+}

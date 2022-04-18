@@ -35,6 +35,7 @@ import { DialogAppointementComponent } from './modules/admin/dialog-appointement
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogContentExample, DialogContentExampleDialog } from './modules/Dialog/dialog-content-example';
 
+
 initializeApp(environment.firebase);
 export function HttpLoaderFactory(http:HttpClient){
 return new TranslateHttpLoader(http,"./assets/i18n/",".json")
@@ -96,6 +97,11 @@ const routerConfig: ExtraOptions = {
     ],
 
     providers: [
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor ,
+        multi: true,
+      },
       {
           provide: 'SocialAuthServiceConfig',
           useValue: {
