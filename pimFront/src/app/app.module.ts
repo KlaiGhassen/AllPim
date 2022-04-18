@@ -32,7 +32,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import {TranslateLoader, TranslateModule,} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DialogAppointementComponent } from './modules/admin/dialog-appointement/dialog-appointement.component';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogContentExample, DialogContentExampleDialog } from './modules/Dialog/dialog-content-example';
 
 
 initializeApp(environment.firebase);
@@ -53,6 +54,8 @@ const routerConfig: ExtraOptions = {
     declarations: [
         AppComponent,
         DialogAppointementComponent,
+        DialogContentExample,
+        DialogContentExampleDialog
         
     ],
     imports     : [
@@ -81,6 +84,7 @@ const routerConfig: ExtraOptions = {
 
         // Layout module of your application
         LayoutModule,
+         MatDialogModule,
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),

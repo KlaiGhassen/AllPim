@@ -8,15 +8,21 @@ var logger = require("morgan");
 var cors = require("cors");
 const mongoose = require("mongoose");
 var uploadDownload = require("./routes/uploadDownload");
-var authUser= require("./routes/auth");
+var authUser = require("./routes/auth");
 var appointment = require("./routes/appointement")
 var notification = require("./routes/notification")
-var ophto = require ("./routes/ophto")
-var transaction = require ("./routes/transaction")
+var ophto = require("./routes/ophto")
+var transaction = require("./routes/transaction")
+var note = require("./routes/note")
+var medicalFollowUp = require("./routes/medicalfollowup")
+var patient = require("./routes/patient")
+var prescription = require("./routes/prescription");
+var ophto = require("./routes/ophto")
+var transaction = require("./routes/transaction")
 const userRoute = require("./routes/user");
 const messageRoute = require("./routes/message");
 const authMiddleware = require("./middlewares/auth");
-var note = require ("./routes/note")
+var note = require("./routes/note")
 
 //const swaggerJsDocs = require("swagger-jsdoc");
 //const swaggerUi = require("swagger-ui-express");
@@ -55,7 +61,7 @@ var app = express();
 //     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 
-    app.use(cors());
+app.use(cors());
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -72,52 +78,55 @@ app.use("/upload", uploadDownload);
 
 
 app.use("/auth", authUser);
-app.use("/appointement",appointment);
-app.use("/notification",notification);
-app.use("/ophto",ophto);
-app.use("/transaction",transaction);
-app.use("/note",note);
+app.use("/appointement", appointment);
+app.use("/notification", notification);
+app.use("/ophto", ophto);
+app.use("/transaction", transaction);
+app.use("/note", note);
+app.use("/medicalFollowUp", medicalFollowUp)
+app.use("/patient", patient)
+app.use("/prescription", prescription)
 
 app.use(authMiddleware);
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+app.use(function(req, res, next) {
+    next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.json({
-    message: err.message,
-    error: req.app.get("env") === "development" ? err : {},
-  });
-  // render the error page
-  res.status(err.status || 500);
+app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
+    res.json({
+        message: err.message,
+        error: req.app.get("env") === "development" ? err : {},
+    });
+    // render the error page
+    res.status(err.status || 500);
 });
 
 const jwt = require("jsonwebtoken");
 
 function verifyAdminToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
+    const authHeader = req.headers["authorization"];
 
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401); // if there isn't any token
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
-    req.body["payload"] = user;
-    next(); // pass the execution off to whatever request the client intended
-  });
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token == null) return res.sendStatus(401); // if there isn't any token
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+        req.body["payload"] = user;
+        next(); // pass the execution off to whatever request the client intended
+    });
 }
 
 function verifySuperAdminToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (req.body.payload.role !== 0) return res.sendStatus(401); // user not Super Admin
-  next();
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (req.body.payload.role !== 0) return res.sendStatus(401); // user not Super Admin
+    next();
 }
 
 module.exports = app;

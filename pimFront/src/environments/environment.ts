@@ -13,8 +13,13 @@ export const environment = {
     storageBucket: "pimnotification.appspot.com",
     messagingSenderId: "181496279575",
     appId: "1:181496279575:web:18ea51dd30e8a076e76252",
-    vapidKey: "BNUs0UE3CCCKpHNY2tjLzQpnLYUSSDu5uQej3RauazNSzNyi_vi_Kk_QoLs7UQEEYIrG1ndGgpq-Qt_2EC5dO64"
+    vapidKey: "BNUs0UE3CCCKpHNY2tjLzQpnLYUSSDu5uQej3RauazNSzNyi_vi_Kk_QoLs7UQEEYIrG1ndGgpq-Qt_2EC5dO64",
+    
   },
+  urlMedicalfollowup: 'http://localhost:3000/', //url mode dev
+  urlMedicalfollowupupdate: 'http://localhost:3000/medicalFollowUp', //url mode dev
+  urlGetPatient: 'http://localhost:3000/patient', //url mode dev
+  urlPrescription: 'http://localhost:3000/Prescription'
   /*
   apiKey: "AIzaSyBBCI5t44tZ0EeVTGFB-_pHe9WlDr_2CW0",
     authDomain: "pimnotification.firebaseapp.com",
