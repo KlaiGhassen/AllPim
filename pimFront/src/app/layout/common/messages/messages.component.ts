@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    DoCheck,
     OnChanges,
     OnDestroy,
     OnInit,
@@ -26,24 +27,31 @@ import { ChatService } from 'app/modules/home/chat.service';
     encapsulation: ViewEncapsulation.None,
     exportAs: 'messages',
 })
-export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
+export class MessagesComponent
+    implements OnInit, OnDestroy, OnChanges, DoCheck
+{
     @ViewChild('messagesOrigin') private _messagesOrigin: MatButton;
     @ViewChild('messagesPanel') private _messagesPanel: TemplateRef<any>;
 
     messages: Message[];
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    contacts: any[] = [];
+    public contacts: any[] = this.chatService.list;
 
     /**
      * Constructor
      */
     constructor(
-        public chatService: ChatService,
+        private chatService: ChatService,
         private _messagesService: MessagesService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
+        private detector: ChangeDetectorRef
     ) {}
+
+    ngDoCheck(): void {
+        console.log(this.contacts);
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
@@ -52,50 +60,14 @@ export class MessagesComponent implements OnInit, OnDestroy, OnChanges {
      * On init
      */
     ngOnInit(): void {
-        setTimeout(() => {
-            this.contacts.push({
-                _id: '625416c20eb71fb79d9bec74',
-                full_name: 'mahmoud ahmadi',
-                email: 'yassine.zitoun@esprit.tn',
-                password:
-                    '598d9f717a601658e4f7ff1653c97addf3bfe74130be4a2e244ae53d9e21f420',
-                phone_number: 25665232,
-                profilePicture: 'image-1649678697408.jpeg',
-                diploma: true,
-                social: false,
-                verified: true,
-                description: 'description',
-                role: 'ophto',
-                createdAt: '2022-04-11T11:53:38.062Z',
-                updatedAt: '2022-04-11T12:34:36.726Z',
-                __v: 0,
-                country: 'Manouba',
-                unreaded: {
-                    count: 2,
-                },
-                undelivred: {
-                    count: 0,
-                },
-                messages: [],
-                typings: [],
-                messages_loading: false,
-                messages_end: true,
-                messages_page: 0,
-            });
-            console.log('Time Out chat service list  ', this.contacts);
-
-            
-        }, 5000);
         // Subscribe to message changes
         // this._messagesService.messages$
         //     .pipe(takeUntil(this._unsubscribeAll))
         //     .subscribe((messages: Message[]) => {
         //         // Load the messages
         //         this.messages = messages;
-
         //         // Calculate the unread count
         //         this._calculateUnreadCount();
-
         //         // Mark for check
         //     });
     }
