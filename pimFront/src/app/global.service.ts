@@ -14,7 +14,7 @@ export class GlobalService {
 
  uri: any ="http://localhost:3000" //"http://localhost:3000"; 
   // uri: any ="http://localhost:3000" // backend url
-   PredectionUri :any = "http://192.168.142.167:8000"
+   PredectionUri :any = "http://localhost:8000"
    private readonly TOKEN = 'access_token';
    //chat
    public readonly BASE_URL = 'http://localhost:3000';
