@@ -5,7 +5,6 @@ const multer = require("multer");
 const { POINT_CONVERSION_COMPRESSED } = require("constants");
 
 const picsPath = require("path").resolve(__dirname, "../uploads");
-
 router.get("/download/:nom", function(req, res) {
     let nom = req.params.nom;
     const file = picsPath + "/" + nom;
@@ -95,8 +94,15 @@ router.get("/patientByEmail/:email", async(req, res, next) => {
 });
 
 //add Patient
-
+Date.prototype.addHours = function(h) {
+    this.setHours(this.getHours() + h);
+    return this;
+}
 router.post("/", async(req, res, next) => {
+
+    var d = new Date(req.body.Bday);
+    //d.addHours(-1);
+    req.body.Bday = d;
     console.log(req.body);
     const patient = new Patient({
         email: req.body.email,
@@ -105,14 +111,28 @@ router.post("/", async(req, res, next) => {
         full_name: req.body.full_name,
         gender: req.body.gender,
         description: req.body.description,
+        profilePicture: req.body.profilePicture,
+        Bday: d,
+
+
     });
     try {
+        if (patient.profilePicture == "") {
+            if ((patient.gender == "Female")) {
+
+                patient.profilePicture = "https://res.cloudinary.com/showapp/image/upload/v1648774354/patient_kla7oe.jpg"
+
+            }
+            if ((patient.gender == "Male")) {
+                patient.profilePicture = "https://res.cloudinary.com/showapp/image/upload/v1650655289/male_qlxcba.jpg"
+            }
+        }
         const newPatient = await patient.save();
         res.status(201).json({ newPatient });
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
-            res.json({ email: true });
+            res.status(400).json({ email: true });
         }
     }
 });

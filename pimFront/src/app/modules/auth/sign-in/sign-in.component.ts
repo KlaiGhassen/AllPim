@@ -82,7 +82,7 @@ export class SignInClassicComponent implements OnInit {
             email:user.email,
             image:user.photoUrl,
             social:true,
-            verified:true,            
+            verified:true,
           }
           this._authService.socialLog(data).subscribe((res)=>{
             if (res.accessToken && res.user) {
@@ -99,7 +99,7 @@ export class SignInClassicComponent implements OnInit {
             }
            })
         });
-     
+
 
 
     }
@@ -111,7 +111,7 @@ export class SignInClassicComponent implements OnInit {
               email:user.email,
               image:user.photoUrl,
               social:true,
-              verified:true,            
+              verified:true,
             }
             this._authService.socialLog(data).subscribe((res)=>{
               if (res.accessToken && res.user) {
@@ -121,14 +121,14 @@ export class SignInClassicComponent implements OnInit {
                 this._activatedRoute.snapshot.queryParamMap.get(
                     'redirectURL'
                 ) || '/signed-in-redirect';
-  
+
             // // Navigate to the redirect url
             this._router.navigateByUrl(redirectURL);
-  
+
               }
              })
           });
-       
+
     }
 
     // -----------------------------------------------------------------------------------------------------

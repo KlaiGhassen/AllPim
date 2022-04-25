@@ -45,7 +45,7 @@
     "highlight.js": "11.0.1",
     "igniteui-angular": "^13.1.9",
     "lodash-es": "4.17.21",
-    "moment": "2.29.1",
+    "moment": "^2.29.3",
     "ng-apexcharts": "1.5.12",
     "ngx-dropzone": "^3.1.0",
     "ngx-markdown": "^12.1.0",

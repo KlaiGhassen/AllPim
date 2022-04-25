@@ -28,7 +28,8 @@ export class MedicalfollowupService {
   Medicalfollowup: any;
   constructor(private Http: HttpClient) { }
   listMedicalfollowup() {
-    return this.Http.get(this.urlMedicalfollowup + 'patient');
+    return this.Http.get(this.urlGetPatient);
+   // return this.Http.get(this.urlMedicalfollowup + 'patient');
   }
 
   headers = {
@@ -67,6 +68,10 @@ export class MedicalfollowupService {
       'Bday': myform.value.Bday,
       'gender': myform.value.gender,
     }
+    return this.Http.post(this.urlGetPatient, this.Patient);
+  }
+  AddPatient2(p: Patient1) {
+    this.Patient = p
     return this.Http.post(this.urlGetPatient, this.Patient);
   }
   GetPatientById(patentId: any): Observable<Patient1> {
