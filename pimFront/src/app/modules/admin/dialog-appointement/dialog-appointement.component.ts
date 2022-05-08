@@ -5,6 +5,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { CalendarService } from 'app/modules/calendar/calendar.service';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { CalendarEvent } from 'app/modules/calendar/calendar.types';
+import { FuseAlertType } from '@fuse/components/alert';
 
 
 export interface DialogData {
@@ -36,7 +37,12 @@ export class DialogAppointementComponent  {
         patientId: null
     };
 
-    
+    alert: { type: FuseAlertType; message: string } = {
+      type: 'error',
+      message: 'Choose a valid date',
+  };
+  showAlert: boolean = false;
+
    
   brag;
   constructor(
@@ -52,12 +58,41 @@ export class DialogAppointementComponent  {
     this.dialogRef.close();
   }
 
+   formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+ parseDate(input) {
+  var parts = input.match(/(\d+)/g);
+  // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+  return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+}
+
+
   addEvent(docId: string, place:string,dd) {
        
-    var now = new Date().getTime();
+    var now = new Date();
     // Get the clone of the event form value
     let newEvent = new CalendarEvent( this.gs.getUser().full_name + now,'1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc', this.gs.getUser()._id, this.gs.getUser().full_name, docId , true, false, 'Pending', dd, place);
-
+    console.log("evvvvvvvvvvvvvvvvv::::::",newEvent.date)
+    console.log("dd::::", this.parseDate(dd).getTime())
+    console.log("now:::",this.formatDate(now))
+    if(this.parseDate(dd).getTime() < now.getTime()){
+      
+    this.showAlert = true;
+    window.document.getElementById("skivipapa").hidden = false;
+    } else {
+      console.log("yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeees")
+    
 
     // Add the event
     this._calendarService.addEvent(newEvent).subscribe(() => {
@@ -81,6 +116,7 @@ export class DialogAppointementComponent  {
         
   
   });
+}
 }
 
 }
