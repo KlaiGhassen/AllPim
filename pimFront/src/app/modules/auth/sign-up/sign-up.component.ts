@@ -121,15 +121,30 @@ export class SignUpClassicComponent implements OnInit {
     this.checkingOphto = !this.checkingOphto;
     }
 
-    load = false;
+    load = true;
 
 
 
     savelicense() {
-        this.load = true;
+        
         this._Us.updateLicensefromSignup(this.files[0]).subscribe((data) => {
             console.log(data);
-            this.load = false;
+            if(data == true){
+                this.load = false;
+                this.alert = {
+                    type: 'success',
+                    message: 'License Accepted',
+                };
+                this.showAlert = true;
+            }
+            else {
+                this.alert = {
+                    type: 'error',
+                    message: 'Rejected License',
+                };
+                this.showAlert = true;
+            }
+            
         });
     }
 
