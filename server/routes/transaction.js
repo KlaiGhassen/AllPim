@@ -133,7 +133,7 @@ router.post("/", async(req, res, next) => {
 });
 
 
-//delet one transaction
+//delete one transaction
 
 router.delete("/:id", getApp, async(req, res) => {
    
