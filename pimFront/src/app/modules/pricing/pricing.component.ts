@@ -83,6 +83,7 @@ export class PricingComponent implements OnInit {
     });
     
         //-----------------------------------
+        
         var id = this.token;
         //var docId = this.gs.getUser()._id;
         //console.log("dociiiiii",docId)
@@ -96,13 +97,24 @@ export class PricingComponent implements OnInit {
         var state = true;
         var gg = new Date
 
-        var t = new Transaction(id,this.user,state,gg,gg,price)
+          if(!this.yearlyBilling ){
+            var t = new Transaction(id,this.user,state,gg,gg,price)
+            this._pricingService.checkout(t,"month").subscribe((res)=> {
+              console.log
+              this.ngOnInit()
+            })
+          }
+          else {
+            var t = new Transaction(id,this.user,state,gg,gg,price)
+            this._pricingService.checkout(t,"year").subscribe((res)=> {
+              console.log
+              this.ngOnInit()
+            })
+          }
+        
 
         //-----------------------------------
-        this._pricingService.checkout(t).subscribe((res)=> {
-          console.log
-          this.ngOnInit()
-        })
+        
  
     handler.open({
       name: 'Premium Subscription',
@@ -126,8 +138,8 @@ export class PricingComponent implements OnInit {
           token: function (token: any) {
             // You can access the token ID with `token.id`.
             // Get the token ID to your server-side code for use.
-            console.log("token:::::::::::::",token.id)
-            alert('Payment Success!!');
+           
+            
           }
         });
       }
