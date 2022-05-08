@@ -51,12 +51,14 @@
         </div>
         <!--/col-3-->
         <div class="col-sm-9">
-            <ul class="nav nav-tabs">
-                <li><a data-toggle="tab" routerLink="/medicalFollowUp/{{this.Patient._id}}">Add new medical follow up</a></li>
+            <div class="aaa">
+                <ul class="nav nav-tabs">
+                    <li><a data-toggle="tab" routerLink="/medicalFollowUp/{{this.Patient._id}}">Add new medical follow up</a></li>
 
-                <li class="active"><a data-toggle="tab">Prescription</a></li>
-                <li><a data-toggle="tab" routerLink="/allmdf/{{this.Patient._id}}">Consult old notes</a></li>
-            </ul>
+                    <li class="active"><a data-toggle="tab">Prescription</a></li>
+                    <li><a data-toggle="tab" routerLink="/allmdf/{{this.Patient._id}}">Consult old notes</a></li>
+                </ul>
+            </div>
 
 
 
@@ -73,11 +75,10 @@
                                                     <img src="https://seeklogo.com/images/H/hospital-clinic-plus-logo-7916383C7A-seeklogo.com.png" />
                                                 </div>
                                                 <div class="credentials">
-                                                    <h4>Doctor Name</h4>
-                                                    <p>Chamber Name</p>
-                                                    <small>Adress</small>
-                                                    <br />
-                                                    <small>Mb. 0XXXXXXXXX</small>
+                                                    <h4>{{user.full_name}}</h4>
+                                                    <br/>
+                                                    <p>{{user.phone_number}}</p>
+                                                    <p>{{user.email}}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -98,8 +99,12 @@
                                                     <div class="col-xs-12">
                                                         <br>
                                                         <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Add </button>
+                                                        <div class="space">
+                                                        </div>
+                                                        <button class="btn btn-lg btn-success" (click)="onPrint()"><i class="glyphicon glyphicon-print"></i> Print </button>
                                                     </div>
                                                 </div>
+
                                             </form>
                                         </td>
                                     </tr>

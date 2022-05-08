@@ -66,7 +66,6 @@ export class PatientComponent implements OnInit {
             this.service.AddPatient2(this.patient).subscribe((response) => {
                 this.Medicalfollowup, alert('added successfully');
                 this.router.navigate(['get']);
-                alert(this.patient.Bday);
             },
             (error: HttpErrorResponse) => {
                 if(error.status==400){

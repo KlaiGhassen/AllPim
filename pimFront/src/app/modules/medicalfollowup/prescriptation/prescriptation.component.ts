@@ -11,6 +11,8 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import { User } from 'app/core/user/user.types';
+import { GlobalService } from 'app/global.service';
 
 @Component({
   selector: 'app-prescriptation',
@@ -20,6 +22,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 export class PrescriptationComponent implements OnInit {
 
   alertColor: string = "alert alert-danger";
+  user: User;
   public patientId: any;
   public profilePicture: any;
   @Input('master') masterName = "test";
@@ -33,8 +36,9 @@ export class PrescriptationComponent implements OnInit {
   Patient: Patient1;
   Prescription: any;
   medicalfollowup: any;
-  constructor(private service: MedicalfollowupService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private service: MedicalfollowupService, private router: Router, private route: ActivatedRoute,private gs:GlobalService,) { }
   ngOnInit(): void {
+    this.user= this.gs.getUser();
     this.Patient = new Patient1("","","","", null, null);
     this.route.paramMap.subscribe(params => { this.patientId = params.get('id'); });
     this.service.GetPatientById(this.patientId).toPromise().then((res: Patient1) => {
@@ -82,7 +86,9 @@ export class PrescriptationComponent implements OnInit {
     this.x = -Date.now();
   }
 
-
+onPrint(){
+    window.print();
+}
 
 
 }

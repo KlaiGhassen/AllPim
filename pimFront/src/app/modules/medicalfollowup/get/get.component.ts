@@ -28,11 +28,10 @@ export class GetComponent implements OnInit {
         private route: ActivatedRoute
     ) { }
     ngOnInit() {
-        GetComponent
-        this.service.listMedicalfollowup().toPromise().then(
+
+        this.service.listMedicalfollowup().subscribe(
             (response) => {
                 this.medicalfollowup = response;
-                this.service.listMedicalfollowup()
             }
         );
         [

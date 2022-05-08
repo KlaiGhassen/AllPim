@@ -41,16 +41,16 @@
                             <tr *ngFor="let medicalfollowup of medicalfollowup | igxFilter: filterContacts ">
                                 <td class="table-img"> <img src={{medicalfollowup.profilePicture}} alt="">
                                 </td>
-                                <td>
+                                <td style="text-align:center">
                                     <h6 class="mb-0 font-13">{{medicalfollowup.full_name}}</h6>
                                 </td>
-                                <td>{{medicalfollowup.email}}</td>
+                                <td style="text-align:center">{{medicalfollowup.email}}</td>
 
-                                <td>
+                                <td style="text-align:center">
                                     <div class="badge-outline col-red">{{medicalfollowup.phoneNumber}}</div>
                                 </td>
 
-                                <td>
+                                <td style="text-align:center">
                                     <a routerLink="/Details" routerLinkActive="active" (click)="DetailsPatients(medicalfollowup) ">
 
                                         <button mat-icon-button aria-label="Example icon button with a open in new tab icon">

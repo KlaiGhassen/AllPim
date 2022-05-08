@@ -13,6 +13,10 @@ export interface Patient{
      phoneNumber:  Number,
      gender : string
 }
+export interface ItemData {
+  item: string;
+  selected: boolean;
+}
 
 
 
