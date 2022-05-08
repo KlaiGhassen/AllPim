@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { GlobalService } from 'app/global.service';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
@@ -35,6 +35,8 @@ export class DialogAppointementComponent  {
         docId: null,
         patientId: null
     };
+
+    
    
   brag;
   constructor(
@@ -44,6 +46,7 @@ export class DialogAppointementComponent  {
     private _calendarService: CalendarService,
     private _notifservice: NotificationsService
   ) {}
+  
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -4,9 +4,16 @@
   <p></p>
   
     
-  <input type="datetime-local" matInput [(ngModel)]="data.brag">
+  <input id="scobidoo" type="datetime-local" matInput [(ngModel)]="data.brag">
 <div mat-dialog-actions>
   <button style="margin-left:10%;color:red " class="accept-button" mat-button (click)="onNoClick()">Cancel</button>
   <button style="margin-left:10%;color:green" class="cancel-button" mat-button [mat-dialog-close]="" (click)="addEvent(data.docId,data.place,data.brag)" cdkFocusInitial>Ok</button>
 </div>
 </div>
+<script type="text/javascript">
+  $(function () {
+      $('#scobidoo').datetimepicker({
+          minDate:new Date()
+      });
+  });
+</script>
