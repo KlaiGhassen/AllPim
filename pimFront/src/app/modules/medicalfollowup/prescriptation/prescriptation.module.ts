@@ -25,6 +25,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import * as moment from 'moment';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
+import { MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @NgModule({
     declarations: [
@@ -63,22 +66,18 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
         MatSelectModule,
         MatSlideToggleModule,
         MatTooltipModule,
-        SharedModule
+        SharedModule,
+        MatChipsModule,
+        MatAutocompleteModule
     ],
     providers: [
+        
         {
-            provide: MAT_DATE_FORMATS,
+            provide: MAT_CHIPS_DEFAULT_OPTIONS,
             useValue: {
-                parse: {
-                    dateInput: moment.ISO_8601
-                },
-                display: {
-                    dateInput: 'LL',
-                    monthYearLabel: 'MMM YYYY',
-                    dateA11yLabel: 'LL',
-                    monthYearA11yLabel: 'MMMM YYYY'
-                }
+                separatorKeyCodes: [ENTER, COMMA]
             }
+            
         }
     ]
 })

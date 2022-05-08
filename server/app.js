@@ -23,42 +23,47 @@ const userRoute = require("./routes/user");
 const messageRoute = require("./routes/message");
 const authMiddleware = require("./middlewares/auth");
 var note = require("./routes/note")
-
-//const swaggerJsDocs = require("swagger-jsdoc");
-//const swaggerUi = require("swagger-ui-express");
+    //const swaggerJsDocs = require("swagger-jsdoc");
+    //const swaggerUi = require("swagger-ui-express");
+process.env.TZ = 'Europe/Amsterdam';
 var app = express();
-// view engine setup
-// const options = {
-//     swaggerDefinition: {
-//         openapi: "3.0.1",
-//         info: {
-//           title: "My Endpoints in Pandapp Application",
-//           version: "1.0.0",
-//         },
-//         servers: [
-//           {
-//             url: "http://localhost:3000",
-//           },
-//         ],
-//         components: {
-//           securitySchemes: {
-//             bearerAuth: {
-//               type: "http",
-//               scheme: "bearer",
-//               bearerFormat: "JWT",
-//             },
-//           },
-//         },
-//         security: [
-//           {
-//             bearerAuth: [],
-//           },
-//         ],
-//       },
-//       apis: ["./routes/*.js"],
-//     };
-//     const swaggerSpecs = swaggerJsDocs(options);
-//     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+const nDate = new Date().toLocaleString('en-US', {
+    timeZone: 'Africa/Tunis',
+
+});
+console.log(new Date(nDate))
+    // view engine setup
+    // const options = {
+    //     swaggerDefinition: {
+    //         openapi: "3.0.1",
+    //         info: {
+    //           title: "My Endpoints in Pandapp Application",
+    //           version: "1.0.0",
+    //         },
+    //         servers: [
+    //           {
+    //             url: "http://localhost:3000",
+    //           },
+    //         ],
+    //         components: {
+    //           securitySchemes: {
+    //             bearerAuth: {
+    //               type: "http",
+    //               scheme: "bearer",
+    //               bearerFormat: "JWT",
+    //             },
+    //           },
+    //         },
+    //         security: [
+    //           {
+    //             bearerAuth: [],
+    //           },
+    //         ],
+    //       },
+    //       apis: ["./routes/*.js"],
+    //     };
+    //     const swaggerSpecs = swaggerJsDocs(options);
+    //     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 
 app.use(cors());
@@ -69,7 +74,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //connection to data base
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+//mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/pim', { useNewUrlParser: true });
+
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 

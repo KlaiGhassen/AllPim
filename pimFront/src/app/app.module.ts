@@ -34,6 +34,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DialogAppointementComponent } from './modules/admin/dialog-appointement/dialog-appointement.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogContentExample, DialogContentExampleDialog } from './modules/Dialog/dialog-content-example';
+import { MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+
 
 
 initializeApp(environment.firebase);
@@ -97,6 +101,13 @@ const routerConfig: ExtraOptions = {
     ],
 
     providers: [
+       {
+            provide: MAT_CHIPS_DEFAULT_OPTIONS,
+            useValue: {
+                separatorKeyCodes: [ENTER, COMMA]
+            }
+            
+        },
       {
         provide: HTTP_INTERCEPTORS,
         useClass: AuthInterceptor ,

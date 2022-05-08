@@ -28,6 +28,7 @@ import { medicalfollowupRoutes } from '../medicalfollowup/addmfu/medicalfollowup
 import { PatientRoutes } from './patient.routing';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 @NgModule({
     declarations: [
         PatientComponent
@@ -66,6 +67,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatSlideToggleModule,
         MatTooltipModule,
         SharedModule,
+        FormsModule
 
     ],
     providers   : [

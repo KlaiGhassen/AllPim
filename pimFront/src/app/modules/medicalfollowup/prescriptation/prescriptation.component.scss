@@ -1,3 +1,18 @@
+.space {
+    width: 100px;
+    height: auto;
+    display: inline-block;
+}
+
+@media print {
+    .col-sm-3,
+    .col-xs-12,
+    .col-sm-10,
+    .aaa {
+        display: none !important;
+    }
+}
+
 body {
     transition: all 0.3s ease;
 }

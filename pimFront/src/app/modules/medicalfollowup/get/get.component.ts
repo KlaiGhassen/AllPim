@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { IgxFilterOptions } from 'igniteui-angular';
+
+
 @Component({
     selector: 'app-get',
     templateUrl: './get.component.html',
@@ -26,13 +28,10 @@ export class GetComponent implements OnInit {
         private route: ActivatedRoute
     ) { }
     ngOnInit() {
+
         this.service.listMedicalfollowup().subscribe(
-            //role de .subscribe
             (response) => {
                 this.medicalfollowup = response;
-                this.service.listMedicalfollowup().subscribe((response) => {
-                    this.medicalfollowup = response;
-                });
             }
         );
         [
