@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { GlobalService } from 'app/global.service';
+import { ProjectService } from '../admin/example/project/project.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +14,11 @@ export class ChatService {
   private dataLoadCompleted = false;
 
   private _currentContact: any = null;
+  picture;
 
-  constructor(private globalService: GlobalService, private http: HttpClient) {
+  constructor(         private sanitizer: DomSanitizer,
+    private _projectService: ProjectService,
+    private globalService: GlobalService, private http: HttpClient) {
     globalService.currentUser.subscribe((user) => {
       console.log(user)
       if (user) {
@@ -130,6 +135,21 @@ export class ChatService {
                 });
               }
               console.log("hello",contact);
+
+              this._projectService
+              .downloadMedia(contact.profilePicture)
+              .subscribe((blob) => {
+                  // var myFile = this.blobToFile(blob, 'my-image1.png');
+                  const objectURL = URL.createObjectURL(blob);
+                  this.picture =
+                      this.sanitizer.bypassSecurityTrustUrl(
+                          objectURL
+                      );
+                  // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+                  contact.profilePicture = this.picture;
+                  console.log(contact.profilePicture);
+              });
+
               return contact;
             });
             this.listOfContacts.push(...contacts);

@@ -12,12 +12,16 @@ import { SharedModule } from 'app/shared/shared.module';
 import { SignUpClassicComponent } from 'app/modules/auth/sign-up/sign-up.component';
 import { authSignupRoutes } from 'app/modules/auth/sign-up/sign-up.routing';
 import {MatSelectModule} from '@angular/material/select';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
         SignUpClassicComponent
     ],
     imports     : [
+        MatAutocompleteModule,
+        NgxDropzoneModule,
         MatSelectModule,
         RouterModule.forChild(authSignupRoutes),
         MatButtonModule,

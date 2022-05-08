@@ -18,6 +18,8 @@ router.post("/forgot-password", (req, res) => {
 
         var transporter = nodemailer.createTransport({
           service: "gmail",
+          port: 465,
+          secure: true,
           auth: {
             user: "pimmpim40@gmail.com",
             pass: "123456789azer@@",
@@ -100,6 +102,7 @@ router.patch("/ophto/:email", getUserEmail, (req, res) => {
 router.patch("/verification", async (req, res) => {
   console.log("from verification");
 userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
+  console.log(parseJwt(req.body.accessToken).id )
   let compte = user[0];
   if (compte) {
     console.log("Compte", compte);

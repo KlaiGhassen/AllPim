@@ -4,7 +4,7 @@
   routerLinkActive="active"
   [ngClass]="{ 'not-readed-messageChat': contact.unreaded.count > 0 }"
 >
-  <app-profile-picture src="/assets/user.png"></app-profile-picture>
+  <app-profile-picture [src]="contact.profilePicture"></app-profile-picture>
   <div class="message-contentChat">
     <div class="message-infoChat">
       <span class="contact-nameChat">

@@ -186,14 +186,24 @@ export class AuthService {
      * @param user
      */
     signUp(data: any): Observable<any> {
+
+        if(data.role =="ophto"){
+       
+
+    
+        }
         return this._httpClient.post<any>(`${this.gs.uri}/ophto`, {
             full_name: data.full_name,
             email: data.email,
             password: this.gs.hashPassword(data.password),
             description: data.description,
             phone_number: data.phoneNumber,
-            role:data.role
+            role:data.role,
+            contacts:data.contacts
         });
+
+
+
     }
 
     /**
@@ -207,6 +217,8 @@ export class AuthService {
     }): Observable<any> {
         return this._httpClient.post('api/auth/unlock-session', credentials);
     }
+
+    
 
     /**
      * Check the authentication status

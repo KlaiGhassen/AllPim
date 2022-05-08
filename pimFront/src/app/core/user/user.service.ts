@@ -77,6 +77,10 @@ export class UserService
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/'+user.email, user)
     }
 
+    updateLicensefromSignup( file:any)
+    {
+        return this._httpClient.post<any>(this.gs.uri+'/ophto/license/', {file: file})
+    }
     updateLicense(email:string ,file:any)
     {
         return this._httpClient.patch<any>(this.gs.uri+'/ophto/license/'+email, {file: file})

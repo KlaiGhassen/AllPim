@@ -18,6 +18,22 @@ router.get("/", async(req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get("/app/pending", async (req, res)=>
+{
+    const app = await App.find({ state: "Pending" });
+
+    return res.json(app);
+
+
+})
+router.get("/app/confirmed", async (req, res)=>
+{
+    const app = await App.find({ state: "Confirmed" });
+
+    return res.json(app);
+
+
+})
 
 router.get("/byPatientId/:patientId", async(req, res, next) => {
     try {
@@ -186,6 +202,8 @@ router.delete("/:id", getApp, async(req, res) => {
 
 
 
+
+
 // update app
 
 router.patch("/:id", getApp, (req, res) => {
@@ -220,6 +238,8 @@ router.patch("/:id", getApp, (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+
 
 
 

@@ -69,7 +69,6 @@ export class ForgotPasswordClassicComponent implements OnInit {
                         message: 'Wrong email',
                     };
                     this.forgotPasswordForm.reset();
-
                     // Show the alert
                     this.showAlert = true;
                 } else {
