@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: url(/assets/images/logo/background.png);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero:hover .logo {
+    transform: scale(1.2);
+}
+
+.logo {
+    width: 100px;
+    cursor: pointer;
+}
+
+.navbar {
+    width: 85%;
+    height: 15%;
+    margin: auto;
+    display: flex;
+    // align-items: center;
+    // justify-content: space-between;
+}
+
+.navbar2 {
+    width: 85%;
+    height: 15%;
+    margin-left: 80%;
+    margin-top: .5%;
+    display: flex;
+    // align-items: center;
+    // justify-content: space-between;
+}
+
+button {
+    color: #3730A3;
+    padding: 10px 25px;
+    border-radius: 20px;
+    outline: none;
+    cursor: pointer;
+    background-color: #ECE2E1;
+}
+
+.content1 {
+    color: #fbfcfd;
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translateY(-50%);
+    z-index: 2
+}
+
+.content2 {
+    color: #fbfcfd;
+    position: absolute;
+    top: 62%;
+    left: 10%;
+    transform: translateY(-50%);
+    z-index: 2
+}
+
+.content3 {
+    color: #fbfcfd;
+    position: absolute;
+    top: 55%;
+    left: 10%;
+    transform: translateY(-50%);
+    z-index: 2
+}
+
+h1 {
+    font-size: 40px;
+    margin: 10px 0 30px;
+    line-height: 30px;
+}
+
+h2 {
+    font-size: 22px;
+    margin: 10px 0 30px;
+    line-height: 30px;
+}
+
+.side-bar {
+    width: 50px;
+    height: 100vh;
+    background: linear-gradient(#00545d, #000729);
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.menu {
+    display: block;
+    width: 25px;
+    margin: 40px auto 0;
+    cursor: pointer;
+}
+
+.social-links img,
+.useful-links img {
+    width: 25px;
+    margin: 5px auto;
+    cursor: pointer;
+}
+
+.social-links {
+    width: 50px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.useful-links {
+    width: 50px;
+    text-align: center;
+    position: absolute;
+    bottom: 30px;
+}
+
+.img-fluid {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translateY(-50%);
+    height: 350px;
+    width: 320px;
+}
