@@ -46,7 +46,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     filesPredection: File[] = [];
     newEvent;
     profilePicture;
-
+patenientCount;
     notification: Notification = {
         id: null,
         _id: null,
@@ -160,8 +160,34 @@ export class ProjectComponent implements OnInit, OnDestroy {
             // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
         });
     }
+    pendingCount=0
+    confirmedCount=0
     ngOnInit(): void {
+       this._projectService.getPatients().subscribe((res:any[]) => {
+this.patenientCount=res.length;
+console.log("patients ", res)
 
+
+
+       })
+
+       this._projectService.getPendingAppointments().subscribe((res:any[]) => {
+        this.pendingCount=res.length
+        
+        console.log("appointment",res)
+
+        
+               })
+               this._projectService.getConfirmedApp().subscribe((res:any[]) => {
+                this.confirmedCount=res.length
+                console.log("appointment",res)
+                
+                
+                       })
+
+
+
+       
         this.user = this.gs.getUser();
         this.donMedia();
 

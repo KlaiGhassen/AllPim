@@ -110,15 +110,25 @@ router.get("/:id", getApp, (req, res) => {
 
 
 router.post("/", async(req, res, next) => {
-    console.log(req.body);
+    console.log(req.body.t);
+    var typee = req.body.period;
+    console.log(typee)
     var noww = new Date();
+    var add_value = 30
+    if(typee == "year"){
+        add_value = 365
+    }
+    else if (typee == "month"){
+        add_value = 30
+    }
     const transaction = new Transaction({
-        id: req.body.id,
-        docId: req.body.docId,
-        state: req.body.state,
+        id: req.body.t.id,
+        docId: req.body.t.docId,
+        state: req.body.t.state,
         startDate: new Date(),
-        endDate: noww.setDate(noww.getDate() + 30),
-        price: req.body.price,
+        
+        endDate: noww.setDate(noww.getDate() + add_value),
+        price: req.body.t.price,
     });
     try {
         const newApp = await transaction.save();
@@ -133,7 +143,7 @@ router.post("/", async(req, res, next) => {
 });
 
 
-//delet one transaction
+//delete one transaction
 
 router.delete("/:id", getApp, async(req, res) => {
    

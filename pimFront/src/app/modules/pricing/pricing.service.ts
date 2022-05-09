@@ -40,8 +40,8 @@ export class PricingService {
                 return this._httpClient.patch(`${this.Gs.uri}/transaction/updateAll`,{});
       }
 
-      checkout(t: Transaction) {
-        return this._httpClient.post(this.Gs.uri+'/transaction', t);
+      checkout(t: Transaction, periodP:String) {
+        return this._httpClient.post(this.Gs.uri+'/transaction', {t,period: periodP});
       }
       
     }

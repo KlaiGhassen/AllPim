@@ -1,10 +1,16 @@
-<h1 mat-dialog-title>Take Appointement</h1>
-<div mat-dialog-content>
-  <p>What's your favorite animal?</p>
+<div style="overflow:hidden" mat-dialog-content>
+  <div id="skivipapa" class="alert danger-alert" hidden="true">
+    <h3>Choose a valid date</h3>
+  </div>
+<div class="custom-modalbox">
+<h1 mat-dialog-title>Take an Appointement</h1>
+
   
     
-  <input type="datetime-local" matInput [(ngModel)]="data.brag">
+  <input id="scobidoo" type="datetime-local" matInput [(ngModel)]="data.brag">
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="" (click)="addEvent(data.docId,data.place,data.brag)" cdkFocusInitial>Ok</button>
+  <button style="margin-left:10%;color:red " class="accept-button" mat-button (click)="onNoClick()">Cancel</button>
+  <button style="margin-left:10%;color:green" class="cancel-button" mat-button  (click)="addEvent(data.docId,data.place,data.brag)" cdkFocusInitial>Ok</button>
 </div>
+</div>
+

@@ -21,6 +21,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
+        
         ProjectComponent
     ],
     imports     : [

@@ -85,7 +85,6 @@ export const appRoutes: Route[] = [
             {path: 'colorblind', loadChildren: () => import('app/modules/colorblind/colorblind.module').then(m => m.ColorblindModule)},
             {path: 'notes', loadChildren: () => import('app/modules/notes/notes.module').then(m => m.NotesModule)},
             {path: 'pricing', loadChildren: () => import('app/modules/pricing/pricing.module').then(m => m.PricingModule)},
-
             { path: 'get', loadChildren: () => import('app/modules/medicalfollowup/get/get.module').then(m => m.GetModule) },
             { path: 'update', loadChildren: () => import('app/modules/medicalfollowup/addmfu/medicalfollowup.module').then(m => m.MedicalfollowupModule) },
             { path: 'patient', loadChildren: () => import('app/modules/patient/patient.module').then(m => m.patientModule) },

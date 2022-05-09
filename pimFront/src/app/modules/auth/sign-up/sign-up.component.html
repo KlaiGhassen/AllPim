@@ -110,18 +110,91 @@
                         type="textarea"
                         [formControlName]="'description'">
                 </mat-form-field>
+              
+
+
                 <!-- ToS and PP -->
-                <div class="sm:col-span-2">
+                <div class="sm:col-span-2 ">
                     <mat-form-field class="fuse-mat-no-subscript w-full">
                         <mat-label>Role</mat-label>
                         <mat-icon class="icon-size-5"svgIcon="heroicons_outline:user" matPrefix></mat-icon>
-                        <mat-select [formControlName]="'role'">
+                        <mat-select (selectionChange)="selectChanged($event)" [formControlName]="'role'">
                             <mat-option value="simple" >simple user </mat-option>
                             <mat-option value="ophto">ophtalmologue</mat-option>
                       </mat-select>
                     </mat-form-field>
                 </div>
-              
+                <div id="skibido" *ngIf="checkingOphto && load">
+                    <div >
+                        <br />
+                        <div
+                        class="w-full"
+                            ngx-dropzone
+                            accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
+                            (change)="onSelect($event)"
+                            [multiple]="false"
+                        >
+                            <ngx-dropzone-label>
+                                <button class="uploadButton" type="button">
+                                  Update Medical License
+                                </button>
+                            </ngx-dropzone-label>
+                            <ngx-dropzone-image-preview
+                                class="w-full"
+                                ngProjectAs="ngx-dropzone-preview"
+                                *ngFor="let f of files"
+                                [file]="f"
+                                [removable]="true"
+                                (removed)="onRemove(f)"
+                                (change)="onSelectedFile($event)"
+                            >
+                            </ngx-dropzone-image-preview>
+                        </div>
+
+                        <button
+                            (click)="savelicense()"
+                            type="submit"
+                            class="mt-4 align-center"
+                            mat-flat-button
+                            type="button"
+                            [color]="'primary'"
+                        >
+                          save License
+                        </button> 
+                      
+                     
+
+
+                    </div>
+                </div>
+                <div class="sm:col-span-2 mt-6"  *ngIf="checkingOphto == false" >
+                    <!-- <mat-form-field class="fuse-mat-no-subscript w-full" appearance="fill">
+                        <mat-label>Doctor</mat-label>
+                        <input matInput
+                               aria-label="Doctor"
+                               [matAutocomplete]="auto"
+                               [formControlName]="'contacts'">
+                        <mat-autocomplete #auto="matAutocomplete">
+                          <mat-option  *ngFor="let doc of data "  [value]="doc._id">
+                           
+                           <div class="">
+                            <img class="example-option-img" aria-hidden [src]="doc.profilePicture" > 
+                            <span>{{doc.full_name}}</span> 
+                        </div> 
+                        </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field> -->
+                    
+                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-label>Doctor</mat-label>
+                        <mat-icon class="icon-size-5"svgIcon="heroicons_outline:user" matPrefix></mat-icon>
+                        <mat-select [formControlName]="'contacts'">
+                            <mat-option *ngFor="let doc of data" [value]="doc._id">
+                              <img      [src]="profilePicture" >  {{doc.full_name}}
+                              </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
                 <div class="inline-flex items-end w-full mt-1.5">
                     <mat-checkbox
                         [color]="'primary'"
@@ -138,6 +211,8 @@
                         </a>
                     </mat-checkbox>
                 </div>
+            
+              
 
                 <!-- Submit button -->
                 <button

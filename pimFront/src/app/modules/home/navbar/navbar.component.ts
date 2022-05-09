@@ -11,7 +11,12 @@ export class NavbarComponent implements OnInit {
 
   constructor(private globalService: GlobalService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+
+
+    
+  }
 
   signOut() {
     this.globalService.signOut();

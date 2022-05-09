@@ -53,4 +53,16 @@ export class ProjectService
             })
         );
     }
+
+getPatients(){
+    return this._httpClient.get(this.gs.uri+'/patient');
+
+
+}
+getPendingAppointments(){
+    return this._httpClient.get(`${this.gs.uri}/appointement/app/pending`);
+}
+getConfirmedApp(){
+    return this._httpClient.get(`${this.gs.uri}/appointement/app/confirmed`);
+}
 }

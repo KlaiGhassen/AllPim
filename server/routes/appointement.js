@@ -18,6 +18,22 @@ router.get("/", async(req, res, next) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.get("/app/pending", async (req, res)=>
+{
+    const app = await App.find({ state: "Pending" });
+
+    return res.json(app);
+
+
+})
+router.get("/app/confirmed", async (req, res)=>
+{
+    const app = await App.find({ state: "Confirmed" });
+
+    return res.json(app);
+
+
+})
 
 router.get("/byPatientId/:patientId", async(req, res, next) => {
     try {
@@ -186,27 +202,56 @@ router.delete("/:id", getApp, async(req, res) => {
 
 
 
+
+
 // update app
 
 router.patch("/:id", getApp, (req, res) => {
     //console.log(req.params, req.body)
     console.log("date");
+
     
-    
-    if (req.body.patientConfirm != null) {
+    if (req.body.patientConfirm == true && res.app.doctorConfirm == false ) {
         res.app.patientConfirm = req.body.patientConfirm;
+        res.app.calendarId = "1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc"
+        res.app.state = "Pending"
     }
-    if (req.body.doctorConfirm != null) {
+    if (res.app.patientConfirm == true && req.body.doctorConfirm == false ) {
         res.app.doctorConfirm = req.body.doctorConfirm;
+        res.app.calendarId = "1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc"
+        res.app.state = "Pending"
     }
+
+    if (req.body.patientConfirm == false && res.app.doctorConfirm == false ) {
+        res.app.patientConfirm = req.body.patientConfirm;
+        res.app.calendarId = "09887870-f85a-40eb-8171-1b13d7a7f529"
+        res.app.state = "Declined"
+    }
+
+    if (req.body.doctorConfirm == false && res.app.patientConfirm == false ) {
+        res.app.doctorConfirm = req.body.doctorConfirm;
+        res.app.calendarId = "09887870-f85a-40eb-8171-1b13d7a7f529"
+        res.app.state = "Declined"
+    }
+
+
+    if (res.app.patientConfirm == true && req.body.doctorConfirm == true ) {
+        res.app.doctorConfirm = req.body.doctorConfirm;
+        res.app.calendarId = "5dab5f7b-757a-4467-ace1-305fe07b11fe"
+        res.app.state = "Confirmed"
+    }
+    if (res.app.doctorConfirm == true && req.body.patientConfirm == true ) {
+        res.app.patientConfirm = req.body.patientConfirm;
+        res.app.calendarId = "5dab5f7b-757a-4467-ace1-305fe07b11fe"
+        res.app.state = "Confirmed"
+    }
+    
+    
     if (req.body.state != null) {
         res.app.state = req.body.state;
         
     }
-    if (req.body.calendarId != null) {
-        res.app.calendarId = req.body.calendarId;
-        
-    }
+
     if (req.body.date != null) {
         res.app.date = req.body.date;
         
@@ -220,6 +265,8 @@ router.patch("/:id", getApp, (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+
 
 
 

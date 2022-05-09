@@ -47,12 +47,12 @@ export class SignInClassicComponent implements OnInit {
      */
     ngOnInit(): void {
         if (this._activatedRoute.snapshot.params.token) {
-            if (this._activatedRoute.snapshot.params.token.length > 20) {
+            if (this._activatedRoute.snapshot.params.token.length > 15) {
                 this._authService.accessToken =
                     this._activatedRoute.snapshot.params.token;
+                    console.log(this._authService.accessToken)
                 this._authService.verification().subscribe((data) => {
                     console.log('hello', data);
-
                     const redirectURL =
                         this._activatedRoute.snapshot.queryParamMap.get(
                             'redirectURL'
