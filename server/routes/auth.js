@@ -101,16 +101,20 @@ router.patch("/ophto/:email", getUserEmail, (req, res) => {
 });
 router.patch("/verification", async (req, res) => {
   console.log("from verification");
+  console.log("token" ,req.body.accessToken)
 userdb.find({ _id: parseJwt(req.body.accessToken).id }).then((user) => {
   console.log(parseJwt(req.body.accessToken).id )
   let compte = user[0];
   if (compte) {
     console.log("Compte", compte);
     compte.verified = true; 
+
     try {
     compte.save().then((updatedophto) => {
+      const token = jwt.sign({updatedophto}, process.env.TOKEN_SECRET);
+
       console.log("Updatedophto", updatedophto);
-          res.json(updatedophto);
+          res.json({ accessToken: token, user: compte });
       });
   } catch (error) {
       res.status(400).json({ message: error.message });
@@ -178,32 +182,9 @@ router.post("/verified",(req, res) => {
 
 router.post("/socauth", async (req, res) => {
   console.log(req.body);
-  const ophto = new userdb({
-      email: req.body.email,
-      password: req.body.password,
-      full_name: req.body.full_name,
-      description: req.body.description,
-      social:req.body.social,
-      verified:req.body.verified,
-      profilePicture:req.body.image
-    });
-  try {
-      const compte = await ophto.save();
-      let payload = {
-        id: compte.id,
-        email: compte.email,
-      };
-      console.log(compte);
-      const token = jwt.sign({compte}, process.env.TOKEN_SECRET);
-
-      res.json({ accessToken: token, user: compte });
-    
-    } catch (err) {
-      console.log(err);
-      if (err.code === 11000) {
         userdb.find({ email: req.body.email}).then((user) => {
           let compte = user[0];
-          if (compte ) {
+          if (compte) {
             let payload = {
               id: compte.id,
               email: compte.email,
@@ -219,9 +200,7 @@ router.post("/socauth", async (req, res) => {
             });
           }
         });
-      }
 
-  }
 });
 
 
@@ -253,6 +232,7 @@ router.post("/sign-in", (req, res) => {
 });
 
 router.post("/refresh-access-token", (req, res) => {
+  console.log("Refresh")
   console.log(req.body);
   try { 
     console.log("chekc here ",parseJwt(req.body.accessToken).compte._id)

@@ -66,6 +66,22 @@ router.get("/role", async (req, res, next) => {
 });
 
 // get one ophto
+router.get("/prderctionList/:id", async (req, res) => {
+  let id = req.params.id;
+  let users = [];
+  result = [];
+  ophto = await Ophto.findById(id);
+  users = ophto.contacts;
+
+  for (let i = 0; i < users.length; i++) {
+    contact = await Ophto.findOne({ _id: users });
+    result.push(contact);
+  }
+
+  if (result.length > 0) {
+    res.json(result);
+  }
+});
 
 router.get("/:email", getOphto, (req, res) => {
   console.log(res.ophto);
@@ -95,7 +111,7 @@ router.post("/", async (req, res, next) => {
   console.log("hello", req.body);
   let ophto;
   if (req.body.contacts) {
-     ophto = new Ophto({
+    ophto = new Ophto({
       email: req.body.email,
       password: req.body.password,
       phone_number: req.body.phone_number,
@@ -103,28 +119,31 @@ router.post("/", async (req, res, next) => {
       description: req.body.description,
       role: req.body.role,
       contacts: [req.body.contacts],
+      social: req.body.social,
+      verified: req.body.verified,
     });
   } else {
-     ophto = new Ophto({
+    ophto = new Ophto({
       email: req.body.email,
       password: req.body.password,
       phone_number: req.body.phone_number,
       full_name: req.body.full_name,
       description: req.body.description,
       role: req.body.role,
+      social: req.body.social,
+      verified: req.body.verified,
     });
   }
 
   try {
     const newOphto = await ophto.save();
-    console.log(newOphto.role);
+    console.log("hello", newOphto.role);
     if (req.body.contacts) {
-  
-    let doc = await Ophto.findOneAndUpdate(
-      { _id: req.body.contacts },
-      { $push: { contacts: newOphto._id } }
-    );
-}
+      await Ophto.findOneAndUpdate(
+        { _id: req.body.contacts },
+        { $push: { contacts: newOphto._id } }
+      );
+    }
     res.status(201).json({ newOphto });
   } catch (err) {
     console.log(err);
