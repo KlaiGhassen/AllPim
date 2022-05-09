@@ -231,6 +231,36 @@
                 </button>
 
             </form>
+              <!-- Single sign-on buttons -->
+              <div class="flex items-center mt-8 space-x-4">
+                <button class="flex-auto"
+                (click)="signInWithFaceBook()"
+                type="button" mat-stroked-button>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'feather:facebook'"
+                    ></mat-icon>
+                </button>
+                <button
+                    (click)="signInWithGoogle()"
+                    class="flex-auto"
+                    type="button"
+                    mat-stroked-button
+                >
+                    <mat-icon
+                        class="icon-size-5"
+                        svgIcon="iconsmind:google"
+                    ></mat-icon>
+                </button>
+                <!-- <button
+                    class="flex-auto"
+                    type="button"
+                    mat-stroked-button>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'feather:github'"></mat-icon>
+                </button> -->
+            </div>
         </div>
     </div>
 </div>

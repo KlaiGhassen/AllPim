@@ -48,22 +48,39 @@ export class AuthUnlockSessionComponent implements OnInit
     ngOnInit(): void
     {
         // Get the user's name
-        this._userService.user$.subscribe((user) => {
-            this.name = user.full_name;
-            this._email = user.email;
-        });
+        if (this._activatedRoute.snapshot.params.token) {
+            if (this._activatedRoute.snapshot.params.token.length > 20) {
+                this._authService.verification(this._activatedRoute.snapshot.params.token).subscribe((data) => {
+                    console.log('hello', data);
+                    this.alert = {
+                        type   : 'success',
+                        message: 'email Verifed'
+                    };
+    
+                    // Show the alert
+                    this.showAlert = true;
 
-        // Create the form
-        this.unlockSessionForm = this._formBuilder.group({
-            name    : [
-                {
-                    value   : this.name,
-                    disabled: true
-                }
-            ],
-            password: ['', Validators.required]
-        });
+                    const redirectURL =
+                        this._activatedRoute.snapshot.queryParamMap.get(
+                            'redirectURL'
+                        ) || '/signed-in-redirect';
+
+                    // // Navigate to the redirect url
+                    this._router.navigateByUrl(redirectURL);
+                });
+            } else {
+                this.alert = {
+                    type   : 'error',
+                    message: 'email Not Verifed'
+                };
+
+                // Show the alert
+                this.showAlert = true;
+
+                this._router.navigateByUrl('/sign-in');
+            }
     }
+}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods

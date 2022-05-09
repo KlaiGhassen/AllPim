@@ -8,7 +8,7 @@ import { GlobalService } from 'app/global.service';
 
 @Injectable()
 export class AuthService {
-    private _authenticated: boolean = false;
+    public _authenticated: boolean = false;
 
     /**
      * Constructor
@@ -64,6 +64,8 @@ export class AuthService {
         );
     }
     socialLog(data: any) {
+
+
         return this._httpClient.post<any>(`${this.gs.uri}/auth/socauth`, data);
     }
 
@@ -167,9 +169,9 @@ export class AuthService {
         return of(true);
     }
 
-    verification() {
+    verification(token) {
         return this._httpClient.patch<any>(`${this.gs.uri}/auth/verification`, {
-            accessToken: this.accessToken,
+            accessToken: token,
         });
     }
 
@@ -185,13 +187,22 @@ export class AuthService {
      *
      * @param user
      */
-    signUp(data: any): Observable<any> {
+    signUp(data: any,socialLog: boolean ): Observable<any> {
+        if(socialLog){
+            return this._httpClient.post<any>(`${this.gs.uri}/ophto`, {
+                full_name: data.full_name,
+                email: data.email,
+                password: this.gs.hashPassword(data.password),
+                description: data.description,
+                phone_number: data.phoneNumber,
+                role:data.role,
+                contacts:data.contacts,
+                verified:true,
+                social:true,
+            });
 
-        if(data.role =="ophto"){
-       
 
-    
-        }
+        }else{
         return this._httpClient.post<any>(`${this.gs.uri}/ophto`, {
             full_name: data.full_name,
             email: data.email,
@@ -199,9 +210,11 @@ export class AuthService {
             description: data.description,
             phone_number: data.phoneNumber,
             role:data.role,
-            contacts:data.contacts
+            contacts:data.contacts,
+            verified:false,
+                social:false,
         });
-
+    }
 
 
     }

@@ -23,6 +23,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { CalendarEvent } from 'app/modules/calendar/calendar.types';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { UserService } from 'app/core/user/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'project',
@@ -46,7 +47,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     filesPredection: File[] = [];
     newEvent;
     profilePicture;
-patenientCount;
+    patenientCount;
+    predectionModule = false;
     notification: Notification = {
         id: null,
         _id: null,
@@ -62,6 +64,7 @@ patenientCount;
         patientId: null,
     };
     brag;
+    signUpForm: FormGroup;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -69,6 +72,7 @@ patenientCount;
      * Constructor
      */
     constructor(
+        private _formBuilder: FormBuilder,
         private _Us: UserService,
         private sanitizer: DomSanitizer,
         private gs: GlobalService,
@@ -150,7 +154,7 @@ patenientCount;
     /**
      * On init
      */
-     donMedia() {
+    donMedia() {
         this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
             // var myFile = this.blobToFile(blob, 'my-image1.png');
             const objectURL = URL.createObjectURL(blob);
@@ -160,34 +164,46 @@ patenientCount;
             // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
         });
     }
-    pendingCount=0
-    confirmedCount=0
+    pendingCount = 0;
+    confirmedCount = 0;
+    seriess: any;
+    labels: any;
+    series2: any;
     ngOnInit(): void {
-       this._projectService.getPatients().subscribe((res:any[]) => {
-this.patenientCount=res.length;
-console.log("patients ", res)
+        this.signUpForm = this._formBuilder.group({
+            contacts: [''],
+        });
+        this.seriess = [
+            {
+                name: 'bye',
+                type: 'line',
+                data: [37, 32, 39, 27, 18, 24, 20],
+            },
+            {
+                name: 'hello',
+                type: 'column',
+                data: [37, 32, 39, 27, 18, 24, 20],
+            },
+        ];
+        this.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        this.series2 = [37, 32, 39, 27, 18, 24, 20];
+        this._projectService.getPatients().subscribe((res: any[]) => {
+            this.patenientCount = res.length;
+            console.log('patients ', res);
+        });
 
+        this._projectService
+            .getPendingAppointments()
+            .subscribe((res: any[]) => {
+                this.pendingCount = res.length;
 
+                console.log('appointment', res);
+            });
+        this._projectService.getConfirmedApp().subscribe((res: any[]) => {
+            this.confirmedCount = res.length;
+            console.log('appointment', res);
+        });
 
-       })
-
-       this._projectService.getPendingAppointments().subscribe((res:any[]) => {
-        this.pendingCount=res.length
-        
-        console.log("appointment",res)
-
-        
-               })
-               this._projectService.getConfirmedApp().subscribe((res:any[]) => {
-                this.confirmedCount=res.length
-                console.log("appointment",res)
-                
-                
-                       })
-
-
-
-       
         this.user = this.gs.getUser();
         this.donMedia();
 
@@ -215,7 +231,7 @@ console.log("patients ", res)
                 });
                 // Store the data
                 // Prepare the chart data
-                // this._prepareChartData();
+                this._prepareChartData();
             });
 
         // Attach SVG fill fixer to all ApexCharts
@@ -237,12 +253,26 @@ console.log("patients ", res)
     uploadPredection = false;
     upload() {
         this.loading = true;
-
         console.log('hello');
         this.gs.postFileToPy(this.filesPredection[0]).subscribe((data: any) => {
             console.log(data);
+let datachart=  [37, 32, 39, 27, 18, 24, 20]
+            this.seriess = [
+                {
+                    name: 'predection result',
+                    type: 'line',
+                    data: datachart,
+                },
+                {
+                    name: 'predection result',
+                    type: 'column',
+                    data:datachart,
+                },
+            ];
+            this.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            this.series2 = [37, 32, 39, 27, 18, 24, 20];
             this.loading = false;
-            this.disease = data.disease;
+            this.predectionModule = true;
         });
     }
 
@@ -306,306 +336,141 @@ console.log("patients ", res)
      *
      * @private
      */
-    // private _prepareChartData(): void
-    // {
-    //     // Github issues
-    //     this.chartGithubIssues = {
-    //         chart      : {
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'line',
-    //             toolbar   : {
-    //                 show: false
-    //             },
-    //             zoom      : {
-    //                 enabled: false
-    //             }
-    //         },
-    //         colors     : ['#64748B', '#94A3B8'],
-    //         dataLabels : {
-    //             enabled        : true,
-    //             enabledOnSeries: [0],
-    //             background     : {
-    //                 borderWidth: 0
-    //             }
-    //         },
-    //         grid       : {
-    //             borderColor: 'var(--fuse-border)'
-    //         },
-    //         labels     : this.data.githubIssues.labels,
-    //         legend     : {
-    //             show: false
-    //         },
-    //         plotOptions: {
-    //             bar: {
-    //                 columnWidth: '50%'
-    //             }
-    //         },
-    //         series     : this.data.githubIssues.series,
-    //         states     : {
-    //             hover: {
-    //                 filter: {
-    //                     type : 'darken',
-    //                     value: 0.75
-    //                 }
-    //             }
-    //         },
-    //         stroke     : {
-    //             width: [3, 0]
-    //         },
-    //         tooltip    : {
-    //             followCursor: true,
-    //             theme       : 'dark'
-    //         },
-    //         xaxis      : {
-    //             axisBorder: {
-    //                 show: false
-    //             },
-    //             axisTicks : {
-    //                 color: 'var(--fuse-border)'
-    //             },
-    //             labels    : {
-    //                 style: {
-    //                     colors: 'var(--fuse-text-secondary)'
-    //                 }
-    //             },
-    //             tooltip   : {
-    //                 enabled: false
-    //             }
-    //         },
-    //         yaxis      : {
-    //             labels: {
-    //                 offsetX: -16,
-    //                 style  : {
-    //                     colors: 'var(--fuse-text-secondary)'
-    //                 }
-    //             }
-    //         }
-    //     };
+    private _prepareChartData(): void {
+        this.chartGithubIssues = {
+            chart: {
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                toolbar: {
+                    show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            colors: ['#64748B', '#94A3B8'],
+            dataLabels: {
+                enabled: true,
+                enabledOnSeries: [0],
+                background: {
+                    borderWidth: 0,
+                },
+            },
+            grid: {
+                borderColor: 'var(--fuse-border)',
+            },
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            legend: {
+                show: false,
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                },
+            },
+            series: this.seriess,
+            states: {
+                hover: {
+                    filter: {
+                        type: 'darken',
+                        value: 0.75,
+                    },
+                },
+            },
+            stroke: {
+                width: [3, 0],
+            },
+            tooltip: {
+                followCursor: true,
+                theme: 'dark',
+            },
+            xaxis: {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    color: 'var(--fuse-border)',
+                },
+                labels: {
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+                tooltip: {
+                    enabled: false,
+                },
+            },
+            yaxis: {
+                labels: {
+                    offsetX: -16,
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+            },
+        };
 
-    //     // Task distribution
-    //     this.chartTaskDistribution = {
-    //         chart      : {
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'polarArea',
-    //             toolbar   : {
-    //                 show: false
-    //             },
-    //             zoom      : {
-    //                 enabled: false
-    //             }
-    //         },
-    //         labels     : this.data.taskDistribution.labels,
-    //         legend     : {
-    //             position: 'bottom'
-    //         },
-    //         plotOptions: {
-    //             polarArea: {
-    //                 spokes: {
-    //                     connectorColors: 'var(--fuse-border)'
-    //                 },
-    //                 rings : {
-    //                     strokeColor: 'var(--fuse-border)'
-    //                 }
-    //             }
-    //         },
-    //         series     : this.data.taskDistribution.series,
-    //         states     : {
-    //             hover: {
-    //                 filter: {
-    //                     type : 'darken',
-    //                     value: 0.75
-    //                 }
-    //             }
-    //         },
-    //         stroke     : {
-    //             width: 2
-    //         },
-    //         theme      : {
-    //             monochrome: {
-    //                 enabled       : true,
-    //                 color         : '#93C5FD',
-    //                 shadeIntensity: 0.75,
-    //                 shadeTo       : 'dark'
-    //             }
-    //         },
-    //         tooltip    : {
-    //             followCursor: true,
-    //             theme       : 'dark'
-    //         },
-    //         yaxis      : {
-    //             labels: {
-    //                 style: {
-    //                     colors: 'var(--fuse-text-secondary)'
-    //                 }
-    //             }
-    //         }
-    //     };
-
-    //     // Budget distribution
-    //     this.chartBudgetDistribution = {
-    //         chart      : {
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'radar',
-    //             sparkline : {
-    //                 enabled: true
-    //             }
-    //         },
-    //         colors     : ['#818CF8'],
-    //         dataLabels : {
-    //             enabled   : true,
-    //             formatter : (val: number): string | number => `${val}%`,
-    //             textAnchor: 'start',
-    //             style     : {
-    //                 fontSize  : '13px',
-    //                 fontWeight: 500
-    //             },
-    //             background: {
-    //                 borderWidth: 0,
-    //                 padding    : 4
-    //             },
-    //             offsetY   : -15
-    //         },
-    //         markers    : {
-    //             strokeColors: '#818CF8',
-    //             strokeWidth : 4
-    //         },
-    //         plotOptions: {
-    //             radar: {
-    //                 polygons: {
-    //                     strokeColors   : 'var(--fuse-border)',
-    //                     connectorColors: 'var(--fuse-border)'
-    //                 }
-    //             }
-    //         },
-    //         series     : this.data.budgetDistribution.series,
-    //         stroke     : {
-    //             width: 2
-    //         },
-    //         tooltip    : {
-    //             theme: 'dark',
-    //             y    : {
-    //                 formatter: (val: number): string => `${val}%`
-    //             }
-    //         },
-    //         xaxis      : {
-    //             labels    : {
-    //                 show : true,
-    //                 style: {
-    //                     fontSize  : '12px',
-    //                     fontWeight: '500'
-    //                 }
-    //             },
-    //             categories: this.data.budgetDistribution.categories
-    //         },
-    //         yaxis      : {
-    //             max       : (max: number): number => parseInt((max + 10).toFixed(0), 10),
-    //             tickAmount: 7
-    //         }
-    //     };
-
-    //     // Weekly expenses
-    //     this.chartWeeklyExpenses = {
-    //         chart  : {
-    //             animations: {
-    //                 enabled: false
-    //             },
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'line',
-    //             sparkline : {
-    //                 enabled: true
-    //             }
-    //         },
-    //         colors : ['#22D3EE'],
-    //         series : this.data.weeklyExpenses.series,
-    //         stroke : {
-    //             curve: 'smooth'
-    //         },
-    //         tooltip: {
-    //             theme: 'dark'
-    //         },
-    //         xaxis  : {
-    //             type      : 'category',
-    //             categories: this.data.weeklyExpenses.labels
-    //         },
-    //         yaxis  : {
-    //             labels: {
-    //                 formatter: (val): string => `$${val}`
-    //             }
-    //         }
-    //     };
-
-    //     // Monthly expenses
-    //     this.chartMonthlyExpenses = {
-    //         chart  : {
-    //             animations: {
-    //                 enabled: false
-    //             },
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'line',
-    //             sparkline : {
-    //                 enabled: true
-    //             }
-    //         },
-    //         colors : ['#4ADE80'],
-    //         series : this.data.monthlyExpenses.series,
-    //         stroke : {
-    //             curve: 'smooth'
-    //         },
-    //         tooltip: {
-    //             theme: 'dark'
-    //         },
-    //         xaxis  : {
-    //             type      : 'category',
-    //             categories: this.data.monthlyExpenses.labels
-    //         },
-    //         yaxis  : {
-    //             labels: {
-    //                 formatter: (val): string => `$${val}`
-    //             }
-    //         }
-    //     };
-
-    //     // Yearly expenses
-    //     this.chartYearlyExpenses = {
-    //         chart  : {
-    //             animations: {
-    //                 enabled: false
-    //             },
-    //             fontFamily: 'inherit',
-    //             foreColor : 'inherit',
-    //             height    : '100%',
-    //             type      : 'line',
-    //             sparkline : {
-    //                 enabled: true
-    //             }
-    //         },
-    //         colors : ['#FB7185'],
-    //         series : this.data.yearlyExpenses.series,
-    //         stroke : {
-    //             curve: 'smooth'
-    //         },
-    //         tooltip: {
-    //             theme: 'dark'
-    //         },
-    //         xaxis  : {
-    //             type      : 'category',
-    //             categories: this.data.yearlyExpenses.labels
-    //         },
-    //         yaxis  : {
-    //             labels: {
-    //                 formatter: (val): string => `$${val}`
-    //             }
-    //         }
-    //     };
-    // }
+        // Task distribution
+        this.chartTaskDistribution = {
+            chart: {
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'polarArea',
+                toolbar: {
+                    show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            labels: this.labels,
+            legend: {
+                position: 'bottom',
+            },
+            plotOptions: {
+                polarArea: {
+                    spokes: {
+                        connectorColors: 'var(--fuse-border)',
+                    },
+                    rings: {
+                        strokeColor: 'var(--fuse-border)',
+                    },
+                },
+            },
+            series: this.series2,
+            states: {
+                hover: {
+                    filter: {
+                        type: 'darken',
+                        value: 0.75,
+                    },
+                },
+            },
+            stroke: {
+                width: 2,
+            },
+            theme: {
+                monochrome: {
+                    enabled: true,
+                    color: '#93C5FD',
+                    shadeIntensity: 0.75,
+                    shadeTo: 'dark',
+                },
+            },
+            tooltip: {
+                followCursor: true,
+                theme: 'dark',
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+            },
+        };
+    }
 }

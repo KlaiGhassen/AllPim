@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
+import {
+    FacebookLoginProvider,
+    GoogleLoginProvider,
+    SocialAuthService,
+} from 'angularx-social-login';
 import { AuthService } from 'app/core/auth/auth.service';
 import { UserService } from 'app/core/user/user.service';
 import { ProjectService } from 'app/modules/admin/example/project/project.service';
@@ -30,11 +35,11 @@ export class SignUpClassicComponent implements OnInit {
 
     signUpForm: FormGroup;
     showAlert: boolean = false;
-    checkingOphto:boolean = false;
+    checkingOphto: boolean = false;
     /**
      * Constructor
      */
-     onSelect(event: any) {
+    onSelect(event: any) {
         console.log(event);
         this.files.push(...event.addedFiles);
     }
@@ -45,14 +50,14 @@ export class SignUpClassicComponent implements OnInit {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
+        private _activatedRoute: ActivatedRoute,
         private _projectService: ProjectService,
         private _router: Router,
         private _authService: AuthService,
         private _formBuilder: FormBuilder,
         private _Us: UserService,
         private sanitizer: DomSanitizer,
-
-
+        private authService: SocialAuthService
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -64,34 +69,32 @@ export class SignUpClassicComponent implements OnInit {
      */
 
     ngOnInit(): void {
-        this._projectService.getData()
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((data) => {
-            console.log(data);
-            data.forEach((elm) => {
-                console.log(elm.profilePicture);
-                this._projectService
-                    .downloadMedia(elm.profilePicture)
-                    .subscribe((blob) => {
-                        // var myFile = this.blobToFile(blob, 'my-image1.png');
-                        const objectURL = URL.createObjectURL(blob);
-                        this.picture =
-                            this.sanitizer.bypassSecurityTrustUrl(
-                                objectURL
-                            );
-                        // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
-                        elm.profilePicture = this.picture;
-                        console.log(elm.profilePicture);
-                        this.data.push(elm);
-                    });
+        this._projectService
+            .getData()
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((data) => {
+                console.log(data);
+                data.forEach((elm) => {
+                    console.log(elm.profilePicture);
+                    this._projectService
+                        .downloadMedia(elm.profilePicture)
+                        .subscribe((blob) => {
+                            // var myFile = this.blobToFile(blob, 'my-image1.png');
+                            const objectURL = URL.createObjectURL(blob);
+                            this.picture =
+                                this.sanitizer.bypassSecurityTrustUrl(
+                                    objectURL
+                                );
+                            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+                            elm.profilePicture = this.picture;
+                            console.log(elm.profilePicture);
+                            this.data.push(elm);
+                        });
+                });
+                // Store the data
+                // Prepare the chart data
+                // this._prepareChartData();
             });
-            // Store the data
-            // Prepare the chart data
-            // this._prepareChartData();
-        });
-
-
-
 
         // Create the form
         this.signUpForm = this._formBuilder.group({
@@ -101,14 +104,33 @@ export class SignUpClassicComponent implements OnInit {
             phoneNumber: ['', Validators.required],
             agreements: ['', Validators.requiredTrue],
             description: [''],
-            role:['simple', Validators.required],
-            contacts:[""],
+            role: ['simple', Validators.required],
+            contacts: [''],
         });
-      
-        
+    }
+    dataform;
+    signInWithGoogle() {
+        this.socialLog=true;
 
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        this.authService.authState.subscribe((user) => {
+            this.signUpForm
+                .get('full_name')
+                .setValue(user.firstName + ' ' + user.lastName);
+            this.signUpForm.get('email').setValue(user.email);
+        });
+    }
+    socialLog=false;
+    signInWithFaceBook() {
+        this.socialLog=true;
 
-
+        this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+        this.authService.authState.subscribe((user) => {
+            this.signUpForm
+                .get('full_name')
+                .setValue(user.firstName + ' ' + user.lastName);
+            this.signUpForm.get('email').setValue(user.email);
+        });
     }
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
@@ -116,35 +138,30 @@ export class SignUpClassicComponent implements OnInit {
         this._unsubscribeAll.complete();
     }
 
-    selectChanged($event){
-        console.log(this.signUpForm.value)
-    this.checkingOphto = !this.checkingOphto;
+    selectChanged($event) {
+        console.log(this.signUpForm.value);
+        this.checkingOphto = !this.checkingOphto;
     }
 
     load = true;
 
-
-
     savelicense() {
-        
         this._Us.updateLicensefromSignup(this.files[0]).subscribe((data) => {
             console.log(data);
-            if(data == true){
+            if (data == true) {
                 this.load = false;
                 this.alert = {
                     type: 'success',
                     message: 'License Accepted',
                 };
                 this.showAlert = true;
-            }
-            else {
+            } else {
                 this.alert = {
                     type: 'error',
                     message: 'Rejected License',
                 };
                 this.showAlert = true;
             }
-            
         });
     }
 
@@ -156,11 +173,12 @@ export class SignUpClassicComponent implements OnInit {
      * Sign in
      */
     signUp(): void {
-        if (this.signUpForm.valid)
-            this._authService.signUp(this.signUpForm.value).subscribe((res) => {
-                console.log(res);
 
-                if (!res.email && res.newOphto) {
+
+        if (this.signUpForm.valid)
+            this._authService.signUp(this.signUpForm.value,this.socialLog).subscribe((res) => {
+                console.log(res);
+                if (!res.email && res.newOphto && res.verified==false ) {
                     this._router.navigateByUrl(
                         '/confirmation-required/' + res.newOphto.email
                     );

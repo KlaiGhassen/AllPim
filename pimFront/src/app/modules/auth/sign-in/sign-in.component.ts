@@ -46,25 +46,7 @@ export class SignInClassicComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
-        if (this._activatedRoute.snapshot.params.token) {
-            if (this._activatedRoute.snapshot.params.token.length > 15) {
-                this._authService.accessToken =
-                    this._activatedRoute.snapshot.params.token;
-                    console.log(this._authService.accessToken)
-                this._authService.verification().subscribe((data) => {
-                    console.log('hello', data);
-                    const redirectURL =
-                        this._activatedRoute.snapshot.queryParamMap.get(
-                            'redirectURL'
-                        ) || '/signed-in-redirect';
-
-                    // // Navigate to the redirect url
-                    this._router.navigateByUrl(redirectURL);
-                });
-            } else {
-                this._router.navigateByUrl('/sign-in');
-            }
-        }
+       
 
         // Create the form
         this.signInForm = this._formBuilder.group({
@@ -82,7 +64,7 @@ export class SignInClassicComponent implements OnInit {
             email:user.email,
             image:user.photoUrl,
             social:true,
-            verified:true,
+            verified:true,            
           }
           this._authService.socialLog(data).subscribe((res)=>{
             if (res.accessToken && res.user) {
@@ -97,9 +79,15 @@ export class SignInClassicComponent implements OnInit {
           this._router.navigateByUrl(redirectURL);
 
             }
+else{
+    this._router.navigateByUrl("sign-up");
+
+
+}
+
            })
         });
-
+     
 
 
     }
@@ -111,7 +99,7 @@ export class SignInClassicComponent implements OnInit {
               email:user.email,
               image:user.photoUrl,
               social:true,
-              verified:true,
+              verified:true,            
             }
             this._authService.socialLog(data).subscribe((res)=>{
               if (res.accessToken && res.user) {
@@ -121,14 +109,14 @@ export class SignInClassicComponent implements OnInit {
                 this._activatedRoute.snapshot.queryParamMap.get(
                     'redirectURL'
                 ) || '/signed-in-redirect';
-
+  
             // // Navigate to the redirect url
             this._router.navigateByUrl(redirectURL);
-
+  
               }
              })
           });
-
+       
     }
 
     // -----------------------------------------------------------------------------------------------------

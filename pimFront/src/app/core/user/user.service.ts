@@ -50,7 +50,10 @@ export class UserService
      * Get the current logged in user data
      */
     get(): Observable<User>
-    { let _user = this.gs.getUser();
+    { 
+        console.log(this.gs.getUser());
+        let _user = this.gs.getUser();
+
         return this._httpClient.get<User>(this.gs.uri+'/auth/current/'+_user._id).pipe(
             tap((user) => {
                 this._user.next(user);
