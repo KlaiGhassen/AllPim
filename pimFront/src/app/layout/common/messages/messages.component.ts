@@ -50,7 +50,7 @@ export class MessagesComponent
     ) {}
 
     ngDoCheck(): void {
-        console.log(this.contacts);
+        //console.log(this.contacts);
     }
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks

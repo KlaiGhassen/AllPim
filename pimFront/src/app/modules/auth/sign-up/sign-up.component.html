@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="flex flex-col flex-auto items-center sm:justify-center min-w-0">
     <div class="w-full sm:w-auto py-8 px-4 sm:p-12 sm:rounded-2xl sm:shadow sm:bg-card">
         <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
@@ -234,3 +235,271 @@
         </div>
     </div>
 </div>
+=======
+<div class="flex flex-col flex-auto items-center sm:justify-center min-w-0">
+    <div class="w-full sm:w-auto py-8 px-4 sm:p-12 sm:rounded-2xl sm:shadow sm:bg-card">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+            <!-- Logo -->
+            <div class="w-12">
+                <img src="assets/images/logo/logo.png">
+            </div>
+
+            <!-- Title -->
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign up</div>
+            <div class="flex items-baseline mt-0.5 font-medium">
+                <div>Already have an account?</div>
+                <a
+                    class="ml-1 text-primary-500 hover:underline"
+                    [routerLink]="['/sign-in']">Sign in
+                </a>
+            </div>
+
+            <!-- Alert -->
+            <fuse-alert
+                class="mt-8 -mb-4"
+                *ngIf="showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </fuse-alert>
+
+            <!-- Sign Up form -->
+            <form
+                class="mt-8"
+                [formGroup]="signUpForm">
+
+                <!-- Name field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Full name</mat-label>
+                    <input
+                        id="name"
+                        matInput
+                        [formControlName]="'full_name'">
+                    <mat-error *ngIf="signUpForm.get('full_name').hasError('required')">
+                        Full name is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Email address</mat-label>
+                    <input
+                        id="email"
+                        matInput
+                        [formControlName]="'email'">
+                    <mat-error *ngIf="signUpForm.get('email').hasError('required')">
+                        Email address is required
+                    </mat-error>
+                    <mat-error *ngIf="signUpForm.get('email').hasError('email')">
+                        Please enter a valid email address
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input
+                        id="password"
+                        matInput
+                        type="password"
+                        [formControlName]="'password'"
+                        #passwordField>
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                    </button>
+                    <mat-error>
+                        Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- phoneNumber field -->
+                <mat-form-field class="w-full">
+                    <mat-label>phoneNumber</mat-label>
+                    <input
+                        id="phoneNumber-confirm"
+                        matInput
+                        type="tel"
+                        [formControlName]="'phoneNumber'">
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('required')">
+                            Email address is required
+                        </mat-error>
+                        <mat-error *ngIf="signUpForm.get('phoneNumber').hasError('tel')">
+                            Please enter a valid email address
+                        </mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Description</mat-label>
+                    <input
+                        id="Description"    
+                        matInput
+                        type="textarea"
+                        [formControlName]="'description'">
+                </mat-form-field>
+              
+
+
+                <!-- ToS and PP -->
+                <div class="sm:col-span-2 ">
+                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-label>Role</mat-label>
+                        <mat-icon class="icon-size-5"svgIcon="heroicons_outline:user" matPrefix></mat-icon>
+                        <mat-select (selectionChange)="selectChanged($event)" [formControlName]="'role'">
+                            <mat-option value="simple" >simple user </mat-option>
+                            <mat-option value="ophto">ophtalmologue</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+                <div id="skibido" *ngIf="checkingOphto && load">
+                    <div >
+                        <br />
+                        <div
+                        class="w-full"
+                            ngx-dropzone
+                            accept="image/gif,image/jpeg,image/pjpeg,image/png,image/x-png"
+                            (change)="onSelect($event)"
+                            [multiple]="false"
+                        >
+                            <ngx-dropzone-label>
+                                <button class="uploadButton" type="button">
+                                  Update Medical License
+                                </button>
+                            </ngx-dropzone-label>
+                            <ngx-dropzone-image-preview
+                                class="w-full"
+                                ngProjectAs="ngx-dropzone-preview"
+                                *ngFor="let f of files"
+                                [file]="f"
+                                [removable]="true"
+                                (removed)="onRemove(f)"
+                                (change)="onSelectedFile($event)"
+                            >
+                            </ngx-dropzone-image-preview>
+                        </div>
+
+                        <button
+                            (click)="savelicense()"
+                            type="submit"
+                            class="mt-4 align-center"
+                            mat-flat-button
+                            type="button"
+                            [color]="'primary'"
+                        >
+                          save License
+                        </button> 
+                      
+                     
+
+
+                    </div>
+                </div>
+                <div class="sm:col-span-2 mt-6"  *ngIf="checkingOphto == false" >
+                    <!-- <mat-form-field class="fuse-mat-no-subscript w-full" appearance="fill">
+                        <mat-label>Doctor</mat-label>
+                        <input matInput
+                               aria-label="Doctor"
+                               [matAutocomplete]="auto"
+                               [formControlName]="'contacts'">
+                        <mat-autocomplete #auto="matAutocomplete">
+                          <mat-option  *ngFor="let doc of data "  [value]="doc._id">
+                           
+                           <div class="">
+                            <img class="example-option-img" aria-hidden [src]="doc.profilePicture" > 
+                            <span>{{doc.full_name}}</span> 
+                        </div> 
+                        </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field> -->
+                    
+                    <mat-form-field class="fuse-mat-no-subscript w-full">
+                        <mat-label>Doctor</mat-label>
+                        <mat-icon class="icon-size-5"svgIcon="heroicons_outline:user" matPrefix></mat-icon>
+                        <mat-select [formControlName]="'contacts'">
+                            <mat-option *ngFor="let doc of data" [value]="doc._id">
+                              <img      [src]="profilePicture" >  {{doc.full_name}}
+                              </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="inline-flex items-end w-full mt-1.5">
+                    <mat-checkbox
+                        [color]="'primary'"
+                        [formControlName]="'agreements'">
+                        <span>I agree to the</span>
+                        <a
+                            class="ml-1 text-primary-500 hover:underline"
+                            [routerLink]="['./']">Terms of Service
+                        </a>
+                        <span>and</span>
+                        <a
+                            class="ml-1 text-primary-500 hover:underline"
+                            [routerLink]="['./']">Privacy Policy
+                        </a>
+                    </mat-checkbox>
+                </div>
+            
+              
+
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full mt-6"
+                    mat-flat-button
+                    [color]="'primary'"
+                    [disabled]="!signUpForm.valid"
+                    (click)="signUp()">
+                    <span *ngIf="!signUpForm.disabled">
+                        Create your account
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="signUpForm.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
+                </button>
+
+            </form>
+              <!-- Single sign-on buttons -->
+              <div class="flex items-center mt-8 space-x-4">
+                <button class="flex-auto"
+                (click)="signInWithFaceBook()"
+                type="button" mat-stroked-button>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'feather:facebook'"
+                    ></mat-icon>
+                </button>
+                <button
+                    (click)="signInWithGoogle()"
+                    class="flex-auto"
+                    type="button"
+                    mat-stroked-button
+                >
+                    <mat-icon
+                        class="icon-size-5"
+                        svgIcon="iconsmind:google"
+                    ></mat-icon>
+                </button>
+                <!-- <button
+                    class="flex-auto"
+                    type="button"
+                    mat-stroked-button>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'feather:github'"></mat-icon>
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+>>>>>>> 8f9425cafef331c5466af9575b2044db9d07d055

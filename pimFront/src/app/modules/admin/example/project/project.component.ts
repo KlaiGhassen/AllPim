@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
     ChangeDetectionStrategy,
     Component,
@@ -609,3 +610,481 @@ console.log("patients ", res)
     //     };
     // }
 }
+=======
+import {
+    ChangeDetectionStrategy,
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewEncapsulation,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ApexOptions } from 'ng-apexcharts';
+import { ProjectService } from './project.service';
+import { GlobalService } from 'app/global.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { DialogAppointementComponent } from '../../dialog-appointement/dialog-appointement.component';
+import { CalendarService } from 'app/modules/calendar/calendar.service';
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { CalendarEvent } from 'app/modules/calendar/calendar.types';
+import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { UserService } from 'app/core/user/user.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
+@Component({
+    selector: 'project',
+    templateUrl: './project.component.html',
+    styleUrls: ['./project.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+
+    changeDetection: ChangeDetectionStrategy.Default,
+})
+export class ProjectComponent implements OnInit, OnDestroy {
+    chartGithubIssues: ApexOptions = {};
+    chartTaskDistribution: ApexOptions = {};
+    chartBudgetDistribution: ApexOptions = {};
+    chartWeeklyExpenses: ApexOptions = {};
+    chartMonthlyExpenses: ApexOptions = {};
+    chartYearlyExpenses: ApexOptions = {};
+    data: any = [];
+    picture;
+    user;
+    selectedProject: string = 'ACME Corp. Backend App';
+    filesPredection: File[] = [];
+    newEvent;
+    profilePicture;
+    patenientCount;
+    predectionModule = false;
+    notification: Notification = {
+        id: null,
+        _id: null,
+        icon: null,
+        image: null,
+        title: null,
+        description: null,
+        time: '',
+        link: null,
+        useRouter: null,
+        read: false,
+        docId: null,
+        patientId: null,
+    };
+    brag;
+    signUpForm: FormGroup;
+
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    /**
+     * Constructor
+     */
+    constructor(
+        private _formBuilder: FormBuilder,
+        private _Us: UserService,
+        private sanitizer: DomSanitizer,
+        private gs: GlobalService,
+        private _projectService: ProjectService,
+        private _router: Router,
+        public dialog: MatDialog,
+        private _calendarService: CalendarService,
+        private _notifservice: NotificationsService
+    ) {}
+    openDialog(docId, place, dd): void {
+        const dialogRef = this.dialog.open(DialogAppointementComponent, {
+            width: '250px',
+
+            data: { docId: docId, place: place },
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log('The dialog was closed');
+            // this.animal = result;
+        });
+    }
+
+    /**
+     * Add event
+     */
+    addEvent(docId: string, place: string) {
+        var now = new Date().getTime();
+        // Get the clone of the event form value
+        let newEvent = new CalendarEvent(
+            '123',
+            '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
+            this.gs.getUser()._id,
+            this.gs.getUser().full_name + now,
+            docId,
+            true,
+            false,
+            'Pending',
+            this.brag,
+            place
+        );
+
+        // Add the event
+        this._calendarService.addEvent(newEvent).subscribe(() => {
+            this.notification.description = `${
+                this.gs.getUser().full_name
+            } have submitted an appointement`;
+            this.notification.icon = 'heroicons_solid:star';
+            this.notification.title = 'new Appointement';
+            this.notification.time = Date();
+            this.notification.read = false;
+            //this.notification.docId = this.gs.getUser()._id;
+            this.notification.docId = docId;
+            this.notification.patientId = this.gs.getUser()._id;
+            this.notification.useRouter = true;
+            this.notification.link = '/calendar';
+
+            this._notifservice.create(this.notification).subscribe((res) => {
+                console.log(res);
+                //this.notification_component.ngOnInit();
+            });
+            //this.ngOnInit();
+        });
+    }
+    // ------------------------------
+
+    onSelectPredection(event: any) {
+        console.log(event);
+        this.filesPredection.push(...event.addedFiles);
+    }
+    onRemovePredection(event: any) {
+        console.log(event);
+        this.filesPredection.splice(this.filesPredection.indexOf(event), 1);
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * On init
+     */
+    donMedia() {
+        this._Us.downloadMedia(this.user.profilePicture).subscribe((blob) => {
+            // var myFile = this.blobToFile(blob, 'my-image1.png');
+            const objectURL = URL.createObjectURL(blob);
+            this.profilePicture =
+                this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+        });
+    }
+    pendingCount = 0;
+    confirmedCount = 0;
+    seriess: any;
+    labels: any;
+    series2: any;
+    ngOnInit(): void {
+        this.signUpForm = this._formBuilder.group({
+            contacts: [''],
+        });
+        this.seriess = [
+            {
+                name: 'bye',
+                type: 'line',
+                data: [37, 32, 39, 27, 18, 24, 20],
+            },
+            {
+                name: 'hello',
+                type: 'column',
+                data: [37, 32, 39, 27, 18, 24, 20],
+            },
+        ];
+        this.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        this.series2 = [37, 32, 39, 27, 18, 24, 20];
+        this._projectService.getPatients().subscribe((res: any[]) => {
+            this.patenientCount = res.length;
+            console.log('patients ', res);
+        });
+
+        this._projectService
+            .getPendingAppointments()
+            .subscribe((res: any[]) => {
+                this.pendingCount = res.length;
+
+                console.log('appointment', res);
+            });
+        this._projectService.getConfirmedApp().subscribe((res: any[]) => {
+            this.confirmedCount = res.length;
+            console.log('appointment', res);
+        });
+
+        this.user = this.gs.getUser();
+        this.donMedia();
+
+        // Get the data
+        this._projectService.data$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((data) => {
+                console.log(data);
+                data.forEach((elm) => {
+                    console.log(elm.profilePicture);
+                    this._projectService
+                        .downloadMedia(elm.profilePicture)
+                        .subscribe((blob) => {
+                            // var myFile = this.blobToFile(blob, 'my-image1.png');
+                            const objectURL = URL.createObjectURL(blob);
+                            this.picture =
+                                this.sanitizer.bypassSecurityTrustUrl(
+                                    objectURL
+                                );
+                            // this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+                            elm.profilePicture = this.picture;
+                            console.log(elm.profilePicture);
+                            this.data.push(elm);
+                        });
+                });
+                // Store the data
+                // Prepare the chart data
+                this._prepareChartData();
+            });
+
+        // Attach SVG fill fixer to all ApexCharts
+        // window['Apex'] = {
+        //     chart: {
+        //         events: {
+        //             mounted: (chart: any, options?: any): void => {
+        //                 this._fixSvgFill(chart.el);
+        //             },
+        //             updated: (chart: any, options?: any): void => {
+        //                 this._fixSvgFill(chart.el);
+        //             },
+        //         },
+        //     },
+        // };
+    }
+    disease;
+    loading = false;
+    uploadPredection = false;
+    upload() {
+        this.loading = true;
+        console.log('hello');
+        this.gs.postFileToPy(this.filesPredection[0]).subscribe((data: any) => {
+            console.log(data);
+let datachart=  [37, 32, 39, 27, 18, 24, 20]
+            this.seriess = [
+                {
+                    name: 'predection result',
+                    type: 'line',
+                    data: datachart,
+                },
+                {
+                    name: 'predection result',
+                    type: 'column',
+                    data:datachart,
+                },
+            ];
+            this.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            this.series2 = [37, 32, 39, 27, 18, 24, 20];
+            this.loading = false;
+            this.predectionModule = true;
+        });
+    }
+
+    /**
+     * On destroy
+     */
+    ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Track by function for ngFor loops
+     *
+     * @param index
+     * @param item
+     */
+    trackByFn(index: number, item: any): any {
+        return item.id || index;
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Private methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Fix the SVG fill references. This fix must be applied to all ApexCharts
+     * charts in order to fix 'black color on gradient fills on certain browsers'
+     * issue caused by the '<base>' tag.
+     *
+     * Fix based on https://gist.github.com/Kamshak/c84cdc175209d1a30f711abd6a81d472
+     *
+     * @param element
+     * @private
+     */
+    private _fixSvgFill(element: Element): void {
+        // Current URL
+        const currentURL = this._router.url;
+
+        // 1. Find all elements with 'fill' attribute within the element
+        // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
+        // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
+        Array.from(element.querySelectorAll('*[fill]'))
+            .filter((el) => el.getAttribute('fill').indexOf('url(') !== -1)
+            .forEach((el) => {
+                const attrVal = el.getAttribute('fill');
+                el.setAttribute(
+                    'fill',
+                    `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`
+                );
+            });
+    }
+
+    /**
+     * Prepare the chart data from the data
+     *
+     * @private
+     */
+    private _prepareChartData(): void {
+        this.chartGithubIssues = {
+            chart: {
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                toolbar: {
+                    show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            colors: ['#64748B', '#94A3B8'],
+            dataLabels: {
+                enabled: true,
+                enabledOnSeries: [0],
+                background: {
+                    borderWidth: 0,
+                },
+            },
+            grid: {
+                borderColor: 'var(--fuse-border)',
+            },
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            legend: {
+                show: false,
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                },
+            },
+            series: this.seriess,
+            states: {
+                hover: {
+                    filter: {
+                        type: 'darken',
+                        value: 0.75,
+                    },
+                },
+            },
+            stroke: {
+                width: [3, 0],
+            },
+            tooltip: {
+                followCursor: true,
+                theme: 'dark',
+            },
+            xaxis: {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    color: 'var(--fuse-border)',
+                },
+                labels: {
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+                tooltip: {
+                    enabled: false,
+                },
+            },
+            yaxis: {
+                labels: {
+                    offsetX: -16,
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+            },
+        };
+
+        // Task distribution
+        this.chartTaskDistribution = {
+            chart: {
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'polarArea',
+                toolbar: {
+                    show: false,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            labels: this.labels,
+            legend: {
+                position: 'bottom',
+            },
+            plotOptions: {
+                polarArea: {
+                    spokes: {
+                        connectorColors: 'var(--fuse-border)',
+                    },
+                    rings: {
+                        strokeColor: 'var(--fuse-border)',
+                    },
+                },
+            },
+            series: this.series2,
+            states: {
+                hover: {
+                    filter: {
+                        type: 'darken',
+                        value: 0.75,
+                    },
+                },
+            },
+            stroke: {
+                width: 2,
+            },
+            theme: {
+                monochrome: {
+                    enabled: true,
+                    color: '#93C5FD',
+                    shadeIntensity: 0.75,
+                    shadeTo: 'dark',
+                },
+            },
+            tooltip: {
+                followCursor: true,
+                theme: 'dark',
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: 'var(--fuse-text-secondary)',
+                    },
+                },
+            },
+        };
+    }
+}
+>>>>>>> 8f9425cafef331c5466af9575b2044db9d07d055
